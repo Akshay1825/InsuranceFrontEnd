@@ -1,0 +1,34 @@
+img {
+    margin: auto;
+    width: 80px;
+    height: 80px;
+    
+  }
+  .card {
+    width: 150px;
+    height: 150px;
+    background: #F2F7FF;
+    box-shadow: 1px 4px 22px -8px #0004;
+    border: none;
+  }
+  
+  .container {
+    width: 50%;
+    margin-top: 50px;
+  }
+  .card-title{
+      color: #0009;
+      text-transform: capitalize;
+      
+  }
+  .card:hover{
+      width: 160px;
+      height: 160px;
+  }
+  .card a{
+      margin:auto;
+      text-decoration: none;
+  
+  }
+
+  

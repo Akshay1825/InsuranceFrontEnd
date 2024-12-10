@@ -1,0 +1,232 @@
+<div class="wrapper">
+<div *ngIf="isAdmin"><app-admin-header></app-admin-header></div>
+<div *ngIf="isEmployee"><app-employee-header></app-employee-header></div>
+<div class="top_link">
+  <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+      alt=""/>Back</button>
+</div>
+<!-- Button trigger modal -->
+<button *ngIf="isEmployee"
+  id="button"
+  class="btn btn-secondary m-4"
+  (click)="addAgent()"
+>
+  Add Agent
+</button>
+
+<div class="container">
+  <div class="row">
+    <div class="pagination-controls ms-4 mb-3 pt-3">
+      <!-- Other pagination elements -->
+      <label for="pageSizeSelect">Page Size:</label>
+      <select
+        id="pageSizeSelect"
+        class="form-control"
+        (change)="onPageSizeChange($event)"
+      >
+      <option value="{{pageSize}}" *ngFor="let pageSize of pageSizes">{{pageSize}}</option>
+      
+        <!-- Add more options as needed -->
+      </select>
+     
+      <div class="search-container">
+        <input
+          type="number"
+          class="search"
+          id="searchQuery"
+          [(ngModel)]="searchQuery"
+          placeholder="Search by Agent Name"
+          
+        />
+        <button *ngIf="!isSearch" class="search-btn ms-1 mb-1" (click)="onSearch()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+          </svg>
+        </button>
+        <button *ngIf="isSearch" class="search-btn ms-1 mb-1" (click)="resetSearch()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+          </svg>
+          </button>
+      </div>
+    </div>
+  </div>
+  <table class="table table-light table-responsive-md table-hover Data-table">
+    <thead>
+      <tr>
+        <th scope="col">Sr.</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Qualification</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+        <th scope="col">Commission</th>
+      
+      </tr>
+    </thead>
+    <tbody *ngIf="agents!=null">
+      <tr *ngFor="let agent of agents; let i = index">
+        <td>
+          {{ i + 1 }}
+        </td>
+        <td>
+          {{ agent.firstName }}
+        </td>
+        <td>
+          {{ agent.lastName }}
+        </td>
+        <td>
+          {{ agent.qualification }}
+        </td>
+        <td>
+          <div *ngIf="agent.isEdit">
+            <input type="email" [(ngModel)]="agent.email" />
+            <span class="text-danger" *ngIf="validateField(agent.email)">*required</span>
+            <span class="text-danger" *ngIf="validateEmail(agent.email)">*Invalid</span>
+          </div>
+          <div *ngIf="!agent.isEdit">
+            {{ agent.email }}
+          </div>
+        </td>
+        <td>
+          <div *ngIf="agent.isEdit">
+            <input id="MobileField" type="text" [(ngModel)]="agent.mobileNumber" />
+           
+            <span class="text-danger" *ngIf="validatePhone(agent.mobileNumber)">*Invalid</span>
+          </div>
+          <div *ngIf="!agent.isEdit">
+            {{ agent.mobileNumber }}
+          </div>
+        </td>
+        <td>
+          <div *ngIf="agent.isEdit">
+            <select [(ngModel)]="agent.status" >
+              <option [ngValue]="true">Active</option>
+              <option [ngValue]="false">InActive</option>
+            </select>
+            <span class="text-danger" *ngIf="validateField(agent.status)">*required</span>
+          </div>
+          <div *ngIf="!agent.isEdit">
+            <p *ngIf="agent.status">Active</p>
+            <p *ngIf="!agent.status">InActive</p>
+          </div>
+        </td>
+
+        <td>
+          <div *ngIf="!agent.isEdit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="blue"
+              class="bi bi-pencil m-1"
+              viewBox="0 0 16 16"
+              (click)="onEdit(agent)"
+            >
+              <path
+                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"
+              />
+            </svg>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="red"
+              class="bi bi-trash m-1"
+              viewBox="0 0 16 16"
+              (click)="onDelete(agent)"
+            >
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"
+              />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"
+              />
+            </svg>
+          </div>
+          <div *ngIf="agent.isEdit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="green"
+              class="bi bi-box-arrow-down m-1"
+              viewBox="0 0 16 16"
+              (click)="onUpdate(agent)"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"
+              />
+            </svg>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="red"
+              class="bi bi-x m-1"
+              viewBox="0 0 16 16"
+              (click)="onCancel(agent)"
+            >
+              <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+              />
+            </svg>
+          </div>
+        </td>
+        <td><button class="btn btn-primary" (click)="viewCommission(agent)">View</button></td>
+      </tr>
+    </tbody>
+
+    <tfoot scope="col" *ngIf="agents==null">
+    <tr class="text-center" >
+     <td colspan="10">Data Not Found</td>
+    </tr>
+    </tfoot>
+  </table>
+</div>
+<div>
+  <nav aria-label="Page navigation example ">
+    <ul class="pagination justify-content-center">
+      <li class="page-item text-center ms-1" *ngIf="currentPage > 1">
+        <a
+          class="page-link"
+          (click)="changePage(currentPage - 1)"
+          aria-label="Previous"
+        >
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item text-center ms-1" *ngFor="let page of pageNumbers">
+        <a
+          class="page-link"
+          [ngClass]="{ active: currentPage === page }"
+          (click)="changePage(page)"
+          >{{ page }}</a
+        >
+      </li>
+      <li
+        class="page-item text-center ms-1"
+        *ngIf="currentPage < pageNumbers.length"
+      >
+        <a
+          class="page-link"
+          (click)="changePage(currentPage + 1)"
+          aria-label="Next"
+        >
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+</div>
+<app-footer-other></app-footer-other>

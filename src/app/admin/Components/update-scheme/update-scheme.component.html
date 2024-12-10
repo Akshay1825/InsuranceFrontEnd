@@ -1,0 +1,222 @@
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2">
+      <img
+        src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""
+      />Back
+    </button>
+  </div>
+  <div class="container">
+    <h5 class="modal-title" id="exampleModalLabel">Update Scheme Deatails</h5>
+    <form [formGroup]="updateSchemeForm">
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="text"
+          formControlName="schemeName"
+          [(ngModel)]="schemeData.schemeName"
+        />
+        <br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('schemeName')?.dirty &&
+            updateSchemeForm.get('schemeName')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="text"
+          formControlName="description"
+          placeholder="TAG LINE*"
+        />
+        <br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('description')?.dirty &&
+            updateSchemeForm.get('description')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="minAmount"
+          placeholder="MINIMUM INVESTMENT AMOUNT*"
+        />
+        <br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('minAmount')?.dirty &&
+            updateSchemeForm.get('minAmount')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="maxAmount"
+          placeholder="MAX INVESTMENT AMOUNT*"
+        /><br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('maxAmount')?.dirty &&
+            updateSchemeForm.get('maxAmount')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="minAge"
+          aria-describedby="emailHelp"
+          placeholder="MINIMUM AGE*"
+        /><br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('minAge')?.dirty &&
+            updateSchemeForm.get('minAge')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="maxAge"
+          placeholder="MAX AGE*"
+        /><br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('maxAge')?.dirty &&
+            updateSchemeForm.get('maxAge')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="minInvestTime"
+          placeholder="MINIMUM TERM*"
+        />
+        <br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('minInvestTime')?.dirty &&
+            updateSchemeForm.get('minInvestTime')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="maxInvestTime"
+          placeholder="MAXIMUM TERM*"
+        />
+        <br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('maxInvestTime')?.dirty &&
+            updateSchemeForm.get('maxInvestTime')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="profitRatio"
+          placeholder="PROFIT PERCENT*"
+          [ngModel]="schemeId"
+        />
+        <br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('profitRatio')?.dirty &&
+            updateSchemeForm.get('profitRatio')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="registrationCommRatio"
+          placeholder="REGISTER COMMISSION PERCENT*"
+        />
+        <br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('registrationCommRatio')?.dirty &&
+            updateSchemeForm
+              .get('registrationCommRatio')
+              ?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="installmentCommRatio"
+          placeholder="EMI COMMISSION PERCENT*"
+        />
+        <br />
+        <small
+          *ngIf="
+            updateSchemeForm.get('installmentCommRatio')?.dirty &&
+            updateSchemeForm.get('installmentCommRatio')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-md-3">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+      </div>
+      <div class="col-md-3">
+        <button
+          id="save"
+          type="button"
+          class="btn btn-primary"
+          (click)="updateScheme()"
+        >
+          Update Scheme
+        </button>
+      </div>
+    </div>
+  </div>
+  <app-footer-other></app-footer-other>
+</div>

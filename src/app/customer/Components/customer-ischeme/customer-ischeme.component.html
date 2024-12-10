@@ -1,0 +1,163 @@
+<div class="wrapper">
+<app-customer-header></app-customer-header>
+
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-8" id="leftcol">
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item" *ngFor="let scheme of planSchemes; let i = index">
+          <h2 class="accordion-header">
+            <button class="accordion-button " type="button" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#collapse-' + i" aria-expanded="true" aria-controls="collapseOne" style="text-transform: uppercase;  ">
+              {{ scheme.schemeName }}
+            </button>
+          </h2>
+          <div [attr.id]="'collapse-' + i" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <h6>{{ scheme.description }}</h6>
+              <table>
+                <tr>
+                  <td>Minimum Age:</td>
+                  <td>{{ scheme.minAge }} years</td>
+                </tr>
+                <tr>
+                  <td>Maximum Age:</td>
+                  <td>{{ scheme.maxAge }} years</td>
+                </tr>
+                <tr>
+                  <td>Minimum Term:</td>
+                  <td>{{ scheme.minInvestTime }} years</td>
+                </tr>
+                <tr>
+                  <td>Maximum Term:</td>
+                  <td>{{ scheme.maxInvestTime }} years</td>
+                </tr>
+
+                <tr>
+                  <td>Min Investment Amount:</td>
+                  <td>&#x20B9;{{ scheme.minAmount }}</td>
+                </tr>
+                <tr>
+                  <td>Max Investment Amount:</td>
+                  <td>&#x20B9;{{ scheme.maxAmount }}</td>
+                </tr>
+                <tr>
+                  <td>Profit Percentage:</td>
+                  <td>{{ scheme.profitRatio }}&#37;</td>
+                </tr>
+                <tr>
+                  <td>Required Documents:</td>
+                  <td ><span>Aadhar Card,PAN Card, VoterId Card</span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 text-center" id="rightCol">
+      <div class="claculator">
+        <h3>Premium Calculator</h3>
+
+        <form [formGroup]="premiumCalculateForm" name="premiumCalculateForm">
+          <div class="form-group">
+            <label for="schemeSelect">Select a Scheme:</label>
+            <select id="schemeSelect" class="menu" formControlName="schemeName">
+              <option *ngFor="let scheme of planSchemes" [value]="scheme.schemeId">
+                {{ scheme.schemeName }}
+              </option>
+            </select>
+            <div *ngIf="premiumCalculateForm.get('schemeName')?.touched && premiumCalculateForm.get('schemeName')?.invalid" class="text-danger">
+              *Please select a scheme.
+            </div>
+          </div>
+          <div class="col-md-12 mt-2">
+            <select class="menu" name="premium Type" id="" formControlName="premiumType">
+
+              <option value="Monthly">Monthly</option>
+              <option value="Quaterly">Quaterly</option>
+              <option value="Yearly">Yearly</option>
+              <option value="Half Yearly">Half Yearly</option>
+            </select>
+            <small
+            *ngIf="
+            premiumCalculateForm.get('premiumType')?.dirty &&
+            premiumCalculateForm.get('premiumType')?.hasError('required')
+            "
+            class="text-danger"
+            >*required</small>
+          </div>
+          <div class="col-md-12 mt-2">
+            <input type="number" formControlName="term" required placeholder="Enter Investment Time" min="0" />
+            <small
+            *ngIf="
+            premiumCalculateForm.get('term')?.dirty &&
+            premiumCalculateForm.get('term')?.hasError('required')
+            "
+            class="text-danger"
+            >*required</small>
+          </div>
+          <div class="col-md-12 mt-2">
+            <input id="amountField" type="number" formControlName="sumAssured" required placeholder="Enter Investment Amount" min="0" />
+            <small
+            *ngIf="
+            premiumCalculateForm.get('sumAssured')?.dirty &&
+            premiumCalculateForm.get('sumAssured')?.hasError('required')
+            "
+            class="text-danger"
+            >*required</small>
+            <small
+            *ngIf="
+            premiumCalculateForm.get('sumAssured')?.dirty &&
+            premiumCalculateForm.get('sumAssured')?.hasError('min')
+            "
+            class="text-danger"
+            >*Invalid</small>
+          </div>
+          <div class="col-12 mt-2">
+            <button type="submit" class="submit" (click)="calculatePremium()">
+              Calculate
+            </button>
+          </div>
+        </form>
+        <div class="result" *ngIf="isDisabled">
+          <h6>Premium Amount: {{ this.premium }}</h6>
+          <h6>Total Premium:  {{ totalPremiumEMI }}</h6>
+          <h6>Maturity Amount: {{ MaturityAmount }}</h6>
+          <div class="col-12 mt-2 me-5">
+
+            <button class="submitBtn" (click)="applyPolicy()">
+              Buy Policy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="policyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Verify Details
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button id="save" type="button" class="btn btn-primary">
+          Continue
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<app-footer-other></app-footer-other>

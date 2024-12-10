@@ -1,0 +1,106 @@
+<div class="wrapper">
+<div *ngIf="isEmployee">
+    <app-employee-header></app-employee-header>
+    </div>
+    <div *ngIf="isAdmin">
+        <app-admin-header></app-admin-header>
+    </div> 
+    <div class="top_link">
+      <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+          alt=""/>Back</button>
+    </div>
+
+<!-- <div class="ms-5 mt-5"><button class="btn btn-danger" (click)="goBack()">Back</button></div>  -->
+<div class="container">
+  <div class="row">
+    <div class="pagination-controls ms-4 mb-3 pt-3">
+      <!-- Other pagination elements -->
+      <label for="pageSizeSelect">Page Size:</label>
+      <select
+        id="pageSizeSelect"
+        class="form-control"
+        (change)="onPageSizeChange($event)"
+      >
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <!-- Add more options as needed -->
+      </select>
+    
+    </div>
+  </div>
+  <table id="employeeTable" class="table table-light table-responsive-md table-hover Data-table">
+    <thead>
+      <tr>
+        <th scope="col">Sr.</th>
+       
+        <th scope="col">Document Type</th>
+        <th scope="col">Action</th>
+        <th scope="col">More</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="documents.length>0">
+      <tr *ngFor="let doc of documents; let i = index">
+        <td>
+          {{ calculateSRNumber(i) }}
+        </td>
+       
+        <td>{{doc.name}}</td>
+        <td>
+            <div *ngIf="!doc.status">
+            <button class="btn btn-primary" (click)="updateDocumentStatus(doc)">Approve</button> 
+            </div> 
+            <div *ngIf="doc.status">
+            <p>Approved</p>
+            </div>
+        </td>
+       
+        <td>
+          <button class="btn btn-primary" (click)="downloadDocument(doc)">Download</button>
+        </td>
+        
+       
+      </tr>
+    </tbody>
+    <tfoot *ngIf="documents.length==0">
+      <tr class="text-center">
+        <td colspan="4">No Document Found</td>
+      </tr>
+    </tfoot>
+    </table>
+</div>
+<div>
+  <nav aria-label="Page navigation example ">
+    <ul class="pagination justify-content-center">
+      <li class="page-item text-center ms-1" *ngIf="currentPage > 1">
+        <a
+          class="page-link"
+          (click)="changePage(currentPage - 1)"
+          aria-label="Previous"
+        >
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item text-center ms-1" *ngFor="let page of pageNumbers">
+        <a
+          class="page-link"
+          [ngClass]="{ active: currentPage === page }"
+          (click)="changePage(page)"
+          >{{ page }}</a
+        >
+      </li>
+      <li class="page-item text-center ms-1" *ngIf="currentPage < pageNumbers.length">
+        <a
+          class="page-link"
+          (click)="changePage(currentPage + 1)"
+          aria-label="Next"
+        >
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+</div>
+<app-footer-other></app-footer-other>

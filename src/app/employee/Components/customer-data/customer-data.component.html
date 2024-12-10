@@ -1,0 +1,117 @@
+<div class="wrapper">
+  <div *ngIf="isEmployee">
+    <app-employee-header></app-employee-header>
+  </div>
+  <div *ngIf="isAdmin">
+    <app-admin-header></app-admin-header>
+  </div>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""/>Back</button>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="pagination-controls ms-4 mb-3 pt-3">
+        <!-- Other pagination elements -->
+        <label for="pageSizeSelect">Page Size:</label>
+        <select id="pageSizeSelect" class="form-control" (change)="onPageSizeChange($event)">
+          <option value="{{pageSize}}" *ngFor="let pageSize of pageSizes">{{pageSize}}</option>
+          <!-- Add more options as needed -->
+        </select>
+        <div class="search-container">
+          <input
+            type="number"
+            class="search"
+            id="searchQuery"
+            [(ngModel)]="searchQuery"
+            placeholder="Search by Customer Id.."
+            
+          />
+          <button *ngIf="!isSearch" class="search-btn ms-1 mb-1" (click)="onSearch()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+          </button>
+          <button *ngIf="isSearch" class="search-btn ms-1 mb-1" (click)="resetSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+            </svg>
+            </button>
+        </div>
+      </div>
+    </div>
+    <table id="employeeTable" class="table table-light table-responsive-md table-hover Data-table">
+      <thead>
+        <tr>
+          <th scope="col">Sr.</th>
+          <!-- <th scope="col">Customer ID</th> -->
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Email</th>
+          <th scope="col">Documents</th>
+          <th scope="col">Policies</th>
+
+        </tr>
+      </thead>
+      <tbody *ngIf="customerData.length>0">
+        <tr *ngFor="let customer of customerData; let i = index">
+          <td>
+            {{ calculateSRNumber(i) }}
+          </td>
+          <td>
+
+            {{ customer.firstName }}
+
+          </td>
+
+          <td>
+
+            {{ customer.lastName }}
+
+          </td>
+          <td>
+
+            {{ customer.mobileNumber }}
+
+          </td>
+          <td>{{customer.email}}</td>
+
+
+          <td>
+            <button class="btn btn-primary" (click)="viewDocument(customer)">Documents</button>
+          </td>
+          <td>
+            <button class="btn btn-primary" (click)="viewPolicies(customer)"> Policies</button>
+          </td>
+
+        </tr>
+      </tbody>
+      <tfoot *ngIf="customerData.length==0">
+        <tr class="text-center">
+          <td colspan="8"> No Customer Data Found</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div>
+    <nav aria-label="Page navigation example ">
+      <ul class="pagination justify-content-center">
+        <li class="page-item text-center ms-1" *ngIf="currentPage > 1">
+          <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item text-center ms-1" *ngFor="let page of pageNumbers">
+          <a class="page-link" [ngClass]="{ active: currentPage === page }" (click)="changePage(page)">{{ page }}</a>
+        </li>
+        <li class="page-item text-center ms-1" *ngIf="currentPage < pageNumbers.length">
+          <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<app-footer-other></app-footer-other>

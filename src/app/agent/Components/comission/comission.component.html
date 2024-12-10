@@ -1,0 +1,192 @@
+<div class="wrapper">
+  <app-agent-header></app-agent-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2">
+      <img
+        src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""
+      />Back
+    </button>
+  </div>
+  <!-- Button trigger modal -->
+
+  <div class="container">
+    <div class="row">
+      <div class="pagination-controls ms-4 mb-3 pt-3">
+        <!-- Other pagination elements -->
+        <label for="pageSizeSelect">Page Size:</label>
+        <select
+          id="pageSizeSelect"
+          class="form-control"
+          (change)="onPageSizeChange($event)"
+        >
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <!-- Add more options as needed -->
+        </select>
+        <div class="search-container">
+          <input
+            type="text"
+            class="form-control search"
+            id="searchQuery"
+            [(ngModel)]="searchQuery"
+            (keyup)="onSearch()"
+            placeholder="Start filtering by id.."
+          />
+        </div>
+      </div>
+    </div>
+    <table class="table table-light table-responsive-md Data-table">
+      <thead>
+        <tr>
+          <th scope="col">Sr.</th>
+          <th scope="col">Commission Id</th>
+          <th scope="col">Policy Number</th>
+          <th>Date</th>
+          <th scope="col">Commission Amount</th>
+          <th scope="col">Withdraw</th>
+          <th scope="col">More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let commission of commissions; let i = index">
+          <td>{{ calculateSRNumber(i) }}</td>
+          <td>{{ commission.commissionId }}</td>
+          <td>{{ commission.policyId }}</td>
+          <td>{{ commission.date | date : "dd-MM-YYYY" }}</td>
+          <td>&#x20B9;{{ commission.commissionAmount }}</td>
+
+          <td>
+            <div *ngIf="commission.status">Approved</div>
+            <div *ngIf="!commission.status">Pending</div>
+          </td>
+          <td>
+            <button
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#policyModal"
+              (click)="ViewDetail(i)"
+            >
+              View Details
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <nav aria-label="Page navigation example ">
+      <ul class="pagination justify-content-center">
+        <li class="page-item text-center ms-1" *ngIf="currentPage > 1">
+          <a
+            class="page-link"
+            (click)="changePage(currentPage - 1)"
+            aria-label="Previous"
+          >
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item text-center ms-1" *ngFor="let page of pageNumbers">
+          <a
+            class="page-link"
+            [ngClass]="{ active: currentPage === page }"
+            (click)="changePage(page)"
+            >{{ page }}</a
+          >
+        </li>
+        <li
+          class="page-item text-center ms-1"
+          *ngIf="currentPage < pageNumbers.length"
+        >
+          <a
+            class="page-link"
+            (click)="changePage(currentPage + 1)"
+            aria-label="Next"
+          >
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div
+    class="modal fade"
+    id="policyModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-body">
+          <table>
+            <tr>
+              <td>Customer Name:</td>
+              <td>
+                {{ customerData.customerFirstName }}
+                {{ customerData.customerLastName }}
+              </td>
+            </tr>
+
+            <tr>
+              <td>Mobile No:</td>
+              <td>+91 {{ customerData.phone }}</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>{{ customerData.email }}</td>
+            </tr>
+            <tr>
+              <td>Policy No:</td>
+              <td>{{ policyData.policyNo }}</td>
+            </tr>
+            <tr>
+              <td>SchemeId</td>
+              <td>{{ policyData.insuranceSchemeId }}</td>
+            </tr>
+            <tr>
+              <td>Issue Date:</td>
+              <td>{{ policyData.issueDate | date : "dd-MM-YYYY" }}</td>
+            </tr>
+            <tr>
+              <td>Maturity Date:</td>
+              <td>{{ policyData.maturityDate | date : "dd-MM-YYYY" }}</td>
+            </tr>
+
+            <tr>
+              <td>Maturity Amount:</td>
+              <td>
+                <span style="font-family: 'RupeeFont'">₹</span
+                >{{ policyData.sumAssured }}
+              </td>
+            </tr>
+            <tr>
+              <td>Premium Amount:</td>
+              <td>
+                <span style="font-family: 'RupeeFont'">₹</span
+                >{{ policyData.premium }}
+              </td>
+            </tr>
+
+            <!-- <tr>
+              <td>Required Documents:</td>
+              <td *ngFor="let rdoc of scheme.additionalDetail.requiredDocuments"><span>{{rdoc.docType}},</span></td>
+            </tr> -->
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer-other></app-footer-other>

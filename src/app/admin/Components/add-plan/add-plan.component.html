@@ -1,0 +1,73 @@
+<!-- Table -->
+
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2">
+      <img
+        src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""
+      />Back
+    </button>
+  </div>
+  <div class="container" id="addPlan">
+    <h5 class="heading" id="exampleModalLabel">Register Insurance Plan</h5>
+
+    <form [formGroup]="addPlanForm">
+      <div class="row">
+        <div class="col">
+          <label for="PlanName" class="form-label">Plan Name</label>
+          <input
+            type="text"
+            formControlName="planName"
+            placeholder=" Enter Plan Name"
+            aria-label="Plan name"
+          />
+          <br />
+          <div class="error-div">
+            <small
+              *ngIf="
+                addPlanForm.get('planName')?.dirty &&
+                addPlanForm.get('planName')?.hasError('required')
+              "
+              class="text-danger"
+              >*Plan Name is required.</small
+            ><br />
+
+            <small
+              *ngIf="
+                addPlanForm.get('planName')?.dirty &&
+                addPlanForm.get('planName')?.hasError('onlyCharacters')
+              "
+              class="text-danger"
+            >
+              *{{
+                addPlanForm.get("planName")?.getError("onlyCharacters").message
+              }}</small
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="row">
+      <div class="col-md-2 ms-2 mb-2">
+        <button type="button" class="btn btn-secondary" (click)="OnCancel()">
+          Cancel
+        </button>
+      </div>
+      <div class="col-md-2 mb-2">
+        <button
+          id="save"
+          type="button"
+          class="btn btn-primary"
+          (click)="addPlan()"
+        >
+          Register
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer-other></app-footer-other>

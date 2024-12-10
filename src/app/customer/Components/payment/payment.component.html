@@ -1,0 +1,177 @@
+<div class="wrapper">
+  <app-customer-header></app-customer-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""/>Back</button>
+  </div>
+<div class="container">
+   <h5>
+   
+   </h5>
+         <div class="form-box">
+         <table class="table">
+          <tr>
+            <td>Premium:</td>
+            <td>&#x20B9;{{ policyToPay.premium }}</td>
+          </tr>
+          <tr>
+            <td>Tax Percent:</td>
+            {{
+              Tax.taxPercent
+            }}&#37;
+          </tr>
+          <tr>
+            <td>Total Amount:</td>
+            <td>&#8377;{{ calculateTotalAmoutToPay() }}</td>
+          </tr>
+       
+        </table> 
+      </div>
+        <div class="form-box">
+          <hr>
+          <h5>Enter Card Details</h5>
+        <form [formGroup]="payPremiumForm">
+          <div class="row">
+            <div class="col-md-6">Payment Type*  </div>
+            <div class="col-md-6">
+              <select
+                class="menu"
+                formControlName="paymentType"
+              
+                aria-label="Payment Type"
+              >
+                <option value="0">Debit Card</option>
+                <option value="1">Credit Card</option>
+              </select>
+              <small
+              *ngIf="
+              payPremiumForm.get('paymentType')?.dirty &&
+              payPremiumForm.get('paymentType')?.hasError('required')
+              "
+              class="text-danger"
+              >*required</small
+            >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col label">Card Holder Name*</div>
+            <div class="col">
+              <input
+                type="text"
+                class="input"
+                formControlName="cardHolderName"
+               
+              />
+              <small
+              *ngIf="
+              payPremiumForm.get('cardHolderName')?.dirty &&
+              payPremiumForm.get('cardHolderName')?.hasError('required')
+              "
+              class="text-danger"
+              >*required</small
+            >
+            <small
+            *ngIf="
+            payPremiumForm.get('cardHolderName')?.dirty &&
+            payPremiumForm
+                .get('cardHolderName')
+                ?.hasError('onlyCharacters')
+            "
+            class="text-danger"
+          >
+           <br> *{{
+            payPremiumForm
+                .get("cardHolderName")
+                ?.getError("onlyCharacters").message
+            }}</small
+          >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col label">Card Number*</div>
+            <div class="col">
+              <input
+                type="number"
+                class="input"
+                formControlName="cardNumber"
+                
+              />
+              <small
+              *ngIf="
+              payPremiumForm.get('cardNumber')?.dirty &&
+              payPremiumForm.get('cardNumber')?.hasError('pattern')
+              "
+              class="text-danger"
+              >*Invalid</small>
+                    <small
+                    *ngIf="
+                    payPremiumForm.get('cardNumber')?.dirty &&
+                    payPremiumForm.get('cardNumber')?.hasError('required')
+                    "
+                    class="text-danger"
+                    >*required</small
+                  >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col label">CVV*</div>
+            <div class="col">
+              <input
+                type="number"
+                class="input"
+                formControlName="cvv"
+               
+              />
+              <small
+              *ngIf="
+              payPremiumForm.get('cvv')?.dirty &&
+              payPremiumForm.get('cvv')?.hasError('required')
+              "
+              class="text-danger"
+              >*required</small
+            >
+            <small
+            *ngIf="
+            payPremiumForm.get('cvv')?.dirty &&
+            payPremiumForm.get('cvv')?.hasError('pattern')
+            "
+            class="text-danger"
+            >*Invalid</small>
+            </div>
+          </div>
+
+          <div class="row" >
+            <div class="col label">Expiry Date*</div>
+            <div class="col">
+              <input type="date" class="input" formControlName="expiryDate" [min]="minDate" />
+              <small
+              *ngIf="
+              payPremiumForm.get('expiryDate')?.dirty &&
+              payPremiumForm.get('expiryDate')?.hasError('required')
+              "
+              class="text-danger"
+              >*required</small
+            >
+            </div>
+          </div>
+         <div class=" row btn-row ">
+            <div class="col-5 mb-3 mt-5">
+              <button class="btn btn-primary"  (click)="PayPremium()">
+               Make Payment
+              
+              </button>
+            </div>
+              <div class="col-3 mb-3 mt-5">
+                <button class="btn btn-danger"  (click)="resetForm()">
+                  Cancel
+                </button>
+              </div>
+          
+           
+            </div>
+        </form>
+       
+      </div>
+      </div>
+    </div>
+    <app-footer-other></app-footer-other>

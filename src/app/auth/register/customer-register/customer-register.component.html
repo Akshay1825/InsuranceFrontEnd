@@ -1,0 +1,273 @@
+<div class="wrapper">
+  <div class="container">
+    <div class="left">
+      <div class="top_link">
+        <a href="/"
+          ><img
+            src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+            alt=""
+          />Return home</a
+        >
+      </div>
+      <h5>Registration Form</h5>
+      <form [formGroup]="customerSignUpForm" (ngSubmit)="customerSignUp()">
+        <div class="row g-2">
+          <div class="col-md-6">
+            <input
+              type="text"
+              formControlName="firstName"
+              placeholder="FIRST NAME*"
+            /><br />
+            <small
+              *ngIf="
+                customerSignUpForm.get('firstName')?.dirty &&
+                customerSignUpForm
+                  .get('firstName')
+                  ?.hasError('required')
+              "
+              class="text-danger"
+              >*First Name is required.</small
+            >
+            <small
+              *ngIf="
+                customerSignUpForm.get('firstName')?.dirty &&
+                customerSignUpForm
+                  .get('firstName')
+                  ?.hasError('minlength')
+              "
+              class="text-danger"
+              >*minimum 3 characters are required.</small
+            >
+            <small
+              *ngIf="
+                customerSignUpForm.get('firstName')?.dirty &&
+                customerSignUpForm
+                  .get('firstName')
+                  ?.hasError('onlyCharacters')
+              "
+              class="text-danger"
+            >
+              *{{
+                customerSignUpForm
+                  .get("firstName")
+                  ?.getError("onlyCharacters").message
+              }}</small
+            >
+          </div>
+          <div class="col-md-6">
+            <input
+              type="text"
+              formControlName="lastName"
+              placeholder="LAST NAME*"
+            /><br />
+            <small
+              *ngIf="
+                customerSignUpForm.get('lastName')?.dirty &&
+                customerSignUpForm.get('lastName')?.hasError('required')
+              "
+              class="text-danger"
+              >*Last Name is required.</small
+            >
+            <small
+              *ngIf="
+                customerSignUpForm.get('lastName')?.dirty &&
+                customerSignUpForm
+                  .get('lastName')
+                  ?.hasError('minlength')
+              "
+              class="text-danger"
+              >*minimum 3 characters are required.</small
+            >
+            <small
+              *ngIf="
+                customerSignUpForm.get('lastName')?.dirty &&
+                customerSignUpForm
+                  .get('lastName')
+                  ?.hasError('onlyCharacters')
+              "
+              class="text-danger"
+            >
+              *{{
+                customerSignUpForm
+                  .get("lastName")
+                  ?.getError("onlyCharacters").message
+              }}</small
+            >
+          </div>
+        </div>
+
+        <div class="row g-2">
+          <div class="col-md-6">
+            <input
+              type="text"
+              formControlName="userName"
+              placeholder="USERNAME* "
+            /><br />
+            <small
+              *ngIf="
+                customerSignUpForm.get('userName')?.dirty &&
+                customerSignUpForm.get('userName')?.hasError('required')
+              "
+              class="text-danger"
+              >*UserName is required.</small
+            >
+            <small
+              *ngIf="
+                customerSignUpForm.get('userName')?.dirty &&
+                customerSignUpForm.get('userName')?.hasError('minlength')
+              "
+              class="text-danger"
+              >*minimum 6 characters are required.</small
+            >
+            <small
+              *ngIf="
+                customerSignUpForm.get('userName')?.dirty &&
+                customerSignUpForm.get('userName')?.hasError('maxlength')
+              "
+              class="text-danger"
+              >*maximum 20 characters are required.</small
+            >
+          </div>
+
+          <div class="col-md-6">
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="PASSWORD*"
+            /><br />
+            <small
+              *ngIf="
+                customerSignUpForm.get('password')?.dirty &&
+                customerSignUpForm.get('password')?.hasError('required')
+              "
+              class="text-danger"
+              >*Password is required.
+            </small>
+            <small
+              *ngIf="
+                customerSignUpForm.get('password')?.dirty &&
+                customerSignUpForm
+                  .get('password')
+                  ?.hasError('passwordValidator')
+              "
+              class="text-danger"
+              [innerHTML]="
+                customerSignUpForm
+                  .get('password')
+                  ?.getError('passwordValidator').message
+              "
+            ></small>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="EMAIL*"
+          /><br />
+          <small
+            *ngIf="
+              customerSignUpForm.get('email')?.dirty &&
+              customerSignUpForm.get('email')?.hasError('required')
+            "
+            class="text-danger"
+            >*Email is required.</small
+          >
+          <small
+            *ngIf="
+              customerSignUpForm.get('email')?.dirty &&
+              customerSignUpForm.get('email')?.hasError('email')
+            "
+            class="text-danger"
+            >*Invalid format.</small
+          >
+        </div>
+        <div class="col-md-12">
+          <input
+            type="date"
+            formControlName="birthDate"
+            placeholder="DATE OF BIRTH*"
+            [max]="maxDate"
+          /><br />
+          <small
+            *ngIf="
+              customerSignUpForm.get('birthDate')?.dirty &&
+              customerSignUpForm.get('birthDate')?.hasError('required')
+            "
+            class="text-danger"
+            >*DOB is required.</small
+          >
+        </div>
+        <div class="col-md-12">
+          <input
+            type="string"
+            formControlName="mobileNumber"
+            placeholder="MOBILE NO*"
+          /><br />
+          <small
+            *ngIf="
+              customerSignUpForm.get('mobileNumber')?.dirty &&
+              customerSignUpForm.get('mobileNumber')?.hasError('required')
+            "
+            class="text-danger"
+            >*Mobile No. is required.</small
+          >
+          <small
+            *ngIf="
+              customerSignUpForm.get('mobileNumber')?.dirty &&
+              customerSignUpForm.get('mobileNumber')?.hasError('pattern')
+            "
+            class="text-danger"
+            >*Invalid Mobile no.</small
+          >
+        </div>
+        <div class="col-md-12">
+          <input
+            type="string"
+            formControlName="address"
+            placeholder="ADDRESS*"
+          /><br />
+          <small
+            *ngIf="
+              customerSignUpForm.get('address')?.dirty &&
+              customerSignUpForm.get('address')?.hasError('required')
+            "
+            class="text-danger"
+            >*Address is required.</small
+          >
+        </div>
+
+        <div class="col-md-12">
+          <input
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="CONFIRM PASSWORD*"
+          /><br />
+          <small
+            *ngIf="
+              customerSignUpForm.get('confirmPassword')?.dirty &&
+              customerSignUpForm.get('confirmPassword')?.hasError('required')
+            "
+            class="text-danger"
+            >* Confirm Password is required.</small
+          >
+          <small
+            *ngIf="
+              customerSignUpForm.get('confirmPassword')?.dirty &&
+              customerSignUpForm
+                .get('confirmPassword')
+                ?.hasError('confirmPassword')
+            "
+            class="text-danger"
+            >Password does not match</small
+          >
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="submit">REGISTER</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

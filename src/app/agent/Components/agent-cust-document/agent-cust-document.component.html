@@ -1,0 +1,125 @@
+<div class="wrapper">
+  <app-agent-header></app-agent-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2">
+      <img
+        src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""
+      />Back
+    </button>
+  </div>
+
+  <div class="container">
+    <div class="right">
+      <form [formGroup]="DocTypeForm" (ngSubmit)="onSubmit()">
+        <h5>Upload Documents</h5>
+
+        <select class="menu" formControlName="docType">
+          <option value="Aadhar">Aadhar Card</option>
+          <option value="PAN">PAN Card</option>
+          <option value="VoterId">VoterId Card</option>
+        </select>
+        <small
+          class="error"
+          *ngIf="
+            DocTypeForm.get('docType')?.dirty &&
+            DocTypeForm.get('docType')?.hasError('required')
+          "
+          class="text-danger error"
+        >
+          *Type is required.<br
+        /></small>
+
+        <input type="file" (change)="onFileSelected($event)" #fileInput />
+
+        <button class="submit">Upload</button>
+      </form>
+    </div>
+    <div class="row">
+      <div class="pagination-controls ms-4 mb-3 pt-3">
+        <!-- Other pagination elements -->
+        <label for="pageSizeSelect">Page Size:</label>
+        <select
+          id="pageSizeSelect"
+          class="form-control"
+          (change)="onPageSizeChange($event)"
+        >
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <!-- Add more options as needed -->
+        </select>
+      </div>
+    </div>
+    <table
+      id="employeeTable"
+      class="table table-light table-responsive-md table-hover Data-table"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Sr.</th>
+          <th scope="col">Document Type</th>
+          <th scope="col">Action</th>
+          <th scope="col">More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of documents; let i = index">
+          <td>
+            {{ calculateSRNumber(i) }}
+          </td>
+          <td>
+            {{ doc.docType }}
+          </td>
+          <td>
+            <div *ngIf="!doc.status">Pending</div>
+            <div *ngIf="doc.status">
+              <p>Verified</p>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-primary" (click)="downloadDocument(doc)">
+              Download
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <nav aria-label="Page navigation example ">
+      <ul class="pagination justify-content-center">
+        <li class="page-item text-center ms-1" *ngIf="currentPage > 1">
+          <a
+            class="page-link"
+            (click)="changePage(currentPage - 1)"
+            aria-label="Previous"
+          >
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item text-center ms-1" *ngFor="let page of pageNumbers">
+          <a
+            class="page-link"
+            [ngClass]="{ active: currentPage === page }"
+            (click)="changePage(page)"
+            >{{ page }}</a
+          >
+        </li>
+        <li
+          class="page-item text-center ms-1"
+          *ngIf="currentPage < pageNumbers.length"
+        >
+          <a
+            class="page-link"
+            (click)="changePage(currentPage + 1)"
+            aria-label="Next"
+          >
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<app-footer-other></app-footer-other>

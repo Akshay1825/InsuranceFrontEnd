@@ -1,0 +1,325 @@
+<div class="wrapper">
+  <app-agent-header></app-agent-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""/>Back</button>
+  </div>
+  <div class="container">
+    <div class="row ms-4">
+      <div class="col-md-8">
+        <h5>Policy Registration Form</h5>
+        <form [formGroup]="policyRegistrationForm" name="policyRegistrationForm">
+          <div class="row">
+          <div class="col-md-2 mt-2" >
+            Plan* 
+          </div>
+          <div class="col-md-10 mt-2">
+            <select class="menu" name="plan" id="" formControlName="planName" (change)="onSelect($event)">
+            <option value="{{plan.planId}}" *ngFor="let plan of iPlans.body">{{plan.planName}}</option>
+            </select>
+    
+            <small
+              *ngIf="
+                policyRegistrationForm.get('planName')?.dirty &&
+                policyRegistrationForm.get('planName')?.hasError('required')
+              "
+              class="text-danger"
+              >*required</small
+            >
+          </div>
+        </div>
+        <div class="row">
+         <div class="col-md-2">Scheme*</div>
+          <div class="col-md-10 mt-2">
+            <select class="menu" name="scheme" id="" formControlName="schemeName" (change)="onSchemeSelection($event)">
+              <option value="{{scheme.schemeId}}" *ngFor="let scheme of iSchemes">{{scheme.schemeName}}</option>
+            </select>
+    
+            <small
+              *ngIf="
+                policyRegistrationForm.get('schemeName')?.dirty &&
+                policyRegistrationForm.get('schemeName')?.hasError('required')
+              "
+              class="text-danger"
+              >*required</small
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 mt-2">Customer ID*</div>
+          <div class="col-md-10 mt-2">
+            <select class="menu" name="plan" id="" formControlName="customerId" (change)="onCustomerSelection($event)">
+              <option value="{{customer.body.customerId}}" *ngFor="let customer of this.agentData.customers" >{{customer.body.customerId}}</option>
+            </select>
+        
+            <small
+              *ngIf="
+                policyRegistrationForm.get('customerId')?.dirty &&
+                policyRegistrationForm.get('customerId')?.hasError('required')
+              "
+              class="text-danger"
+              >*required</small
+            >
+
+          </div>
+          
+        </div>
+        <div class="row">
+          <div class="col-md-2 mt-2">Term*</div>
+          <div class="col-md-10 mt-2">
+            <input
+              type="number"
+              formControlName="term"
+              required
+              placeholder="Enter Investment Time"
+              min="0"
+            />
+            <small
+                *ngIf="
+                policyRegistrationForm.get('term')?.dirty &&
+                policyRegistrationForm.get('term')?.hasError('required')
+                "
+                class="text-danger"
+                >*required</small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 mt-2">Mode*</div>
+        
+          <div class="col-md-10 mt-2">
+            <select
+              class="menu"
+              name="premium Type"
+              id=""
+              formControlName="premiumMode"
+            >
+              <option value="Monthly">Monthly</option>
+              <option value="Quaterly">Quaterly</option>
+              <option value="Yearly">Yearly</option>
+              <option value="Half Yearly">Half Yearly</option>
+            </select>
+            <small
+              *ngIf="
+              policyRegistrationForm.get('premiumMode')?.dirty &&
+              policyRegistrationForm.get('premiumMode')?.hasError('required')
+              "
+              class="text-danger"
+              >*required</small>
+          </div>
+        </div>
+           <div class="row">
+            <div class="col-md-2 mt-2 ">Investment Amount*</div>
+         
+          <div class="col-md-10 mt-2">
+            <input id="amountField"
+              type="number"
+              formControlName="sumAssured"
+              required
+              placeholder="Enter Investment Amount"
+            />
+            <small
+              *ngIf="
+              policyRegistrationForm.get('sumAssured')?.dirty &&
+              policyRegistrationForm.get('sumAssured')?.hasError('required')
+              "
+              class="text-danger"
+              >*required</small>
+              <span *ngIf="!isNominee"><button  class="btn btn-primary ms-3 mt-2" (click)="showNominee()">Add Nominee</button></span>
+              
+          </div>
+        </div>
+          <!-- <div *ngIf="isNominee">
+            <div class="row">
+              <div class="col-md-2 mt-2 ">Nominee Name*</div>
+            <div class="col-md-10 mt-2">
+              <input
+              type="text"
+              formControlName="nomineeName"
+              required
+              placeholder="Enter Nominee Name"
+            />
+      
+              <small
+                *ngIf="
+                  policyRegistrationForm.get('nomineeName')?.dirty &&
+                  policyRegistrationForm.get('nomineeName')?.hasError('required')
+                "
+                class="text-danger"
+                >*required</small
+              >
+            </div>
+          </div>
+            <div class="row"><div class="col-md-2 mt-2">Realtion*</div>
+            <div class="col-md-10 mt-2">
+              <select class="menu" name="plan" id="" formControlName="nomineeRelation">
+              <option value="Father">Father</option>
+              <option value="Mother">Mother</option>
+              <option value="Brother">Brother</option>
+              <option value="Sister">Sister</option>
+              <option value="Spause">Spause</option>
+             
+              </select>
+      
+              <small
+                *ngIf="
+                  policyRegistrationForm.get('nomineeRelation')?.dirty &&
+                  policyRegistrationForm.get('nomineeRelation')?.hasError('required')
+                "
+                class="text-danger"
+                >*required</small
+              >
+            </div>
+          </div>
+        </div> -->
+          <div class="col-12 mt-2">
+            <button type="submit" class="submit" 
+            (click)="calculatePremium()">Continue</button>
+          </div>
+        </form>
+    </div>
+ 
+    <div class="col-md-4" *ngIf="isNominee" >
+      <div>
+         <h5>Add Nominee</h5>
+        <form [formGroup]="nomineeForm" >
+        <div class="row">
+          <div class="col-md-2 mt-2 ">Nominee Name*</div>
+        <div class="col-md-10 mt-2">
+          <input
+          type="text"
+          formControlName="nomineeName"
+          required
+          placeholder="Enter Nominee Name"
+        />
+  
+          <small
+            *ngIf="
+              nomineeForm.get('nomineeName')?.dirty &&
+              nomineeForm.get('nomineeName')?.hasError('required')
+            "
+            class="text-danger"
+            >*required</small
+          >
+         
+        </div>
+      </div>
+        <div class="row"><div class="col-md-2 mt-2">Realtion*</div>
+        <div class="col-md-10 mt-2">
+          <select class="menu" name="plan" id="" formControlName="nomineeRelation">
+          <option value="Father">Father</option>
+          <option value="Mother">Mother</option>
+          <option value="Brother">Brother</option>
+          <option value="Sister">Sister</option>
+          <option value="Spause">Spause</option>
+         
+          </select>
+  
+          <small
+            *ngIf="
+              nomineeForm.get('nomineeRelation')?.dirty &&
+              nomineeForm.get('nomineeRelation')?.hasError('required')
+            "
+            class="text-danger"
+            >*required</small
+          >
+        </div>
+      </div>
+      <div class="row">
+      <div class="col-4 mt-2" style="margin-left:6rem;">
+        <button type="submit" class="btn btn-primary" 
+        (click)="onSubmit()" [disabled]="isSubmitted"
+       >Submit</button>
+      </div>
+      <div class="col-4 mt-2">
+        <button type="submit" class="btn btn-danger"style="margin-left: auto;"
+        (click)="onCancel()"
+       >Cancel</button>
+      </div>
+   
+    </div>
+  </form>
+    </div>
+    </div>
+ 
+</div>
+</div>
+
+
+<!-- Verify Detail Modal -->
+<div
+  class="modal fade"
+  id="RegisterModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>Name</td>
+              <td>{{customerData.customerFirstName}} {{customerData.customerLastName}}</td>
+            </tr>
+            <tr>
+              <td>Premium Mode</td>
+              <td><div *ngIf="policy.premiumType==0">Yearly</div>
+              <div *ngIf="policy.premiumType==1">Half Yearly</div>
+              <div *ngIf="policy.premiumType==2">Quaterly</div>
+              <div *ngIf="policy.premiumType==3">Monthly</div>
+            </td> 
+            </tr>
+      
+            <tr>
+              <td>IssueDate</td>
+              <td>{{policy.issueDate|date:"dd-MM-YYYY"}}</td>
+             
+            </tr>
+            <tr>
+              <td>MaturityDate</td>
+              <td>{{policy.maturityDate|date:"dd-MM-YYYY"}}</td>
+            </tr>
+            <tr>
+              <td>Investment Amount</td>
+               <td><span style="font-family: 'RupeeFont';">₹</span>{{policy.investmentAmount}}</td>
+            </tr>
+            <tr>
+              <td>Premium</td>
+
+              <td><span style="font-family: 'RupeeFont';">₹</span>{{policy.premiumAmount}}</td>
+            </tr>
+            <tr>
+              <td>SumAssured</td>
+              <td><span style="font-family: 'RupeeFont';">₹</span>{{policy.sumAssured}}</td>
+            </tr>
+            <tr>
+              <td>Nominee</td>
+            <td>{{policy.nominee}}</td>
+            </tr>
+            <tr><td>Relation</td>
+              
+              <td>
+                {{policy.nomineeRelation}}
+              
+
+              </td></tr>
+            
+           
+           
+          </tbody>
+        </table>  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="CancelRegistration()">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="applyPolicy()" data-bs-dismiss="modal" >
+       Apply
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 
+</div>
+<app-footer-other></app-footer-other>

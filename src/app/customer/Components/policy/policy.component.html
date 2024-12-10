@@ -1,0 +1,307 @@
+<div class="wrapper">
+<app-customer-header></app-customer-header>
+<div class="top_link">
+  <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+      alt=""/>Back</button>
+</div>
+<div class="container" class="text-center mt-3">
+
+ 
+  <div class="container">
+    <table class="table table-hover table-responsive-md Data-table w-85 mt-3">
+      <thead class="table-secondary">
+        <tr  class="text-center">
+          <th colspan="12">CUSTOMER DETAILS</th>
+        </tr>
+        <tr class="text-center">
+          <th>Customer Name</th>
+          <th>DOB</th>
+          <th>Email</th>
+          <th>Mobile No</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-center">
+          <td>
+            {{ this.customerData.body['firstName'] }}
+            {{ this.customerData.body['lastName'] }}
+          </td>
+          <td>
+            {{ customerData.body['birthDate'] | date : "dd-MM-YYYY" }}
+          </td>
+          <td>
+            {{ customerData.body['email'] }}
+          </td>
+          <td>
+            {{ customerData.body['mobileNumber'] }}
+          </td>
+          <td>
+            {{ customerData.body['address'] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="container mt-3">
+    <table class="table table-hover table-responsive-md table-light Data-table w-85 mt-3">
+      <thead class="table-secondary">
+        <tr class="text-center">
+          <th colspan="12">POLICY DETAILS</th>
+        </tr>
+        <tr class="text-center">
+          <th>Policy Numebr</th>
+          <th>Scheme Name</th>
+          <th>Issue Date</th>
+          <th>Maturity Date</th>
+          <th>Premium Mode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-center">
+          <td>
+            {{ policy.body['policyNumber'] }}
+          </td>
+          <td>
+            {{ schemeData.body['schemeName'] }}
+          </td>
+          <td>
+            {{ policy.body['issueDate'] | date : "dd-MM-YYYY" }}
+          </td>
+          <td>
+            {{ policy.body['maturityDate'] | date : "dd-MM-YYYY" }}
+          </td>
+          <td>
+            <div *ngIf="policy.body['premiumType']==0">Yearly</div>
+            <div *ngIf="policy.body['premiumType']==1">Half Yearly</div>
+            <div *ngIf="policy.body['premiumType']==2">Quaterly</div>
+            <div *ngIf="policy.body['premiumType']==3">Monthly</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="container mt-3">
+    <table class="table table-hover table-responsive-md table-light Data-table w-85 mt-3">
+      <thead class="table-secondary">
+        <tr class="text-center">
+          <th colspan="12">PREIMUM DETAILS</th>
+        </tr>
+        <tr class="text-center">
+          <th>Premium Amount</th>
+          <th>Profit Ratio</th>
+          <th>Sum Assured</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-center">
+          <td>
+            <span style="font-family: 'RupeeFont';">₹</span>
+            {{ policy.body?.['premiumAmount'] ?? 'N/A' }}
+          </td>
+          <td>
+            {{ schemeData.body?.['profitRatio'] ?? 'N/A' }}%
+          </td>
+          <td>
+            <span style="font-family: 'RupeeFont';">₹</span>
+            {{ policy.body?.['sumAssured'] ?? 'N/A' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- <div class="container mt-3" >
+    <p>{{installment[0] | json}}</p>
+    <table class="table table-hover table-responsive-md table-light Data-table w-85 mt-3">
+      <thead class="table-secondary">
+        <tr>
+          <th colspan="12" class="text-center">PAYMENT DETAILS</th>
+        </tr>
+        <tr class="text-center">
+          <th>Installment Number</th>
+          <th>Installment Amount</th>
+          <th>Due Date</th>
+          <th>Action</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let emi of installment; let i = index">
+          <td>
+            {{emi.num}}
+          </td>
+          <td><span style="font-family: 'RupeeFont';">₹</span>
+          {{ data.premiumAmount || 'N/A'}}</td>
+          <td>{{ calculateDueDate(i) | date : "dd-MM-YYYY" }}</td>
+          <td>
+            <div *ngIf="i == (policy?.payments?.length || 0)">
+              <button class="btn btn-primary" (click)="showPaymentModal(i)">
+                Pay Premium
+              </button>
+            </div>
+            <div *ngIf="i < policy.payments.length"><h6>Paid</h6></div>
+            <div *ngIf="i > policy.payments.length">
+              <button class="btn btn-secondary" disabled>Pay Premium</button>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="i < policy.payments.length">
+              <button class="btn btn-success" (click)="downloadReceipt(i)">
+                Reciept
+              </button>
+            </div>
+            <div *ngIf="i >= policy.payments.length">--</div>
+          </td>
+        </tr>
+      </tbody>
+    </table> -->
+  <!-- </div> -->
+  <h3>
+    <button (click)="showPremiums()">Show Premium Details</button>
+  </h3>
+
+  <div class="container mt-3 mb-3">
+    <button
+      class="btn btn-secondary"
+      *ngIf="installment.length > policy.payments.length"
+    disabled >
+      Claim Policy
+    </button>
+  </div>
+  <div class="container mt-3 mb-3">
+    <button
+      class="btn submit"
+      *ngIf="installment.length == policy.payments.length &&policy.claims.length<=0"
+      (click)="claim()"
+    >
+      Claim Policy
+    </button>
+  </div>
+  <div class="container mt-3 mb-3">
+    <button
+      class="btn btn-secondary"
+      *ngIf="installment.length == policy.payments.length &&policy.claims.length>0"
+      disabled
+    >
+      Claimed
+    </button>
+  </div>
+</div>
+
+      
+<!-- Claim Modal -->
+<div class="container">
+  <div
+    class="modal fade"
+    id="claimPolicyModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Enter Bank Details</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+           <div>
+          <div  class="row ms-2">
+            <div class="col">Claim Amount:</div>
+            <div class="col"><span style="font-family: 'RupeeFont';">₹</span>
+              {{policy.sumAssured}}</div>
+          </div>
+         
+          
+         
+      
+            
+         
+        </div> 
+          <div class="container-box">
+            <hr>
+         
+               <form [formGroup]="ClaimForm">
+                <div class="row">
+                  <div class="col">Bank Account No*</div>
+                  <div class="col">
+                    <input
+                      class="input"
+                      type="text"
+                   
+                      formControlName="accNo"
+                    />
+                    <small
+                    *ngIf="
+                    ClaimForm.get('accNo')?.dirty &&
+                    ClaimForm.get('accNo')?.hasError('required')
+                    "
+                    class="text-danger"
+                    >*required</small
+                  >
+                  <small
+                  *ngIf="
+                  ClaimForm.get('accNo')?.dirty &&
+                  ClaimForm.get('accNo')?.hasError('pattern')
+                  "
+                  class="text-danger"
+                  >*Invalid</small>
+                  </div>
+                  
+                </div>
+                <div class="row">
+                  <div class="col">Bank IFSC Code*</div>
+                  <div class="col">
+                    <input
+                      class="input"
+                      type="text"
+                    
+                      formControlName="ifsc"
+                    />
+                    <small
+                    *ngIf="
+                    ClaimForm.get('accNo')?.dirty &&
+                    ClaimForm.get('accNo')?.hasError('required')
+                    "
+                    class="text-danger"
+                    >*required</small
+                  >
+                  <small class="text-danger" *ngIf="ClaimForm.get('ifsc')?.dirty && ClaimForm.get('ifsc')?.hasError('pattern')">
+                    *Please enter a valid IFSC code.
+                  </small>
+                  </div>
+
+                
+                </div>
+        </form>  
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            (click)="resetClaimForm()"
+          >
+            Cancel
+          </button>
+          <button
+            id="save"
+            type="button"
+            class="btn btn-primary"
+            (click)="claimPolicy()"
+          >
+            submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<app-footer-other></app-footer-other>

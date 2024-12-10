@@ -1,0 +1,27 @@
+
+    .container{
+      margin-top: 50px;
+      width: 1000px;
+    
+
+    }
+    #employeeTable{
+      box-shadow: 1px 4px 22px -8px #0004;
+    }
+    .wrapper{
+      display: flex;
+      flex-direction: column;
+      min-height: 93vh;
+    }
+   
+    .top_link  button{
+      border: none;
+      background: none;
+      color: #583672;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    
+   
+  

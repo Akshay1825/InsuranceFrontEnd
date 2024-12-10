@@ -1,0 +1,215 @@
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2">
+      <img
+        src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""
+      />Back
+    </button>
+  </div>
+  <div class="container" id="addEmp">
+    <h5 id="Label">Employee Registration</h5>
+
+    <form [formGroup]="addEmpForm">
+      <div class="mb-3">
+        <input
+          type="text"
+          formControlName="firstName"
+          placeholder=" FIRST NAME*"
+        />
+        <br />
+        <div>
+          <small
+            *ngIf="
+              addEmpForm.get('firstName')?.dirty &&
+              addEmpForm.get('firstName')?.hasError('required')
+            "
+            class="text-danger"
+            >*First Name is required.</small
+          >
+          <small
+            *ngIf="
+              addEmpForm.get('firstName')?.dirty &&
+              addEmpForm.get('firstName')?.hasError('minlength')
+            "
+            class="text-danger"
+            ><br />*minimum 3 characters are required.</small
+          >
+          <small
+            *ngIf="
+              addEmpForm.get('firstName')?.dirty &&
+              addEmpForm.get('firstName')?.hasError('onlyCharacters')
+            "
+            class="text-danger"
+            ><br />
+            *{{
+              addEmpForm.get("firstName")?.getError("onlyCharacters").message
+            }}</small
+          >
+        </div>
+      </div>
+      <div class="mb-3">
+        <input
+          type="text"
+          formControlName="lastName"
+          placeholder=" LAST NAME*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addEmpForm.get('lastName')?.dirty &&
+            addEmpForm.get('lastName')?.hasError('required')
+          "
+          class="text-danger"
+          >*Last Name is required.<br
+        /></small>
+        <small
+          *ngIf="
+            addEmpForm.get('lastName')?.dirty &&
+            addEmpForm.get('lastName')?.hasError('minlength')
+          "
+          class="text-danger"
+          >*Minimum 3 characters are required.<br
+        /></small>
+        <small
+          *ngIf="
+            addEmpForm.get('lastName')?.dirty &&
+            addEmpForm.get('lastName')?.hasError('onlyCharacters')
+          "
+          class="text-danger"
+        >
+          *{{
+            addEmpForm.get("lastName")?.getError("onlyCharacters").message
+          }}</small
+        >
+      </div>
+
+      <div class="mb-3">
+        <input
+          type="userName"
+          formControlName="userName"
+          placeholder="USERNAME*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addEmpForm.get('userName')?.dirty &&
+            addEmpForm.get('userName')?.hasError('required')
+          "
+          class="text-danger"
+          >*User Name is required.<br
+        /></small>
+        <small
+          *ngIf="
+            addEmpForm.get('userName')?.dirty &&
+            addEmpForm.get('userName')?.hasError('minlength')
+          "
+          class="text-danger"
+          >*minimum 6 characters are required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="PASSWORD*"
+        /><br />
+        <small
+          *ngIf="
+            addEmpForm.get('password')?.dirty &&
+            addEmpForm.get('password')?.hasError('required')
+          "
+          class="text-danger"
+          >*Password is required.</small
+        ><br />
+        <small
+          *ngIf="
+            addEmpForm.get('password')?.dirty &&
+            addEmpForm.get('password')?.hasError('passwordValidator')
+          "
+          class="text-danger"
+          [innerHTML]="
+            addEmpForm.get('password')?.getError('passwordValidator').message
+          "
+        ></small>
+      </div>
+      <div class="mb-3">
+        <input
+          type="email"
+          formControlName="email"
+          aria-describedby="emailHelp"
+          placeholder="EMAIL*"
+        /><br />
+        <small
+          *ngIf="
+            addEmpForm.get('email')?.dirty &&
+            addEmpForm.get('email')?.hasError('required')
+          "
+          class="text-danger"
+          >*Email is required.<br
+        /></small>
+        <small
+          *ngIf="
+            addEmpForm.get('email')?.dirty &&
+            addEmpForm.get('email')?.hasError('email')
+          "
+          class="text-danger"
+          >*Invalid format.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          type="number"
+          formControlName="mobileNumber"
+          placeholder="MOBILE NUMBER*"
+        /><br />
+
+        <small
+          *ngIf="
+            addEmpForm.get('mobileNumber')?.dirty &&
+            addEmpForm.get('mobileNumber')?.hasError('required')
+          "
+          class="text-danger"
+          >*Mobile No. is required.<br
+        /></small>
+        <small
+          class="text-danger"
+          *ngIf="addEmpForm.get('mobileNumber')?.hasError('pattern')"
+        >
+          *Invalid phone number format.
+        </small>
+      </div>
+      <div class="mb-3">
+        <input type="number" formControlName="salary" placeholder="SALARY" />
+        <br />
+        <small
+          *ngIf="
+            addEmpForm.get('salary')?.dirty &&
+            addEmpForm.get('salary')?.hasError('min')
+          "
+          class="text-danger"
+          >*salary can not be negative</small
+        >
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-md-2 ms-2 mb-2">
+        <button type="button" class="btn btn-secondary" (click)="OnCancel()">
+          Cancel
+        </button>
+      </div>
+      <div class="col-md-2 mb-2">
+        <button
+          id="save"
+          type="button"
+          class="btn btn-primary"
+          (click)="addEmp()"
+        >
+          Register
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer-other></app-footer-other>

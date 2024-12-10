@@ -1,0 +1,223 @@
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2">
+      <img
+        src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""
+      />Back
+    </button>
+  </div>
+  <div class="container">
+    <h5 class="modal-title" id="exampleModalLabel">Add Scheme Deatails</h5>
+    <form [formGroup]="addSchemeForm">
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="text"
+          formControlName="schemeName"
+          placeholder="SHCEME NAME*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addSchemeForm.get('schemeName')?.dirty &&
+            addSchemeForm.get('schemeName')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="text"
+          formControlName="description"
+          placeholder="TAG LINE*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addSchemeForm.get('description')?.dirty &&
+            addSchemeForm.get('description')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="minInvestmentAmount"
+          placeholder="MINIMUM INVESTMENT AMOUNT*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addSchemeForm.get('minInvestmentAmount')?.dirty &&
+            addSchemeForm.get('minInvestmentAmount')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="maxInvestmentAmount"
+          placeholder="MAX INVESTMENT AMOUNT*"
+        /><br />
+        <small
+          *ngIf="
+            addSchemeForm.get('maxInvestmentAmount')?.dirty &&
+            addSchemeForm.get('maxInvestmentAMount')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="minAge"
+          aria-describedby="emailHelp"
+          placeholder="MINIMUM AGE*"
+        /><br />
+        <small
+          *ngIf="
+            addSchemeForm.get('minAge')?.dirty &&
+            addSchemeForm.get('minAge')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="maxAge"
+          placeholder="MAX AGE*"
+        /><br />
+        <small
+          *ngIf="
+            addSchemeForm.get('maxAge')?.dirty &&
+            addSchemeForm.get('maxAge')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="minTerm"
+          placeholder="MINIMUM TERM*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addSchemeForm.get('minTerm')?.dirty &&
+            addSchemeForm.get('minTerm')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="maxTerm"
+          placeholder="MAXIMUM TERM*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addSchemeForm.get('maxTerm')?.dirty &&
+            addSchemeForm.get('maxTerm')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="profitPercent"
+          placeholder="PROFIT PERCENT*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addSchemeForm.get('profitPercent')?.dirty &&
+            addSchemeForm.get('profitPercent')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="firstPremiumCommissionPercent"
+          placeholder="REGISTER COMMISSION PERCENT*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addSchemeForm.get('firstPremiumCommissionPercent')?.dirty &&
+            addSchemeForm
+              .get('firstPremiumCommissionPercent')
+              ?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+      <div class="mb-3">
+        <input
+          class="form-input"
+          type="number"
+          formControlName="emiCommissionPercent"
+          placeholder="EMI COMMISSION PERCENT*"
+        />
+        <br />
+        <small
+          *ngIf="
+            addSchemeForm.get('emiCommissionPercent')?.dirty &&
+            addSchemeForm.get('emiCommissionPercent')?.hasError('required')
+          "
+          class="text-danger"
+          >*Field is required.</small
+        >
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-md-3">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+      <div class="col-md-3">
+        <button
+          id="save"
+          type="button"
+          class="btn btn-primary"
+          (click)="addScheme()"
+        >
+          Add Scheme
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer-other></app-footer-other>

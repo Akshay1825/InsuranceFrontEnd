@@ -1,0 +1,247 @@
+<div class="wrapper">
+  <app-agent-header></app-agent-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2">
+      <img
+        src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""
+      />Back
+    </button>
+  </div>
+  <div
+    class="btn-group switch switchBtn"
+    role="group"
+    aria-label="Button switch"
+  >
+    <div>
+      <button
+        type="button"
+        class="btn"
+        [class.active]="isSwitchOn"
+        [class.on]="isSwitchOn"
+        (click)="toggleSwitch(true)"
+      >
+        Purchased
+      </button>
+      <button
+        type="button"
+        class="btn"
+        [class.off]="!isSwitchOn"
+        (click)="toggleSwitch(false)"
+      >
+        Applied
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="pagination-controls ms-4 mb-3 pt-3">
+        <!-- Other pagination elements -->
+        <label for="pageSizeSelect">Page Size:</label>
+        <select
+          id="pageSizeSelect"
+          class="form-control"
+          (change)="onPageSizeChange($event)"
+        >
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <!-- Add more options as needed -->
+        </select>
+        <div class="search-container">
+          <input
+            type="text"
+            class="search"
+            id="searchQuery"
+            [(ngModel)]="searchQuery"
+            placeholder="Search by policy Number.."
+          />
+          <button class="search-btn ms-1 mb-1" (click)="onSearch()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              class="bi bi-search"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- purchased table -->
+
+    <table
+      *ngIf="isSwitchOn"
+      id="policyTable"
+      class="table table-light table-responsive-md table-hover Data-table"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Sr.</th>
+          <th scope="col">Policy No</th>
+          <th scope="col">Scheme Id</th>
+          <th scope="col">Premium</th>
+          <th scope="col">Mode</th>
+          <th scope="col">Sum Assured</th>
+          <th scope="col">Issue Date</th>
+          <th scope="col">Maturity Date</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let policy of policies; let i = index">
+        <tr>
+          <td>
+            {{ calculateSRNumber(i) }}
+          </td>
+
+          <td>
+            {{ policy.policyNo }}
+          </td>
+          <td>
+            {{ policy.insuranceSchemeId }}
+          </td>
+          <td>
+            <span style="font-family: 'RupeeFont'">₹</span>
+            {{ policy.premium }}
+          </td>
+          <td>
+            <div *ngIf="policy.premiumMode == 0">Yearly</div>
+            <div *ngIf="policy.premiumMode == 1">Half Yearly</div>
+            <div *ngIf="policy.premiumMode == 2">Quaterly</div>
+            <div *ngIf="policy.premiumMode == 3">Monthly</div>
+          </td>
+          <td>
+            <span style="font-family: 'RupeeFont'">₹</span>
+            {{ policy.maturityAmount }}
+          </td>
+          <td>
+            {{ policy.issueDate | date : "dd-MM-YYYY" }}
+          </td>
+          <td>
+            {{ policy.maturityDate | date : "dd-MM-YYYY" }}
+          </td>
+          <!-- <td> -->
+          <!-- <button class="btn btn-primary" (click)="viewPolicy(policy)"> 
+                    View More
+                  </button>-->
+          <!-- {{policy.tatus}} -->
+          <!-- </td> -->
+        </tr>
+      </tbody>
+      <tfoot *ngIf="policies.length == 0">
+        <tr class="text-center">
+          <td colspan="9">No Policy Data Found</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- Applied tabel -->
+    <table
+      *ngIf="!isSwitchOn"
+      id="policyTable"
+      class="table table-light table-responsive-md table-hover Data-table"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Sr.</th>
+          <th scope="col">Policy No</th>
+          <th scope="col">Scheme Id</th>
+          <th scope="col">Premium</th>
+          <th scope="col">Mode</th>
+          <th scope="col">Sum Assured</th>
+          <th scope="col">Issue Date</th>
+          <th scope="col">Maturity Date</th>
+          <!-- <th scope="col">Status</th> -->
+        </tr>
+      </thead>
+      <tbody *ngIf="policies.length > 0">
+        <tr *ngFor="let policy of policies; let i = index">
+          <td>
+            {{ calculateSRNumber(i) }}
+          </td>
+
+          <td>
+            {{ policy.policyNo }}
+          </td>
+          <td>
+            {{ policy.insuranceSchemeId }}
+          </td>
+          <td>
+            <span style="font-family: 'RupeeFont'">₹</span>
+            {{ policy.premium }}
+          </td>
+          <td>
+            <div *ngIf="policy.premiumMode == 0">Yearly</div>
+            <div *ngIf="policy.premiumMode == 1">Half Yearly</div>
+            <div *ngIf="policy.premiumMode == 2">Quaterly</div>
+            <div *ngIf="policy.premiumMode == 3">Monthly</div>
+          </td>
+
+          <td>
+            <span style="font-family: 'RupeeFont'">₹</span>
+            {{ policy.maturityAmount }}
+          </td>
+          <td>
+            {{ policy.issueDate | date : "dd-MM-YYYY" }}
+          </td>
+          <td>
+            {{ policy.maturityDate | date : "dd-MM-YYYY" }}
+          </td>
+          <!-- <td> -->
+          <!-- <button class="btn btn-primary" (click)="BuyPolicy(policy)">
+                    Buy Policy
+                  </button> -->
+          <!-- </td> -->
+        </tr>
+      </tbody>
+      <tfoot *ngIf="policies.length == 0">
+        <tr class="text-center">
+          <td colspan="9">No Policy Data Found</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div>
+    <nav aria-label="Page navigation example ">
+      <ul class="pagination justify-content-center">
+        <li class="page-item text-center ms-1" *ngIf="currentPage > 1">
+          <a
+            class="page-link"
+            (click)="changePage(currentPage - 1)"
+            aria-label="Previous"
+          >
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item text-center ms-1" *ngFor="let page of pageNumbers">
+          <a
+            class="page-link"
+            [ngClass]="{ active: currentPage === page }"
+            (click)="changePage(page)"
+            >{{ page }}</a
+          >
+        </li>
+        <li
+          class="page-item text-center ms-1"
+          *ngIf="currentPage < pageNumbers.length"
+        >
+          <a
+            class="page-link"
+            (click)="changePage(currentPage + 1)"
+            aria-label="Next"
+          >
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<app-footer-other></app-footer-other>

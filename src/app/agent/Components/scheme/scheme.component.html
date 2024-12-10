@@ -1,0 +1,183 @@
+<div class="wrapper">
+<app-agent-header></app-agent-header>
+<div class="top_link">
+  <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+      alt=""/>Back</button>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="pagination-controls ms-4 mb-3 pt-3">
+      <!-- Other pagination elements -->
+      <label for="pageSizeSelect">Page Size:</label>
+      <select
+        id="pageSizeSelect"
+        class="form-control"
+        (change)="onPageSizeChange($event)"
+      >
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <!-- Add more options as needed -->
+      </select>
+      <div class="search-container">
+        <input
+          type="text"
+          class="form-control search"
+          id="searchQuery"
+          [(ngModel)]="searchQuery"
+          (keyup)="onSearch()"
+          placeholder="Start filtering by id or scheme name.."
+        />
+      </div>
+    </div>
+  </div>
+  <table class="table table-light table-responsive-md table-hover Data-table">
+    <thead>
+      <tr>
+        <th scope="col">Sr.</th>
+
+        <th scope="col">Scheme Name</th>
+        <th scope="col">Status</th>
+
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let scheme of planSchemes; let i = index">
+        <td>
+          {{ i + 1 }}
+        </td>
+
+        <td>
+          <div>
+            {{ scheme.schemeName }}
+          </div>
+        </td>
+        <td>
+          <div *ngIf="scheme.status">Active</div>
+          <div *ngIf="!scheme.status">InActive</div>
+        </td>
+
+        <td>
+          <button
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#SchemeModal"
+            (click)="showDetail(scheme)"
+          >
+            View More..
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div>
+  <nav aria-label="Page navigation example ">
+    <ul class="pagination justify-content-center">
+      <li class="page-item text-center" *ngIf="currentPage > 1">
+        <a
+          class="page-link"
+          (click)="changePage(currentPage - 1)"
+          aria-label="Previous"
+        >
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item text-center" *ngFor="let page of pageNumbers">
+        <a
+          class="page-link"
+          [ngClass]="{ active: currentPage === page }"
+          (click)="changePage(page)"
+          >{{ page }}</a
+        >
+      </li>
+      <li
+        class="page-item text-center"
+        *ngIf="currentPage < pageNumbers.length"
+      >
+        <a
+          class="page-link"
+          (click)="changePage(currentPage + 1)"
+          aria-label="Next"
+        >
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<!-- <app-add-plan></app-add-plan> -->
+<!-- Table -->
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="SchemeModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-body">
+        <table>
+          <tr>
+            <td>Minimum Age:</td>
+            <td>{{ planSchemes.body }} years</td>
+          </tr>
+          <tr>
+            <td>Maximum Age:</td>
+            <td>{{ planSchemes.maxAge }} years</td>
+          </tr>
+          <tr>
+            <td>Minimum Term:</td>
+            <td>{{ schemeDetail.minTerm }} years</td>
+          </tr>
+          <tr>
+            <td>Maximum Term:</td>
+            <td>{{ schemeDetail.maxTerm }} years</td>
+          </tr>
+
+          <tr>
+            <td>Min Investment Amount:</td>
+            <td>
+              <span style="font-family: 'RupeeFont'">₹</span
+              >{{ schemeDetail.minInvestmentAmount }}
+            </td>
+          </tr>
+          <tr>
+            <td>Max Investment Amount:</td>
+            <td>
+              <span style="font-family: 'RupeeFont'">₹</span
+              >{{ schemeDetail.maxInvestmentAmount }}
+            </td>
+          </tr>
+          <tr>
+            <td>Profit Percentage:</td>
+            <td>{{ schemeDetail.profitPercent }}&#37;</td>
+          </tr>
+          <tr>
+            <td>Registration Commission&#37;:</td>
+            <td>{{ schemeDetail.firstPremiumCommissionPercent }}&#37;</td>
+          </tr>
+          <tr>
+            <td>Premium Commission&#37;:</td>
+            <td>{{ schemeDetail.emiCommissionPercent }}&#37;</td>
+          </tr>
+          <!-- <tr>
+              <td>Required Documents:</td>
+              <td *ngFor="let rdoc of scheme.additionalDetail.requiredDocuments"><span>{{rdoc.docType}},</span></td>
+            </tr> -->
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<app-footer-other></app-footer-other>

@@ -1,0 +1,88 @@
+<div class="wrapper">
+<app-customer-header></app-customer-header>
+<div class="top_link">
+  <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+      alt=""/>Back</button>
+</div>
+<div class="container">
+  <div class="profile">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="50"
+      height="50"
+      fill="blue"
+      class="bi bi-person-lines-fill"
+      viewBox="0 0 16 16"
+    >
+      <path
+        d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"
+      />
+    </svg>
+    <h4>Profile</h4>
+  </div>
+
+  <table class="table table-responsive-md">
+    <tbody>
+      <tr>
+        <td>First Name</td>
+       
+        <td>
+         {{ customerProfile.customer['firstName'] }}
+        </td>
+      </tr>
+      <tr>
+        <td>Last Name</td>
+        <td>{{ customerProfile.customer['lastName'] }}</td>
+      </tr>
+      <tr>
+        <td>Date of Birth</td>
+        <td>{{ customerProfile.customer['birthDate'] | date : "dd-MM-yyyy" }}</td>
+      </tr>
+      <tr>
+        
+        <td>Mobile No</td>
+        <td>
+            <div *ngIf="!isEdit">{{customerProfile.customer['mobileNumber']}}</div>
+            <div *ngIf="isEdit"><input type="string"  [(ngModel)]="customerProfile.customer['mobileNumber']">
+                <span class="text-danger" *ngIf="ValidateField(customerProfile.customer['mobileNumber'])">*required</span>
+                <span class="text-danger" *ngIf="validatePhone(customerProfile.customer['mobileNumber'])">*Invalid</span>
+            </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>
+            <div *ngIf="!isEdit">{{ customerProfile.customer['email'] }}</div>
+            <div *ngIf="isEdit"><input type="email" [(ngModel)]="customerProfile.customer['email']">
+                 <span class="text-danger" *ngIf="ValidateField(customerProfile.customer['email'])">*required</span>
+                 <span class="text-danger" *ngIf="validateEmail(customerProfile.customer['email'])">*Invalid</span>
+                </div>
+        </td>
+      </tr>
+      
+      <tr>
+        <td>Address</td>
+        <td>
+            <div *ngIf="!isEdit">{{ customerProfile.customer['address'] }}</div>
+            <div *ngIf="isEdit"><input type="text" [(ngModel)]="customerProfile.customer['address']">
+                 <span class="text-danger" *ngIf="ValidateField(customerProfile.customer['address'])">*required</span></div>
+        </td>
+      </tr>
+    </tbody>
+    <div *ngIf="!isEdit" class="col-12 mt-2">
+      <button class="submit" (click)="onEdit()">Edit Profile</button>
+    </div>
+
+    <div *ngIf="isEdit" class="col-12 mt-2">
+      <div class="row">
+        <div class="col-md-6">
+           <button class="submit" (click)="updateProfile()">Update</button>
+        </div>
+        <div class="col-md-6">    <button class="submit" (click)="OnCancel()">Cancel</button></div>
+       </div>
+    </div>
+  </table>
+</div>
+</div>
+<app-footer-other></app-footer-other>
+

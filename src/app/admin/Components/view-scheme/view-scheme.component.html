@@ -1,0 +1,160 @@
+<app-admin-header></app-admin-header>
+<!-- Button trigger modal -->
+<div class="top_link">
+  <button (click)="goBack()" class="ms-3 mt-2">
+    <img
+      src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+      alt=""
+    />Back
+  </button>
+</div>
+<button id="button" class="btn btn-secondary m-4" (click)="addScheme()">
+  Add New Scheme
+</button>
+
+<div class="container">
+  <div class="row">
+    <div class="pagination-controls ms-4 mb-3 pt-3">
+      <!-- Other pagination elements -->
+      <label for="pageSizeSelect">Page Size:</label>
+      <select
+        id="pageSizeSelect"
+        class="form-control"
+        (change)="onPageSizeChange($event)"
+      >
+      <option value="{{pageSize}}" *ngFor="let pageSize of pageSizes">{{pageSize}}</option>
+        <!-- Add more options as needed -->
+      </select>
+      <div class="search-container">
+        <input
+          type="number"
+          class="search"
+          id="searchQuery"
+          [(ngModel)]="searchQuery"
+          placeholder="Search by Scheme Id.."
+          
+        />
+        <button *ngIf="!isSearch" class="search-btn ms-1 mb-1" (click)="onSearch()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+          </svg>
+        </button>
+        <button *ngIf="isSearch" class="search-btn ms-1 mb-1" (click)="resetSearch()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+          </svg>
+          </button>
+      </div>
+    </div>
+  </div>
+  <table class="table table-light table-responsive-md table-hover Data-table">
+    <thead>
+      <tr>
+        <th scope="col">Sr.</th>
+        <!-- <th scope="col">Scheme ID</th> -->
+        <th scope="col">Scheme Name</th>
+        <th scope="col">Min Investment</th>
+        <th scope="col">Max Investment</th>
+        <th scope="col">Min Age</th>
+        <th scope="col">Max Age</th>
+        <th scope="col">Min Term(Years)</th>
+        <th scope="col">Max Term(Years)</th>
+        <th scope="col">Profit %</th>
+        <th scope="col">Register Commission %</th>
+        <th scope="col">EMI Commission %</th>
+
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="planSchemes.length > 0">
+      <tr *ngFor="let scheme of planSchemes; let i = index">
+        <td>
+          {{ i + 1 }}
+        </td>
+
+        <!-- <td>
+          {{ scheme.schemeId }}
+        </td> -->
+        <td>
+          {{ scheme.schemeName }}
+        </td>
+        <td>&#x20B9;{{ scheme.minAmount }}</td>
+        <td>&#x20B9;{{ scheme.maxAmount }}</td>
+        <td>
+          {{ scheme.minAge }}
+        </td>
+        <td>
+          {{ scheme.maxAge }}
+        </td>
+        <td>
+          {{ scheme.minInvestTime }}
+        </td>
+        <td>
+          {{ scheme.maxInvestTime }}
+        </td>
+        <td>
+          {{ scheme.profitRatio }}
+        </td>
+        <td>
+          {{ scheme.registrationCommRatio }}
+        </td>
+        <td>
+          {{ scheme.installmentCommRatio }}
+        </td>
+
+        <td>
+          <button
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#updateSchemeModal"
+            dat
+            (click)="UpdateSchemeData(scheme)"
+          >
+            Edit
+          </button>
+          <button class="btn btn-danger mt-2">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot *ngIf="planSchemes.length == 0">
+      <tr class="text-center">
+        <td colspan="13">No Plan Scheme Data Found</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<div>
+  <nav aria-label="Page navigation example ">
+    <ul class="pagination justify-content-center">
+      <li class="page-item text-center" *ngIf="currentPage > 1">
+        <a
+          class="page-link"
+          (click)="changePage(currentPage - 1)"
+          aria-label="Previous"
+        >
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item text-center" *ngFor="let page of pageNumbers">
+        <a
+          class="page-link"
+          [ngClass]="{ active: currentPage === page }"
+          (click)="changePage(page)"
+          >{{ page }}</a
+        >
+      </li>
+      <li
+        class="page-item text-center"
+        *ngIf="currentPage < pageNumbers.length"
+      >
+        <a
+          class="page-link"
+          (click)="changePage(currentPage + 1)"
+          aria-label="Next"
+        >
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

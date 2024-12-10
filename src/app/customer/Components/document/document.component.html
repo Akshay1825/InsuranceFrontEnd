@@ -1,0 +1,89 @@
+<div class="wrapper">
+  <div *ngIf="isCustomer">
+<app-customer-header></app-customer-header>
+</div>
+<div *ngIf="isAgent"><app-agent-header></app-agent-header></div>
+<div class="top_link">
+  <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+      alt=""/>Back</button>
+</div>
+  <form [formGroup]="newDocument" (ngSubmit)="upload()" class="p-4 border rounded shadow-sm bg-light" style="max-width: 600px; margin: 0 auto;">
+    <div class="mb-3">
+      <label for="docType" class="form-label fw-bold">Document Type <span class="text-danger">*</span></label>
+      <select formControlName="name" id="docType" class="form-select">
+        <option value="" disabled>Select a document type</option> <!-- Placeholder -->
+        <option *ngFor="let type of documentTypes" [value]="type.name" [id]="type.id">{{ type.name }}</option>
+      </select>
+      <div *ngIf="newDocument.get('name')?.invalid && newDocument.get('name')?.touched" class="text-danger mt-1 small">
+        Document Type is required.
+      </div>
+    </div>
+  
+    <div class="mb-3">
+      <label for="fileInput" class="form-label fw-bold">Upload File</label>
+      <input type="file" id="fileInput" class="form-control" (change)="onSelect($event)" accept="image/*" />
+      <!-- Display Selected File -->
+      <div *ngIf="file" class="mt-2">
+        <p class="mb-1"><strong>Selected File:</strong> {{ file.name }}</p>
+        <button type="button" class="btn btn-outline-danger btn-sm" (click)="onRemove()">Remove File</button>
+      </div>
+    </div>
+  
+    <!-- Upload Button -->
+    <button type="submit" class="btn btn-primary w-100">Upload File</button>
+  </form>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="container">
+  <table id="employeeTable" class="table table-light table-responsive-md table-hover Data-table">
+    <thead>
+      <tr class="text-center">
+        <th scope="col">Sr.</th>
+        <th scope="col">Type</th>
+       
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody >
+      <tr *ngFor="let doc of documents; let i = index" class="text-center">
+        <td>
+          {{ calculateSRNumber(i) }}
+        </td>
+        <td>
+          {{ doc.name}}
+        <!-- <div *ngIf = "doc.docType == 0">AadharCard</div>
+        <div *ngIf = "doc.docType == 1">PanCard</div>
+        <div *ngIf = "doc.docType == 2">VoterIdCard</div> -->
+        </td>
+        <td>
+          <div *ngIf="!doc.status">Pending</div>
+          <div *ngIf="doc.status">Approved</div>
+        </td>
+        <td>
+          <button class="btn btn-primary" (click)="downloadDocument(doc)">View Document</button>
+        </td>
+        
+       
+      </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- </div> -->
+<app-footer-other></app-footer-other>

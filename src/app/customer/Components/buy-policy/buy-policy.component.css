@@ -1,0 +1,76 @@
+.submit {
+    border: none;
+    padding: 10px 50px;
+    border-radius: 8px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
+    position: relative;
+    background: red;
+    color: #fff;
+    font-weight: bold;
+    -webkit-box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+    -moz-box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+    box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+  }
+  .container{
+    margin-top: 50px;
+    width: 800px;
+  }
+  .table-input{
+   
+      border: none;
+      margin-top: 5px;
+      margin-right: 5px;
+      border-bottom: 1px solid #4f30677d;
+      padding: 10px 10px;
+    
+      overflow: hidden;
+      background: transparent;
+      font-weight: 500;
+      font-size: 14px;
+    
+  }
+ 
+  .right{
+    width: 500px;
+    margin-left: 30%;
+    margin-top: 10px;
+    padding-top: 20px;
+    padding-left: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    
+    margin-bottom: 30px;
+  }
+  .right h5{
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 20px;
+  
+  }
+  .right form {
+    display: flex;
+    flex-direction: column;
+  }
+ select{
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+ }
+  input[type="file"] {
+    width: 50%;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
+ 
+  .top_link  button{
+    border: none;
+    background: none;
+    color: #583672;
+    text-decoration: underline;
+    font-weight: 500;
+  }

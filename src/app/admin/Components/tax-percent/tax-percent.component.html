@@ -1,0 +1,59 @@
+<!-- Table -->
+
+<!-- Modal -->
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="top_link">
+    <button (click)="goBack()" class="ms-3 mt-2">
+      <img
+        src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+        alt=""
+      />Back
+    </button>
+  </div>
+  <div class="container">
+    <div class="heading">
+      <h5>Tax Settings</h5>
+    </div>
+
+    <form [formGroup]="taxPercentForm">
+      <div class="row">
+        <div class="col">
+          <input
+            type="number"
+            formControlName="taxPercent"
+            placeholder="Enter Tax Percent"
+            [min]="0"
+            aria-label="Tax Percent"
+          />
+          <br />
+          <small
+            *ngIf="
+              taxPercentForm.get('taxPercent')?.dirty &&
+              taxPercentForm.get('taxPercent')?.hasError('required')
+            "
+            class="text-danger"
+            >*Field is required.</small
+          >
+          <small
+            *ngIf="
+              taxPercentForm.get('taxPercent')?.dirty &&
+              taxPercentForm.get('taxPercent')?.hasError('pattern')
+            "
+            class="text-danger"
+            >*Invalid input.</small
+          >
+        </div>
+      </div>
+    </form>
+
+    <div class="row">
+      <div class="col-12">
+        <button id="save" type="button" class="submit" (click)="updateTax()">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer-other></app-footer-other>

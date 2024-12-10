@@ -1,0 +1,73 @@
+
+
+   .search-container{
+    margin-left: auto;
+    margin-right: 40px;
+    padding:2px;
+    width: 230px;
+    height: 30px;
+    border:1px solid black;
+    border-radius: 10px;
+    
+
+  }
+  .switchBtn{
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+  .btn.active.on {
+    background-color: #583672; /* Change to the desired background color */
+    color: #ffffff; /* Change to the desired text color */
+    font-weight: 500;
+  }
+  
+  /* Style for the "Off" state */
+  .btn.off {
+    background-color: #583672; /* Change to the desired background color */
+    color: #ffffff; /* Change to the desired text color */
+    font-weight: 500;
+  }
+  .btn{
+    font-weight: 500;
+    
+  }
+  
+  .row{
+    margin: 10px;
+    
+}
+input{
+  border: none;
+  background: none;
+}
+input:focus{
+  outline: none;
+}
+.search-btn{
+border: none;
+padding: none;
+background: none;
+}
+  
+    
+   
+  
+    .wrapper{
+      min-height: 93vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container{
+      margin-top: 50px;
+      width: 1200px;
+    }
+    Table{
+      box-shadow: 1px 4px 22px -8px #0004;
+    }
+    .top_link  button{
+      border: none;
+      background: none;
+      color: #583672;
+      text-decoration: underline;
+      font-weight: 500;
+    }

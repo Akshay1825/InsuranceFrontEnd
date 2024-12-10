@@ -1,0 +1,166 @@
+<div class="wrapper">
+<div *ngIf="isEmployee">
+<app-employee-header></app-employee-header>
+</div>
+<div *ngIf="isAdmin">
+    <app-admin-header></app-admin-header>
+</div>
+<div class="top_link">
+  <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+      alt=""/>Back</button>
+</div>
+<div class="container">
+    <div class="row">
+      <div class="pagination-controls ms-4 mb-3 pt-3">
+        <!-- Other pagination elements -->
+        <label for="pageSizeSelect">Page Size:</label>
+        <select
+          id="pageSizeSelect"
+          class="form-control"
+          (change)="onPageSizeChange($event)"
+        >
+        
+        <option value="{{pageSize}}" *ngFor="let pageSize of pageSizes">{{pageSize}}</option>
+          <!-- Add more options as needed -->
+        </select>
+        <div class="search-container">
+          <input
+            type="number"
+            class="search"
+            id="searchQuery"
+            [(ngModel)]="searchQuery"
+            placeholder="Search by Claim Date"
+            
+          />
+          <button *ngIf="!isSearch" class="search-btn ms-1 mb-1" (click)="onSearch()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+          </button>
+          <button *ngIf="isSearch" class="search-btn ms-1 mb-1" (click)="resetSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+            </svg>
+            </button>
+        </div>
+      </div>
+    </div>
+    <table id="employeeTable" class="table table-light table-responsive-md table-hover Data-table">
+       <thead>
+        <tr>
+          <th scope="col">Sr.</th>
+          <!-- <th scope="col">Claim ID</th> -->
+          
+          <th scope="col">Date of apply</th>
+
+          <th scope="col">Claim Amount</th>
+          <th scope="col">policy</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead> 
+     <tbody *ngIf="claimData.length>0">
+        <tr *ngFor="let claim of claimData; let i = index">
+          <td>
+            {{ calculateSRNumber(i) }}
+          </td>
+  
+          <!-- <td>
+            {{ claim.claimId }}
+          </td> -->
+          <td>
+            {{claim.claimDate|date:"dd-MM-YYYY"}}
+          </td>
+          <td>
+            {{claim.claimAmount}}
+          </td>
+          <td>
+            <div>
+      
+       <button class="btn btn-primary" (click)="showPolicy(i)">View</button>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="claim.status==0">
+            <button class="btn btn-primary" (click)="updateClaim(i)">Approve</button>
+          </div>
+           <div *ngIf="claim.status==1">
+            Approved
+           </div>
+           <div *ngIf="claim.status==2">
+            Rejected
+           </div>
+          </td>
+          
+        </tr>
+      </tbody> 
+      <tfoot *ngIf="claimData.length==0">
+        <tr class ="text-center" >
+          <td colspan="6"> No Claim Data Found</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+ 
+ <div
+  class="modal fade"
+  id="policyDetailModal"
+  tabindex="-1"
+  aria-labelledby=""
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-body">
+        <table>
+           
+          <tr>
+            
+            <td>Policy No:</td>
+            <td>{{ policyData.policyNumber }} </td>
+            
+          </tr>
+           <tr>
+            <td>Scheme Name:</td>
+            <td>{{ policyData.schemeName }} </td>
+          </tr>
+          <tr>
+            <td>Issue Date:</td>
+            <td>{{ policyData.issueDate|date:"dd-MM-YYYY" }} </td>
+          </tr>
+          <tr>
+            <td>Maturity Date:</td>
+            <td>{{ policyData.maturityDate|date:"dd-MM-YYYY" }} </td>
+          </tr>
+
+          <tr>
+            <td> Maturity Amount:</td>
+            <td>
+              <span style="font-family: 'RupeeFont'">₹</span
+              >{{ policyData.sumAssured }}
+            </td>
+          </tr>
+          <tr>
+            <td> Premium Amount:</td>
+            <td>
+              <span style="font-family: 'RupeeFont'">₹</span
+              >{{ policyData.premiumAmount }}
+            </td>
+          </tr>
+          
+          
+        
+        </table> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>  
+
+
+</div>
+
+<app-footer-other></app-footer-other>

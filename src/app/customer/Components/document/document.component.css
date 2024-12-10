@@ -1,0 +1,82 @@
+
+  .container{
+    margin-top: 50px;
+  }
+  
+  .right{
+    width: 500px;
+    margin-left: 30%;
+    margin-top: 10px;
+    padding-top: 20px;
+    padding-left: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 4px 22px -8px #0004;
+    margin-bottom: 30px;
+  }
+  .menu{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .error
+  {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .right h5{
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 20px;
+  
+  }
+  .right form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  input[type="file"] {
+    width: 50%;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
+ 
+   
+    .submit {
+      border: none;
+      padding: 10px 50px;
+      border-radius: 8px;
+      display: block;
+       margin-right: auto;
+      margin-left: auto; 
+    
+      margin-top: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      background: #583672;
+      color: #fff;
+      font-weight: bold;
+      -webkit-box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+      -moz-box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+      box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 93vh; /* Ensure the wrapper takes up the full viewport height */
+    }
+   
+Table{
+  box-shadow: 1px 4px 22px -8px #0004;
+}
+  
+.top_link  button{
+  border: none;
+  background: none;
+  color: #583672;
+  text-decoration: underline;
+  font-weight: 500;
+}

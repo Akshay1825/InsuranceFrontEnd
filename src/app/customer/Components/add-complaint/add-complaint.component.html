@@ -1,0 +1,81 @@
+<div class="wrapper">
+<app-customer-header></app-customer-header>
+
+<!--<div *ngIf="isAdmin">
+    <app-admin-header></app-admin-header>
+  </div>
+
+  <div *ngIf="isEmployee">
+    <app-employee-header></app-employee-header>
+  </div>
+-->
+<div class="top_link">
+  <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+      alt=""/>Back</button>
+</div>
+<div class="container">
+
+  <form class="row g-2" [formGroup]="addComplaintForm">
+    <div class="heading">
+      <h5>Add Complaint</h5>
+    </div>
+    <div class="col-md-12">
+      <input
+        type="text"
+        formControlName="complaintName"
+        placeholder="TITLE"
+      /><br />
+      <small 
+        *ngIf="
+          addComplaintForm.get('complaintName')?.dirty &&
+          addComplaintForm.get('complaintName')?.hasError('required')
+        "
+        class="text-danger error"
+        >*Field is required.<br
+      /></small>
+      <small
+          *ngIf="
+          addComplaintForm.get('complaintName')?.dirty &&
+          addComplaintForm
+              .get('complaintName')
+              ?.hasError('onlyCharacters')
+          "
+          class="text-danger"
+        >
+          *{{
+            addComplaintForm
+              .get("complaintName")
+              ?.getError("onlyCharacters").message
+          }}</small
+        >
+    </div>
+    <div class="col-md-12">
+      <textarea
+        type="text"
+        formControlName="complaintMessage"
+        placeholder="DESCRIPTION"
+        cols="40"
+        rows="5"
+      ></textarea
+      ><br />
+      <small
+        *ngIf="
+          addComplaintForm.get('complaintMessage')?.dirty &&
+          addComplaintForm.get('complaintMessage')?.hasError('required')
+        "
+        class="text-danger error"
+      >
+        *Field is required.<br
+      /></small>
+      
+    </div>
+
+    <div class="col-12">
+      <button type="submit" class="submit" (click)="addComplaint()">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+</div>
+<app-footer-other></app-footer-other>

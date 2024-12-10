@@ -1,0 +1,135 @@
+
+
+<!-- Button trigger modal -->
+<div class="wrapper">
+<app-customer-header></app-customer-header>
+<div class="top_link">
+  <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+      alt=""/>Back</button>
+</div>
+<div class="container">
+    <div class="row">
+      <div class="pagination-controls ms-4 mb-3 pt-3">
+        <!-- Other pagination elements -->
+        <label for="pageSizeSelect">Page Size:</label>
+        <select
+          id="pageSizeSelect"
+          class="form-control"
+          (change)="onPageSizeChange($event)"
+        >
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <!-- Add more options as needed -->
+        </select>
+        <div class="search-container">
+          <input
+            type="text"
+            class="form-control search"
+            id="searchQuery"
+            [(ngModel)]="searchQuery"
+            (keyup)="onSearch()"
+            placeholder="Start filtering by id or first name.."
+          />
+        </div>
+      </div>
+    </div>
+    <table class="table table-light table-responsive-md Data-table table-hover" >
+      <thead>
+        <tr>
+          <th scope="col">Sr.</th>
+          <!-- <th scope="col">Agent ID</th> -->
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Qualification</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone</th>
+         
+         
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let agent of agents; let i = index">
+          <td>
+            {{ i + 1 }}
+          </td>
+  
+          <!-- <td>
+            {{ agent.agentId }}
+          </td> -->
+          <td>
+            
+            {{ agent.firstName }}
+          </td>
+          <td>
+          
+            {{ agent.lastName }}
+      
+          </td>
+          <td>
+           
+            {{ agent.qualification }}
+        
+          </td>
+          <td>
+            <div *ngIf="agent.isEdit">
+              <input type="text" [(ngModel)]="agent.email" />
+            </div>
+            <div *ngIf="!agent.isEdit">
+              {{ agent.email }}
+            </div>
+          </td>
+          <td>
+            <div *ngIf="agent.isEdit">
+              <input type="text" [(ngModel)]="agent.mobileNumber" />
+            </div>
+            <div *ngIf="!agent.isEdit">
+              {{ agent.mobileNumber }}
+            </div>
+          </td>
+          
+  
+         
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <nav aria-label="Page navigation example ">
+      <ul class="pagination justify-content-center">
+        <li class="page-item text-center ms-1" *ngIf="currentPage > 1">
+          <a
+            class="page-link"
+            (click)="changePage(currentPage - 1)"
+            aria-label="Previous"
+          >
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item text-center ms-1" *ngFor="let page of pageNumbers">
+          <a
+            class="page-link"
+            [ngClass]="{ active: currentPage === page }"
+            (click)="changePage(page)"
+            >{{ page }}</a
+          >
+        </li>
+        <li
+          class="page-item text-center ms-1"
+          *ngIf="currentPage < pageNumbers.length"
+        >
+          <a
+            class="page-link"
+            (click)="changePage(currentPage + 1)"
+            aria-label="Next"
+          >
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<app-footer-other></app-footer-other>
+  
+  

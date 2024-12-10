@@ -1,0 +1,59 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Concert+One&family=Dancing+Script:wght@500&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Montserrat:wght@600;700&display=swap');
+
+.header {
+  background-color: #4169E1;
+}
+.navbar-brand{
+  font-family: 'Dancing Script', cursive;
+  font-family: 'Montserrat', sans-serif;
+  font-size:25px;;
+}
+.navbar-nav .nav-item .nav-link{
+
+  font-weight: 600;
+}
+.navbar-nav .nav-item:hover .nav-link {
+  font-weight: 700;
+}
+
+.top_link  button{
+    border: none;
+    background: none;
+    color: #583672;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+  .wrapper{
+    display: float;
+    flex-direction:column ;
+    min-height: 93vh;
+  
+  }
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+  }
+  
+  .pagination-controls label {
+    margin-right: 10px;
+  }
+  
+  .pagination-controls select {
+    width: 60px; /* Adjust width as needed */
+  }
+  .Data-table {
+    box-shadow: 1px 4px 22px -8px #0004;
+  }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* @media (forced-colors: active) {
+  body {
+    background-color: Canvas;
+    color: CanvasText;
+  }
+} */

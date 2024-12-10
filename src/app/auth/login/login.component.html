@@ -1,0 +1,44 @@
+<section class="login">
+  <div class="login_box">
+    <div class="left">
+      <div class="top_link">
+        <a href="/"><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+            alt="" />Return home</a>
+      </div>
+      <div class="contact">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <h3>Login</h3>
+          <input type="text" placeholder="USERNAME*" formControlName="userName" />
+          <small *ngIf="
+                loginForm.get('userName')?.dirty &&
+                loginForm.get('userName')?.hasError('required')
+              " class="text-danger">*UserName is required.</small>
+          <input type="password" placeholder="PASSWORD*" formControlName="password" />
+          <small *ngIf="
+                loginForm.get('password')?.dirty &&
+                loginForm.get('password')?.hasError('required')
+              " class="text-danger">*Password is required.</small>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="captcha-code"><img [src]="captchaUrl" alt="CAPTCHA Image" *ngIf="captchaUrl" /></div>
+                <button class="btn btn-outline-secondary" (click)="generateCaptcha()" type="button">
+                  Refresh
+                </button>
+              </div>
+      
+              <div class="form-group">
+                <label for="captcha">Enter Captcha</label>
+                <input type="text" class="form-control" id="captcha" formControlName="captchaInput" />
+                <div *ngIf="loginForm.get('captcha')?.hasError('required')" class="text-danger">
+                  Captcha is required.
+                </div>
+              </div>
+          <button class="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+    <div class="right">
+
+      
+    </div>
+  </div>
+</section>

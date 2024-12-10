@@ -1,0 +1,194 @@
+h1{
+    text-align: center;
+    margin: 50px 0 !important;
+    font-family: sans-serif;
+}
+.accordion-item,.accordion-header{
+    border: none !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin-bottom: 20px;
+
+}
+.accordion-item{
+    box-shadow: 0 2px 20px 0 rgba(110,130,208, .18);
+}
+.accordion-button{
+    width: 100%;
+    height: 60px;
+    color: #000;
+    font-weight: bold;
+    text-align: left;
+    text-decoration: none;
+    
+}
+
+.accordion-button:focus {
+    outline: none;
+    border: none; /* Optionally remove the border */
+    box-shadow: none; /* Optionally remove the box shadow */
+    background: none !important;
+  }
+ 
+#leftcol{
+    max-height: 700px;
+     overflow-y: auto;
+}
+/* Width and style of the scrollbar track */
+::-webkit-scrollbar {
+    width: 12px; /* You can adjust the width as needed */
+  }
+  
+  /* Style of the scrollbar thumb (the draggable part) */
+  ::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar thumb */
+    border-radius: 6px; /* Rounded corners for the thumb */
+  }
+  
+  /* Hover effect on the scrollbar thumb */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Change the color on hover */
+  }
+  
+  /* Style for the scrollbar track when the scrollbar is in the hover state */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background color of the scrollbar track */
+  }
+  
+  /* Style for the scrollbar corners */
+  ::-webkit-scrollbar-corner {
+    background: #f1f1f1; /* Background color of the scrollbar corners */
+  }
+  
+  /* Scrollbar width in Firefox */
+  /* Note that Firefox may require a different approach */
+  /* You can use the scrollbar-width property for Firefox */
+  /* scrollbar-width: thin; */
+  
+ 
+  input {
+    border: none;
+    width: 80%;
+  
+    margin-top: 10px;
+    border-bottom: 1px solid #4f30677d;
+    padding: 10px 10px;
+  
+    overflow: hidden;
+    background: transparent;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .menu
+  {
+    border: none;
+    width: 80%;
+  
+    margin-top: 10px;
+    border-bottom: 1px solid #4f30677d;
+    padding: 10px 10px;
+  
+    overflow: hidden;
+    background: transparent;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .submit {
+    border: none;
+    padding: 10px 50px;
+    border-radius: 8px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
+    position: relative;
+    background: #583672;
+    color: #fff;
+    font-weight: bold;
+    -webkit-box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+    -moz-box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+    box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+  }
+  .submitBtn{
+    border: none;
+    padding: 10px 50px;
+    border-radius: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    position: relative;
+    background: #583672;
+    color: #fff;
+    font-weight: bold;
+    -webkit-box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+    -moz-box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+    box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
+  }
+  option
+  {
+    height: 60px;
+    color:#000
+  }
+  option:checked{
+    background-color: none;
+  }
+.result{
+  text-align: left;
+  padding: 5%;
+  margin-left: 20px;
+  margin-top: 20px;
+
+}
+.claculator{
+  padding: 20px;
+  box-shadow: 1px 4px 22px -8px #0004;
+}
+#amountField::-webkit-inner-spin-button,
+#amountField::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+select.menu {
+  display: block;
+  width: 100%; /* Make it responsive */
+  padding: 8px;
+  font-size: 16px;
+  line-height: 1.5;
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 4px; /* Rounded corners */
+  background-color: #fff; /* White background */
+  color: #333; /* Dark text */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  -webkit-appearance: none; /* Remove default styles on Webkit browsers */
+  -moz-appearance: none; /* Remove default styles on Firefox */
+  appearance: none; /* Remove default styles in modern browsers */
+}
+
+/* Add hover effect for better user experience */
+select.menu:hover {
+  border-color: #007bff; /* Highlight border */
+  background-color: #f8f9fa; /* Slight background change */
+}
+
+/* Add focus effect for accessibility */
+select.menu:focus {
+  outline: none; /* Remove default outline */
+  border-color: #007bff; /* Highlight border */
+  box-shadow: 0 0 3px #007bff; /* Add focus shadow */
+}
+
+/* Ensure options are visible and readable */
+select.menu option {
+  padding: 8px;
+  background-color: #fff;
+  color: #333;
+}
+
+/* Handle disabled state */
+select.menu:disabled {
+  background-color: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+}

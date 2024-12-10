@@ -1,0 +1,158 @@
+
+<div class="wrapper">
+    
+ 
+        <app-customer-header></app-customer-header>
+
+    <div class="top_link">
+      <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
+          alt=""/>Back</button>
+    </div>
+    <div class="container">
+        <div class="row">
+          <div class="pagination-controls ms-4 mb-3 pt-3">
+            <!-- Other pagination elements -->
+            <label for="pageSizeSelect">Page Size:</label>
+            <select
+              id="pageSizeSelect"
+              class="form-control"
+              (change)="onPageSizeChange($event)"
+            >
+            
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <!-- Add more options as needed -->
+            </select>
+            <div class="search-container">
+            <input
+              type="text"
+              class="form-control search"
+              id="searchQuery"
+              [(ngModel)]="searchQuery"
+              (keyup)="onSearch()"
+              placeholder= "Start filtering by  claim id .."
+            />
+            
+          </div>
+          </div>
+        </div>
+        <table id="employeeTable" class="table table-light table-responsive-md table-hover Data-table">
+           <thead>
+            <tr>
+              <th scope="col">Sr.</th>
+              <th scope="col">Claim ID</th>
+              
+              <th scope="col">Date of apply</th>
+    
+              <th scope="col">Claim Amount</th>
+              <th scope="col">policy</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead> 
+         <tbody *ngIf="claimData.length>0">
+            <tr *ngFor="let claim of claimData; let i = index">
+              <td>
+                {{ calculateSRNumber(i) }}
+              </td>
+      
+              <td>
+                {{ claim.claimId }}
+              </td>
+              <td>
+                {{claim.claimDate|date:"dd-MM-YYYY"}}
+              </td>
+              <td>
+                {{claim.claimAmount}}
+              </td>
+              <td>
+                <div>
+          
+           <button class="btn btn-primary" (click)="showPolicy(i)">View</button>
+                </div>
+              </td>
+              <td>
+                <div *ngIf="claim.status==1">
+                <button class="btn btn-primary" (click)="updateClaim(i)">Approve</button>
+              </div>
+               <div *ngIf="claim.status==0">
+                Approved
+               </div>
+               <div *ngIf="claim.status==2">
+                Rejected
+               </div>
+              </td>
+              
+            </tr>
+          </tbody> 
+          <tfoot *ngIf="claimData.length==0">
+            <tr class ="text-center" >
+              <td colspan="6"> No Claim Data Found</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+     
+     <div
+      class="modal fade"
+      id="policyDetailModal"
+      tabindex="-1"
+      aria-labelledby=""
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-body">
+            <table>
+               
+              <tr>
+                
+                <td>Policy No:</td>
+                <td>{{ policyData.policyNo }} </td>
+                
+              </tr>
+               <tr>
+                <td>SchemeId</td>
+                <td>{{ policyData.insuranceSchemeId }} </td>
+              </tr>
+              <tr>
+                <td>Issue Date:</td>
+                <td>{{ policyData.issueDate|date:"dd-MM-YYYY" }} </td>
+              </tr>
+              <tr>
+                <td>Maturity Date:</td>
+                <td>{{ policyData.maturityDate|date:"dd-MM-YYYY" }} </td>
+              </tr>
+    
+              <tr>
+                <td> Maturity Amount:</td>
+                <td>
+                  <span style="font-family: 'RupeeFont'">₹</span
+                  >{{ policyData.sumAssured }}
+                </td>
+              </tr>
+              <tr>
+                <td> Premium Amount:</td>
+                <td>
+                  <span style="font-family: 'RupeeFont'">₹</span
+                  >{{ policyData.premium }}
+                </td>
+              </tr>
+              
+              
+            
+            </table> 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>  
+    
+    
+    </div>
+    
+    <app-footer-other></app-footer-other>
