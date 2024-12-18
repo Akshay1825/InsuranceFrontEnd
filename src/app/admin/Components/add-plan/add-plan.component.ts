@@ -29,12 +29,13 @@ export class AddPlanComponent  {
               
               console.log(data)
               this.addPlanForm.reset();
-              alert("Registered Successfully") 
+              alert("Plan Added Successfully") 
+              this.goBack();
             
             },
             error:(error:HttpErrorResponse)=>{
               console.log(error)
-              alert(error.error.Message);
+              alert("Plan Name Already Exists");
               
               this.addPlanForm.reset();
             }

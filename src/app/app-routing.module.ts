@@ -60,12 +60,20 @@ import { CustomerClaimsComponent } from './customer/Components/customer-claims/c
 import { AuthGuard } from './Guards/authentication.guard';
 import { AuthService } from './Services/auth.service';
 import { SampleComponent } from './Samples/sample/sample.component';
+import { DocumentuploadComponent } from './customer/Components/documentupload/documentupload.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeDashboardComponent
   },
+  {
+    path:'document-upload',
+    component: DocumentuploadComponent
+  },
+  // {
+  //   path:''
+  // },
   {
      path : 'sample/:policyId',
      component: SampleComponent

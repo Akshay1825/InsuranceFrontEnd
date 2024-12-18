@@ -12,6 +12,10 @@
      
     
   }
+
+  .btn-group .btn {
+    margin-right: 5px; /* Optional: Adds space between buttons */
+  }
 .row{
   margin: 10px;
   

@@ -22,7 +22,9 @@
         >
           <option value="5">5</option>
           <option value="10">10</option>
+          <option value="15">15</option>
           <option value="20">20</option>
+          <option value="25">25</option>
           <option value="30">30</option>
           <!-- Add more options as needed -->
         </select>
@@ -33,7 +35,7 @@
             id="searchQuery"
             [(ngModel)]="searchQuery"
             (keyup)="onSearch()"
-            placeholder="Start filtering by id.."
+            placeholder="Search By Policy Number"
           />
         </div>
       </div>
@@ -42,26 +44,47 @@
       <thead>
         <tr>
           <th scope="col">Sr.</th>
-          <th scope="col">Commission Id</th>
+          
           <th scope="col">Policy Number</th>
+          <th scope="col">Commission Type</th>
           <th>Date</th>
           <th scope="col">Commission Amount</th>
-          <th scope="col">Withdraw</th>
+          <th scope="col">Action</th>
           <th scope="col">More</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let commission of commissions; let i = index">
           <td>{{ calculateSRNumber(i) }}</td>
-          <td>{{ commission.commissionId }}</td>
-          <td>{{ commission.policyId }}</td>
+          
+          <td>{{ commission.policyNumber }}</td>
+          <td>{{ commission.commissionType}}</td>
           <td>{{ commission.date | date : "dd-MM-YYYY" }}</td>
-          <td>&#x20B9;{{ commission.commissionAmount }}</td>
+          <td>&#x20B9;{{ roundToTwoDecimals(commission.amount) }}</td>
 
           <td>
-            <div *ngIf="commission.status">Approved</div>
-            <div *ngIf="!commission.status">Pending</div>
+            <!-- Show 'Approved' if commission status is 1 -->
+            <div *ngIf="commission.status === 1">
+              Pending
+            </div>
+          
+            <!-- Show 'Pending' if commission status is 0 -->
+            <div *ngIf="commission.status === 0">
+              <button class="btn btn-success" (click)="withdrawCommission(commission)">
+                Withdraw
+              </button>
+            </div>
+          
+            <!-- Show 'Withdraw Successful' if commission status is 2 -->
+            <div *ngIf="commission.status === 2">
+              Withdraw Successful
+            </div>
+
+            <div *ngIf="commission.status === 3">
+              Rejected
+            </div>
           </td>
+
           <td>
             <button
               class="btn btn-primary"
@@ -125,14 +148,14 @@
             <tr>
               <td>Customer Name:</td>
               <td>
-                {{ customerData.customerFirstName }}
-                {{ customerData.customerLastName }}
+                {{ customerData.firstName }}
+                {{ customerData.lastName }}
               </td>
             </tr>
 
             <tr>
               <td>Mobile No:</td>
-              <td>+91 {{ customerData.phone }}</td>
+              <td>+91 {{ customerData.mobileNumber }}</td>
             </tr>
             <tr>
               <td>Email</td>
@@ -140,11 +163,11 @@
             </tr>
             <tr>
               <td>Policy No:</td>
-              <td>{{ policyData.policyNo }}</td>
+              <td>{{ policyData.policyNumber }}</td>
             </tr>
             <tr>
-              <td>SchemeId</td>
-              <td>{{ policyData.insuranceSchemeId }}</td>
+              <td>Scheme Name</td>
+              <td>{{ policyData.schemeName }}</td>
             </tr>
             <tr>
               <td>Issue Date:</td>
@@ -166,7 +189,7 @@
               <td>Premium Amount:</td>
               <td>
                 <span style="font-family: 'RupeeFont'">₹</span
-                >{{ policyData.premium }}
+                >{{ roundToTwoDecimals(policyData.premiumAmount) }}
               </td>
             </tr>
 

@@ -1,11 +1,11 @@
 <div class="wrapper">
 <app-customer-header></app-customer-header>
-<div class="top_link">
+<div class="top_link" *ngIf="complaints.length!=0">
   <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
       alt=""/>Back</button>
 </div>
 
-<div class="container">
+<div class="container" *ngIf="complaints.length!=0">
   <div class="col-md-12 mt-5"><button class="btn btn-secondary" (click)="addComplaint()">Add Complaint</button></div>
   <div class="row">
     <div class="pagination-controls ms-4 mb-3 pt-3">
@@ -23,12 +23,12 @@
       </select>
       <div class="search-container">
         <input
-          type="text"
+          type="date"
           class="form-control search"
           id="searchQuery"
           [(ngModel)]="searchQuery"
           (keyup)="onSearch()"
-          placeholder="Start filtering by id or title.."
+          placeholder="Start filtering by Date"
         />
       </div>
     </div>

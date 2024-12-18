@@ -1,0 +1,34 @@
+<form [formGroup]="newDocument" (ngSubmit)="upload()" class="p-4 border rounded shadow-sm bg-light" style="max-width: 600px; margin: 0 auto;">
+    <div *ngIf="this.schemeId" class="mb-3">
+        <label for="docType" class="form-label fw-bold">Document Type <span class="text-danger">*</span></label>
+        <select formControlName="Newname" id="docType" class="form-select">
+          <option value="" disabled>Select a document type</option>
+          <option *ngFor="let type of documentTypes"[value]="type">{{ type }}</option>
+        </select>
+        <div *ngIf="newDocument.get('Newname')?.invalid && newDocument.get('Newname')?.touched" class="text-danger mt-1 small">
+          Document Type is required.
+        </div>
+      </div>
+  
+    <div class="mb-3">
+      <label for="fileInput" class="form-label fw-bold">Upload File</label>
+      <input type="file" id="fileInput" class="form-control" (change)="onSelect($event)" accept="image/*" />
+      
+      <div *ngIf="file" class="mt-2">
+        <p class="mb-1"><strong>Selected File:</strong> {{ file.name }}</p>
+        <button type="button" class="btn btn-outline-danger btn-sm" (click)="onRemove()">Remove File</button>
+      </div>
+    </div>
+  
+    
+    <button type="submit" class="btn btn-primary w-100">Upload File</button>
+  </form>
+
+  <div *ngIf="showUploadSuccess" class="alert alert-success">
+    <p>{{ uploadStatus }}</p>
+    
+  </div>
+
+  <div class="d-flex justify-content-center align-items-start mt-5" style="height: 100vh;">
+    <button (click)="goToDocumentsPage()" class="btn btn-primary">Go to Documents</button>
+  </div>

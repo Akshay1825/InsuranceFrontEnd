@@ -16,7 +16,7 @@
               Insurance Plan
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown" >
-              <li *ngFor="let plan of iPlans; let i=index"><button class="dropdown-item " (click)="showSchemes(i)" >{{plan.planName}}</button></li>
+              <li *ngFor="let plan of iPlans.body; let i=index"><button class="dropdown-item " (click)="showSchemes(i)" >{{plan.planName}}</button></li>
             </ul>
           </li>
           <li class="nav-item">

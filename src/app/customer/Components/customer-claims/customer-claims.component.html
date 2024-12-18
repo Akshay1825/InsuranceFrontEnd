@@ -1,14 +1,17 @@
 
 <div class="wrapper">
-    
- 
         <app-customer-header></app-customer-header>
 
-    <div class="top_link">
+    <div class="top_link" *ngIf="claimData.length!=0">
       <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
           alt=""/>Back</button>
     </div>
-    <div class="container">
+    <!-- <tfoot *ngIf="claimData.length==0">
+      <tr class ="text-center" >
+        <td colspan="6"> No Claim Data Found</td>
+      </tr>
+    </tfoot> -->
+    <div class="container" *ngIf="claimData.length!=0">
         <div class="row">
           <div class="pagination-controls ms-4 mb-3 pt-3">
             <!-- Other pagination elements -->
@@ -26,12 +29,12 @@
             </select>
             <div class="search-container">
             <input
-              type="text"
+              type="date"
               class="form-control search"
               id="searchQuery"
               [(ngModel)]="searchQuery"
               (keyup)="onSearch()"
-              placeholder= "Start filtering by  claim id .."
+              placeholder= "Start filtering by Claim date"
             />
             
           </div>
@@ -41,13 +44,13 @@
            <thead>
             <tr>
               <th scope="col">Sr.</th>
-              <th scope="col">Claim ID</th>
+              <!-- <th scope="col">Claim ID</th> -->
               
               <th scope="col">Date of apply</th>
     
               <th scope="col">Claim Amount</th>
               <th scope="col">policy</th>
-              <th scope="col">Action</th>
+              <th scope="col">Status</th>
             </tr>
           </thead> 
          <tbody *ngIf="claimData.length>0">
@@ -56,9 +59,9 @@
                 {{ calculateSRNumber(i) }}
               </td>
       
-              <td>
+              <!-- <td>
                 {{ claim.claimId }}
-              </td>
+              </td> -->
               <td>
                 {{claim.claimDate|date:"dd-MM-YYYY"}}
               </td>
@@ -70,18 +73,17 @@
           
            <button class="btn btn-primary" (click)="showPolicy(i)">View</button>
                 </div>
-              </td>
-              <td>
-                <div *ngIf="claim.status==1">
-                <button class="btn btn-primary" (click)="updateClaim(i)">Approve</button>
-              </div>
-               <div *ngIf="claim.status==0">
-                Approved
-               </div>
-               <div *ngIf="claim.status==2">
-                Rejected
-               </div>
-              </td>
+                <td>
+                  <div *ngIf="claim.status == 0">
+                    Pending
+                  </div>
+                  <div *ngIf="claim.status == 1">
+                    Approved
+                  </div>
+                  <div *ngIf="claim.status == 2">
+                    Rejected
+                  </div>
+                  </td>
               
             </tr>
           </tbody> 
@@ -108,13 +110,13 @@
               <tr>
                 
                 <td>Policy No:</td>
-                <td>{{ policyData.policyNo }} </td>
+                <td>{{ policyData.policyNumber }} </td>
                 
               </tr>
-               <tr>
+               <!-- <tr>
                 <td>SchemeId</td>
                 <td>{{ policyData.insuranceSchemeId }} </td>
-              </tr>
+              </tr> -->
               <tr>
                 <td>Issue Date:</td>
                 <td>{{ policyData.issueDate|date:"dd-MM-YYYY" }} </td>
@@ -135,7 +137,7 @@
                 <td> Premium Amount:</td>
                 <td>
                   <span style="font-family: 'RupeeFont'">₹</span
-                  >{{ policyData.premium }}
+                  >{{ policyData.premiumAmount }}
                 </td>
               </tr>
               

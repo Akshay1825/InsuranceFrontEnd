@@ -10,7 +10,8 @@ import { CustomerService } from 'src/app/Services/customer.service';
 })
 export class PaymentsComponent {
 
-
+  fromDate: string = '';    // For From Date
+  toDate: string = '';
   currentPage = 1;
   totalPaymentCount = 0;
   payments: any
@@ -34,8 +35,6 @@ export class PaymentsComponent {
   }
 
   getPayments() {
-   
-
     this.admin.getPayments(this.currentPage, this.pageSize).subscribe({
       next: (response) => {
         const paginationHeader = response.headers.get('X-Pagination');
@@ -65,6 +64,11 @@ export class PaymentsComponent {
     this.currentPage = page;
     this.getPayments();
   }
+
+  roundToTwoDecimals(value: number): number {
+    if (isNaN(value)) return 0;
+    return Math.round(value * 100) / 100;
+  }
   calculateSRNumber(index: number): number {
     return (this.currentPage - 1) * this.pageSize + index + 1;
   }
@@ -78,43 +82,44 @@ export class PaymentsComponent {
     this.paginatedEmployees = this.payments.slice(start, end);
   }
   onSearch() {
- 
-    this.admin.getPayments(this.currentPage, this.pageSize,this.serachQuery).subscribe({
+    this.admin.getPayments(this.currentPage, this.pageSize, this.fromDate, this.toDate, this.serachQuery).subscribe({
       next: (response) => {
         const paginationHeader = response.headers.get('X-Pagination');
         console.log(paginationHeader);
         const paginationData = JSON.parse(paginationHeader!);
         console.log(paginationData.TotalCount);
-
+  
         this.totalPaymentCount = paginationData.TotalCount;
-        this.payments = response.body
-
+        this.payments = response.body;
       },
       error: (err) => {
         console.log(err);
-        this.payments=[]
+        this.payments = [];
       }
-    })
-    this.isSearch=!this.isSearch
+    });
+    this.isSearch = !this.isSearch;
   }
   viewDetail(payment: any) {
-    this.customer.getPolicyDetail(payment.policyNumber).subscribe(
+    console.log(payment);
+    this.customer.getPolicyDetail(payment.policyId).subscribe(
       {
         next: (res) => {
-          this.policyData = res;
+          this.getCustomerDetail(res.body.customerId);
+          this.policyData = res.body;
+          console.log(this.policyData);
         },
         error: (err) => {
           console.log(err)
         }
       }
     )
-
-    this.getCustomerDetail(payment.policyNumber);
+    // this.getCustomerDetail(this.policyData.body.customerId);
   }
-  getCustomerDetail(policyNumber: any) {
-    this.customer.getPaymentFullDetail(policyNumber).subscribe(
+  getCustomerDetail(data: any) {
+    this.customer.getCustomerById(data).subscribe(
       (res) => {
-        this.customerData = res;
+        this.customerData = res.body;
+        console.log(this.customerData);
       },
       (err) => {
         console.log(err)
@@ -122,7 +127,13 @@ export class PaymentsComponent {
     )
   }
   resetSearch() {
-   this.serachQuery=undefined
+    
+      // this.searchQuery = '';
+      this.fromDate = '';
+      this.toDate = '';
+      this.isSearch = false;
+      this.onSearch(); // Reload data with empty filters
+    
    this.getPayments()
    this.isSearch=false
   }

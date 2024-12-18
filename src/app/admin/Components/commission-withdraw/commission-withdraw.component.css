@@ -2,15 +2,16 @@
 
 .search-container{
   margin-left: auto;
-  margin-right: 40px;
+  margin-right: 10px;
   padding:2px;
-  width: 230px;
-  height: 30px;
+  width: 150px;
+  height: 10px;
   border:1px solid black;
   border-radius: 10px;
+}
   
 
-}.row{
+.row{
   margin: 10px;
   
 }
@@ -35,7 +36,7 @@ input[type="number"]::-webkit-outer-spin-button {
   }
   
   .container{
-    margin-top: 50px;
-    width: 1000px;
+    margin-top: 10px;
+    width: 1400px;
   }
   

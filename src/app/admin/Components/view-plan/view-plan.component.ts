@@ -38,7 +38,7 @@ export class ViewPlanComponent {
 
 
   getAllPlan(): void {
-    this.admin.getPlans(this.currentPage, this.pageSize).subscribe({
+    this.admin.getPlans2(this.currentPage, this.pageSize).subscribe({
       next: (response) => {
 
         const paginationHeader = response.headers.get('X-Pagination');
@@ -88,7 +88,7 @@ export class ViewPlanComponent {
 
   onSearch() {
     console.log(typeof this.searchQuery)
-    this.admin.getFilterPlans(this.currentPage, this.pageSize, this.searchQuery).subscribe({
+    this.admin.getFilterPlans2(this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (response) => {
 
         const paginationHeader = response.headers.get('X-Pagination');
@@ -107,15 +107,21 @@ export class ViewPlanComponent {
   }
 
 
+  onActivate(plan: any): void {
+    plan.status = true;
+    this.onDelete(plan);
+  }
 
+  onDeactivate(plan:any): void {
+    plan.status = false;
+    this.onDelete(plan);
+  }
   onDelete(plan: any) {
-    debugger
-    this.admin.deletePlan(plan.planId).subscribe({
+    this.admin.deletePlan(plan).subscribe({
       next: (data) => {
         console.log(data)
-        alert("Deleted Sucessfully");
+        alert("Plan Updated Sucessfully");
         location.reload();
-
       },
       error(error: HttpErrorResponse) {
         alert(error.message)

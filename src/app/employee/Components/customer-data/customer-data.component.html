@@ -20,11 +20,11 @@
         </select>
         <div class="search-container">
           <input
-            type="number"
+            type="string"
             class="search"
             id="searchQuery"
             [(ngModel)]="searchQuery"
-            placeholder="Search by Customer Id.."
+            placeholder="Search by First Name.."
             
           />
           <button *ngIf="!isSearch" class="search-btn ms-1 mb-1" (click)="onSearch()">

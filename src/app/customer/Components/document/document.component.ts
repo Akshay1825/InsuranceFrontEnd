@@ -7,8 +7,7 @@ import { Location } from '@angular/common';
 import { CustomerService } from 'src/app/Services/customer.service';
 import { ValidateForm } from 'src/app/helper/validateForm';
 import { HttpClient } from '@angular/common/http';
-
-
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -29,7 +28,8 @@ export class DocumentComponent {
   totalDocumentCount = 0;
   pageSize = this.pageSizes[0];
   newName: any;
-  constructor(private customer:CustomerService,private location:Location,private http:HttpClient){}
+  newUploadedDocuments:any;
+  constructor(private customer:CustomerService,private router:Router,private location:Location,private http:HttpClient){}
   DocTypeForm!:FormGroup
   jwtHelper=new JwtHelperService()
   isAgent=false
@@ -81,8 +81,13 @@ export class DocumentComponent {
         this.customer.getCustomerDocuments(this.customerProfile.customer['customerId'], this.currentPage, this.pageSize).subscribe({
           next: (response) => {
             if (!response) {
+              this.newUploadedDocuments = response;
               console.warn('Document response is empty');
-              alert('No documents found.');
+              // if (!Array.isArray(this.newUploadedDocuments) || this.newUploadedDocuments.length === 0) {
+              //   alert("No Documents Found");
+              //   this.goBack();
+              //   return;
+              // }
               this.documents = [];
               return;
             }
@@ -108,6 +113,7 @@ export class DocumentComponent {
   
             // Assign documents or fallback to empty array
             this.documents = response.body || [];
+            
             console.log('Documents:', this.documents);
           },
           error: (err: HttpErrorResponse) => {
@@ -189,6 +195,7 @@ export class DocumentComponent {
     this.file = null;
   }
 
+  
   upload(): void {
     const formData = new FormData();
     formData.append('file', this.file);
@@ -210,11 +217,33 @@ export class DocumentComponent {
         }).subscribe({
           next: (res) => 
             alert("Document Uploaded Successfully"),
+            
           error: (err) => console.error('Database error:', err),
         });
       })
       .catch((error) => console.error('Cloudinary upload error:', error));
   }
+
+  updateDocumentStatus(data: any) {
+    console.log(data);
+    // Pass 'data' to the PUT request body to update the document
+    this.http.put("https://localhost:7117/api/Document", data).subscribe(
+      (res) => {
+        alert("Updated Successfully");
+        this.getDocuments();// Refresh the page after the update
+      },
+      (err) => {
+        alert("Something went wrong");
+        console.error(err); // Log error for debugging
+      }
+    );
+  }
+
+  reuploadDocument(i:any)
+{
+  this.router.navigate(['/document-upload'], { queryParams: { name: this.documents[i].name } })
+  this.documents[i].name
+}
 goBack(){
   this.location.back()
 }

@@ -21,8 +21,8 @@ export class AgentService {
     return this.http.get(this.baseURL + "/Agent/GetByUserName?userName=" + name,{observe:'response'});
 
   }
-  updateAgent(data: any) {
-    return this.http.put(this.baseURL + '/Agent/', data);
+  updateAgent(data: any):Observable<any> {
+    return this.http.put(this.baseURL + '/Agent', data,{observe:'response'});
   }
   containsOnlyDigits(s: string) {
     return /^\d+$/.test(s);
@@ -39,7 +39,7 @@ export class AgentService {
     return this.http.get(serachUrl, { observe: 'response' });
 
   }
-  getSchemesByPlan(planId: number) {
+  getSchemesByPlan(planId: any) {
     return this.http.get(this.baseURL+"/InsurancePlan/getId?Id=" + planId,{ observe: 'response'})
   }
   getAgentByUserName(): Observable<any> {
@@ -47,31 +47,42 @@ export class AgentService {
     return this.http.get(this.baseURL+'/Agent/GetByUserName?userName=' + usrName,{ observe: 'response'})
   }
 
-  getAgentCommission(agentID: number, pgNo?: number, pgSize?: number, searchQuery?: number) {
-    let serachUrl = this.baseURL+`Commissions/get?AgentId=${agentID}&PageNumber=${pgNo}&PageSize=${pgSize}`
-    if (searchQuery != undefined) {
-      serachUrl += `&Id=${searchQuery}`
-    }
-    return this.http.get(serachUrl, { observe: 'response' });
-
+  getCustomerByAgentId(id: any): Observable<any>{
+    return this.http.get(this.baseURL+'/Customer/GetByAgentId?id=' + id,{ observe: 'response'})
   }
-  getCommission( pgNo?: number, pgSize?: number, searchQuery?: number) {
-    let status=1
-    let serachUrl = this.baseURL+`Commissions/get?Status=${status}&PageNumber=${pgNo}&PageSize=${pgSize}`
-    if (searchQuery != undefined) {
-      serachUrl += `&Id=${searchQuery}`
-    }
-    return this.http.get(serachUrl,{ observe: 'response' });
 
+  getAgentCommission(agentID: any, pgNo?: number, pgSize?: number, searchQuery?: number): Observable<any> {  
+    // Construct the base URL
+    let searchUrl = `${this.baseURL}/Commission/get?AgentId=${agentID}&PageNumber=${pgNo}&PageSize=${pgSize}`;
+    
+    // Append the searchQuery if it exists
+    if (searchQuery) {
+      searchUrl += `&searchQuery=${encodeURIComponent(searchQuery)}`;
+    }
+  
+    return this.http.get(searchUrl, { observe: 'response' });
+  }
+  getCommission(pgNo?: number, pgSize?: number, fromDate?: string, toDate?: string): Observable<any> {
+    let searchUrl = this.baseURL + `/Commission/getAll?PageNumber=${pgNo}&PageSize=${pgSize}`;
+    
+    // Add date filters if provided
+    if (fromDate) {
+      searchUrl += `&FromDate=${fromDate}`;
+    }
+    if (toDate) {
+      searchUrl += `&ToDate=${toDate}`;
+    }
+  
+    return this.http.get(searchUrl, { observe: 'response' });
   }
   updateAgentCommission(data: any) {
     return this.http.put(this.baseURL+'Commissions/update', data);
   }
 
-  getAgentPolicies( AgentId:number,status:number,pgNo?:number,pgSize?:number,searchQuery?:number){
-   let searchURL=this.baseURL+`Policy/get?Status=${status}&AgentId=${AgentId}&PageNumber=${pgNo}&PageSize=${pgSize}`
+  getAgentPolicies( AgentId:any,pgNo?:number,pgSize?:number,searchQuery?:any){
+   let searchURL=this.baseURL+`/Policy/get2?agentId=${AgentId}&PageNumber=${pgNo}&PageSize=${pgSize}`
   if(searchQuery!=undefined){
-    searchURL+=`&Id=${searchQuery}`
+    searchURL+=`&Name=${searchQuery}`
 
   }
   return this.http.get(searchURL,{observe:'response'})

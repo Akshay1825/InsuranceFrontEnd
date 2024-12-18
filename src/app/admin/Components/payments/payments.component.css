@@ -1,26 +1,28 @@
 
   .container{
-    margin-top: 50px;
+    margin-top: 100px;
   }
   .search-container{
     margin-left: auto;
     margin-right: 40px;
-    padding:2px;
-    width: 230px;
-    height: 30px;
+    
+    width: 100px;
+    height: 15px;
     border:1px solid black;
     border-radius: 10px;
+
+
     
 
   }.row{
-    margin: 10px;
-    
+    margin: 10px;   
 }
   input{
  
     padding-left: 5px;
     border: none;
     background: none;
+    text-align: center;
   }
   input:focus{
     outline: none;
@@ -36,9 +38,11 @@
     background: none;
     }
     .pagination-controls{
-      margin-left: 80px;
+      margin-left: 100px;
     }
     .page-row{
       justify-content: center;
     }
+
+    
 

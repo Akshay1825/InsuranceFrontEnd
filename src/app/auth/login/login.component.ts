@@ -18,47 +18,32 @@ import { Observable } from 'rxjs';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  // adminLoginForm = new FormGroup({
-  //   userName: new FormControl('', Validators['required']),
-  //   password: new FormControl('', Validators['required']),
-  // })
-  // token: any = '';
-  // jwtHelper = new JwtHelperService();
-  ngOnInit(){
-    this.generateCaptcha();
-  }
+  
   loginForm: FormGroup;
   successMessage: string = '';
   errorMessage: string = '';
-  myToken: any='';
-  userName: string='';
-  role: any='';
-
-  captchaUrl: string = 'https://localhost:7117/api/Captcha'; 
-  captchaInput: string = ''; 
-  captchaResolved=false;
-  captchaResponse="";
+  captchaError: string = ''; // Field-level error message for CAPTCHA
+  myToken: any = '';
+  userName: string = '';
+  role: any = '';
+  captchaUrl: string = '';
   generatedCaptcha: string = '';
 
   constructor(
     private fb: FormBuilder,
     private snackbar: MatSnackBar,
-    private authService: AuthService, 
+    private auth: AuthService,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      userName: ['', [Validators.required]],  
+      userName: ['', [Validators.required]],
       password: ['', Validators.required],
-      captchaInput: ['', [Validators.required, Validators.minLength(6)]]
+      captchaInput: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
-  onCaptchaResolved(captchaResponse:any): void {
-    this.captchaResolved = !!captchaResponse;
-    this.captchaResponse=captchaResponse;
-  }
 
-  refreshCaptcha(): void {
-    this.captchaUrl = 'https://localhost:7117/api/Captcha?' + new Date().getTime(); // Append timestamp to prevent caching
+  ngOnInit() {
+    this.generateCaptcha();
   }
 
   generateCaptcha() {
@@ -70,97 +55,89 @@ export class LoginComponent implements OnInit {
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d')!;
-    
-    // Set canvas size
+
     canvas.width = 200;
     canvas.height = 50;
-    
-    // Set background color
+
     ctx.fillStyle = '#f0f0f0';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // Set text style
+
     ctx.font = '30px Arial';
     ctx.fillStyle = 'black';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    
-    // Draw the CAPTCHA text in the center of the canvas
+
     ctx.fillText(this.generatedCaptcha, canvas.width / 2, canvas.height / 2);
-    
-    // Convert the canvas to an image URL (base64 encoded)
+
     this.captchaUrl = canvas.toDataURL();
   }
+
   verifyCaptcha(inputCaptcha: string): boolean {
     return inputCaptcha === this.generatedCaptcha;
   }
 
-  
+  refreshCaptcha(): void {
+    this.generateCaptcha();
+  }
 
   onSubmit() {
-    
     const captcha = this.loginForm.get('captchaInput')?.value;
-    // alert(captcha);
+
+    // Validate CAPTCHA
     if (!this.verifyCaptcha(captcha)) {
-      this.snackbar.open('Invalid CAPTCHA. Please try again.', 'Close', {
-        duration: 3000,
-        panelClass: ['error-snackbar'],
-      });
-      this.generateCaptcha();
-      
+      // this.captchaError = 'Invalid CAPTCHA. Please try again.';
+      // this.snackbar.open('Invalid CAPTCHA. Please try again.', 'Close', {
+      //   duration: 3000,
+      //   panelClass: ['error-snackbar'],
+      // });
+      alert('Invalid CAPTCHA. Please try again.');
+      this.refreshCaptcha();
+      return; // Halt form submission
+    } else {
+      this.captchaError = ''; // Clear CAPTCHA error
     }
 
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
-     
-      // Authenticate user
-      this.authService.login(formData.userName, formData.password,formData.captchaInput).subscribe({
-        
+
+      this.auth.login(formData.userName, formData.password).subscribe({
         next: (response) => {
-          console.log('Login form data:', formData);
-          
           this.successMessage = 'Login successful!';
           this.errorMessage = '';
-  
-          this.myToken = response.headers.get('Jwt'); // Retrieve token from headers
-          // console.log('JWT Token:', this.myToken);
-  
-          localStorage.setItem('token', this.myToken); // Store JWT token locally
-          localStorage.setItem("userName",this.loginForm.get('userName')?.value!)
-          localStorage.setItem('password', this.loginForm.get('password')?.value!)
-          this.role = response.body; // Retrieve role from body
-          // console.log('Role:', this.role);
-  
-          if (this.role.roleName === 3) 
-            {
-            this.router.navigateByUrl('/customer')
-            }
-            else if (this.role.roleName === 0)
-            {
-              this.router.navigateByUrl('/admin')
-            }
-            else if (this.role.roleName === 1)
-            {
-              this.router.navigateByUrl('/employee')
-            }
-            else if (this.role.roleName === 2)
-            {
-              this.router.navigateByUrl('/agent')
-            }
-            else{
-              this.router.navigateByUrl('/login')
-              this.errorMessage = 'Invalid credentials. Please try again.';
-              this.successMessage = '';
-            } 
+
+          this.myToken = response.headers.get('Jwt');
+          localStorage.setItem('token', this.myToken);
+          localStorage.setItem('userName', this.loginForm.get('userName')?.value!);
+
+          this.role = response.body;
+
+          if (this.role.roleName === 3) {
+            this.router.navigateByUrl('/customer');
+          } else if (this.role.roleName === 0) {
+            this.router.navigateByUrl('/admin');
+          } else if (this.role.roleName === 1) {
+            this.router.navigateByUrl('/employee');
+          } else if (this.role.roleName === 2) {
+            this.router.navigateByUrl('/agent');
+          } else {
+            this.router.navigateByUrl('/login');
+            this.snackbar.open('Invalid credentials. Please try again.', 'Close', {
+              duration: 3000,
+              panelClass: ['error-snackbar'],
+            });
+          }
         },
         error: (error: HttpErrorResponse) => {
-          this.errorMessage = error.error?.message || 'Invalid credentials. Please try again.';
-          this.successMessage = '';
-        }
+          alert("Invalid credentials. Please try again");
+        },
       });
     } else {
       this.errorMessage = 'Please fill out the form correctly.';
-      this.successMessage = '';
+      this.snackbar.open('Please fill out the form correctly.', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+      });
     }
   }
 }
+

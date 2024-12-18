@@ -53,7 +53,6 @@ getCustomers() {
 
         this.totalCustomerCount=paginationData.TotalCount;
       this.customerData = response.body;
-      //this.updatePaginatedEmployees();
 
     },
     error:(err:HttpErrorResponse)=>{
@@ -110,7 +109,6 @@ resetSearch(){
 
 }
 viewDocument(data:any){
-  debugger
   if(this.isEmployee)
   {
     this.router.navigateByUrl("/employee/customers/document/"+data.customerId)

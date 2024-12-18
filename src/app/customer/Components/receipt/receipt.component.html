@@ -75,27 +75,27 @@
                                     <p>{{policy.body['policyNumber']}}</p>
                                   </td>
                                   <td style="padding: 12px 15px; text-align: right; color: #555;">
-                                    <p>&#8377;{{policy.body['premiumAmount']}}</p>
+                                    <p>&#8377;{{roundToTwoDecimals(policy.body['premiumAmount'])}}</p>
                                   </td>
                                 </tr>
                           
                                 <!-- Subtotal Row -->
                                 <tr style="background-color: #f9f9f9;">
                                   <th scope="row" colspan="2" class="text-end" style="padding: 12px 15px;">Sub Total</th>
-                                  <td class="text-end" style="padding: 12px 15px; color: #555;">&#8377;{{policy.body['premiumAmount']}}</td>
+                                  <td class="text-end" style="padding: 12px 15px; color: #555;">&#8377;{{roundToTwoDecimals(policy.body['premiumAmount'])}}</td>
                                 </tr>
                           
                                 <!-- Tax Row -->
                                 <tr>
                                   <th scope="row" colspan="2" class="text-end" style="padding: 12px 15px;">Tax</th>
-                                  <td class="text-end" style="padding: 12px 15px; color: #555;">&#8377;{{calculateTax()}}</td>
+                                  <td class="text-end" style="padding: 12px 15px; color: #555;">&#8377;{{roundToTwoDecimals(calculateTax())}}</td>
                                 </tr>
                           
                                 <!-- Total Row -->
                                 <tr>
                                   <th scope="row" colspan="2" class="text-end" style="padding: 12px 15px; font-weight: bold;">Total</th>
                                   <td class="text-end" style="padding: 12px 15px; font-weight: bold; color: #007bff;">
-                                    <h4 class="m-0 fw-semibold">&#8377;{{paymentData.body['amount']}}</h4>
+                                    <h4 class="m-0 fw-semibold">&#8377;{{roundValue(paymentData.body['amount'])}}</h4>
                                   </td>
                                 </tr>
                               </tbody>

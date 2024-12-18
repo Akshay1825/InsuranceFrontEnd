@@ -80,7 +80,13 @@ export class SampleComponent implements OnInit {
       }
     )
   }
-
+  roundValue(value: number): number {
+    return Math.round(value);
+  }
+  roundToTwoDecimals(value: number): number {
+    if (isNaN(value)) return 0;
+    return Math.round(value * 100) / 100;
+  }
   getTax() {
     this.customer.getTaxPercent().subscribe({
       next: (res) => {
@@ -103,7 +109,7 @@ export class SampleComponent implements OnInit {
   }
 
   CalculateAmount() {
-    return (((this.policy.body['premiumAmount'] * this.Tax.body[0].taxPercentage) / 100) + this.policy.body['premiumAmount'])
+    return this.roundToTwoDecimals((((this.policy.body['premiumAmount'] * this.Tax.body[0].taxPercentage) / 100) + this.policy.body['premiumAmount']))
   }
 
   calculateDueDate(emi: number) {
@@ -131,14 +137,14 @@ export class SampleComponent implements OnInit {
   {
     const options = {
       key: 'rzp_test_RB0WElnRLezVJ5', 
-      amount: Math.round(this.CalculateAmount()*100),
+      amount: (this.roundValue(this.CalculateAmount()))*100,
       currency: 'INR',
       name: 'NewInsurance',
       description: 'Test Payment',
       image: 'https://your-logo-url.com/logo.png', // Optional logo
       handler: (response: any) => {
         // This handler will be called when the payment is successful
-        alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+        alert('Payment successful!');
         console.log(response);
         this.UpdatePayment(id);
       },
@@ -171,7 +177,10 @@ export class SampleComponent implements OnInit {
       status: "Paid",
       tax: this.Tax.body[0].taxPercentage,   // Ensure Tax object is defined
       amount: this.CalculateAmount(),        // Assuming CalculateAmount() returns the correct amount
-      paymentDate: new Date().toISOString()  // ISO format date string
+      paymentDate: new Date().toISOString(),
+      insuranceSchemeId:this.policy.body['insuranceSchemeId'], 
+      policyNumber:this.policy.body['policyNumber'],
+      agentId:this.customerData.body['agentId'] || null// ISO format date string
     };
 
 console.log([paymentData]); // Debugging: Log FormData content
@@ -182,7 +191,7 @@ this.admin.UpdatePayment(paymentData).subscribe(
     if (res) {
       console.log(res);
       console.log('Payment updated successfully');
-      alert('Payment updated successfully!');
+      // alert('Payment updated successfully!');
       this.UpdatePolicy(); // Call update policy
     } else {
       console.error('Payment update failed:', res.message);
@@ -223,8 +232,8 @@ this.admin.UpdatePayment(paymentData).subscribe(
         if (res) {
           // If the response indicates success, update the local state or UI
           console.log('Policy updated successfully');
-          alert('Policy updated successfully!');
-    
+          // alert('Policy updated successfully!');
+          location.reload();
           // Optionally, you can navigate to another page or refresh data
           // this.router.navigate(['/policies']); // Uncomment to navigate to policies page
         } else {

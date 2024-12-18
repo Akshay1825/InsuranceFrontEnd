@@ -9,6 +9,7 @@ import { NomineeDTO } from 'src/app/models/NomineeDTO';
 import { Policy } from 'src/app/models/Policy';
 import { Location } from '@angular/common';
 import { AdminService } from 'src/app/Services/admin.service';
+import { Router } from '@angular/router';
 declare var window: any
 @Component({
   selector: 'app-register-policy',
@@ -20,6 +21,7 @@ export class RegisterPolicyComponent {
   nomineeForm!: FormGroup
   iPlans: any = {};
   iplan: any
+  arr: number[] = new Array();  
   selectedValue:any;
   selectedValue2:any;
   agentData: any = {}
@@ -27,6 +29,7 @@ export class RegisterPolicyComponent {
   schemeDetail: any = {}
   isNominee = false
   isSubmitted = false
+  newCustomer: any;
   totalPremiumEMI!: number;
   premium!: number;
   policy: Policy = new Policy()
@@ -35,20 +38,20 @@ export class RegisterPolicyComponent {
   customerData: any = {}
   selectedValue3:any;
   showDetailModal: any
-  constructor(private customer: CustomerService,private admin:AdminService, private agent: AgentService,private location:Location) { }
+  constructor(private customer: CustomerService,private router:Router,private admin:AdminService, private agent: AgentService,private location:Location) { }
   ngOnInit() {
     this.policyRegistrationForm = new FormGroup({
       planName: new FormControl('', [Validators.required]),
       schemeName: new FormControl('', [Validators.required]),
-      customerId: new FormControl('', [Validators.required]),
+      userName: new FormControl('', [Validators.required]),
       premiumType: new FormControl('', [Validators.required]),
       term: new FormControl('', [Validators.required]),
       sumAssured: new FormControl('', [Validators.required, Validators.min(0)]),
 
     })
     this.nomineeForm = new FormGroup({
-      nominee: new FormControl('', [Validators.required, ValidateForm.onlyCharactersValidator]),
-      nomineeRelation: new FormControl('', [Validators.required]),
+      nominee: new FormControl('', ),
+      nomineeRelation: new FormControl('', ),
     })
     this.showDetailModal = new window.bootstrap.Modal(document.getElementById("RegisterModal"));
     this.customer.getAllPlan().subscribe({
@@ -68,12 +71,27 @@ export class RegisterPolicyComponent {
       next: (res) => {
         this.agentData = res
         console.log(this.agentData.body)
+        this.GetCustomersByAgentId() 
       },
       error: (err: HttpErrorResponse) => {
         console.log(err)
       }
     })
   }
+
+  GetCustomersByAgentId() 
+  { 
+    this.agent.getCustomerByAgentId(this.agentData.body.customer['id']).subscribe({
+      next: (res) => {
+        this.customerData = res.body;
+        console.log(this.customerData)
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log(err)
+      }
+    })
+  }
+
   onSelect(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedValue = selectElement.value; 
@@ -93,6 +111,9 @@ export class RegisterPolicyComponent {
   }
 
   onSchemeSelection(event: Event): void {
+    // this.customercount[] = 
+    // console.log(this.agentData.body.customer.customerCount.value)
+     this.arr.length = this.agentData.body.customer['customerCount'];
     const selectElement = event.target as HTMLSelectElement;
     this.selectedValue2 = selectElement.value;
     console.log('Selected option value: ' + this.selectedValue2);
@@ -108,12 +129,13 @@ export class RegisterPolicyComponent {
     )
   }
   onCustomerSelection(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    this.selectedValue3 = selectElement.value;
-    console.log('Selected option value: '+ this.selectedValue3);
-    this.customer.getCustomerById(this.selectedValue3).subscribe({
+    const selectedUserName = (event.target as HTMLSelectElement).value;
+    console.log('Selected userName: ', selectedUserName);
+    this.customer.getCustomerProfile2(selectedUserName).subscribe({
       next:(res)=>{
-        this.customerData=res;
+        console.log(res);
+        this.newCustomer=res.body;
+        console.log(this.newCustomer);
       },
       error:(err:HttpErrorResponse)=>{
         console.log(err.error.Message);
@@ -125,10 +147,12 @@ export class RegisterPolicyComponent {
 
   }
   showNominee() {
-
-    this.isNominee = true
+    
+    this.isNominee = true;
   }
   onSubmit() {
+
+    console.log(this.nomineeForm.value);
     if (this.nomineeForm.valid) {
       this.isSubmitted = true
       console.log(this.nomineeForm.value)
@@ -136,6 +160,7 @@ export class RegisterPolicyComponent {
       this.policy.nominee = this.nomineeForm.get('nominee')?.value!
       this.policy.nomineeRelation = this.nomineeForm.get('nomineeRelation')?.value!
       alert("Added Successfully")
+      this.isNominee = true;
     }
     else {
       ValidateForm.validateAllFormFileds(this.nomineeForm)
@@ -146,7 +171,6 @@ export class RegisterPolicyComponent {
 
   }
   onCancel() {
-
     this.nomineeForm.reset()
     this.isNominee = false
   }
@@ -159,7 +183,7 @@ export class RegisterPolicyComponent {
   }
   calculateModeMultiplier() {
     let modeMultiplier = 1;
-    switch (this.policyRegistrationForm.get('premiumMode')!.value) {
+    switch (this.policyRegistrationForm.get('premiumType')!.value) {
       case 'Monthly':
         modeMultiplier = 12;
         this.policy.premiumType = 3;
@@ -179,21 +203,19 @@ export class RegisterPolicyComponent {
   }
   fillPolicy() {
    // this.customerData = this.agentData.customers.find((object: any) => object.customerId == this.policyRegistrationForm.get('customerId')!.value)
-    if (this.checkRange(this.schemeDetail.minInvestTime, this.schemeDetail.maxTerm, this.policyRegistrationForm.get('term')!.value) &&
-      this.checkRange(this.schemeDetail.minInvestmentAmount, this.schemeDetail.maxInvestmentAmount, this.policyRegistrationForm.get('sumAssured')!.value)) {
+    if (this.checkRange(this.schemeDetail.body['minInvestTime'], this.schemeDetail.body['maxInvestTime'], this.policyRegistrationForm.get('term')!.value) &&
+      this.checkRange(this.schemeDetail.body['minAmount'], this.schemeDetail.body['maxAmount'], this.policyRegistrationForm.get('sumAssured')!.value)) {
 
       let modeMultiplier = this.calculateModeMultiplier();
 
       this.totalPremiumEMI = (modeMultiplier * this.policyRegistrationForm.get('term')!.value)
       this.premium = Math.round((this.policyRegistrationForm.get('sumAssured')!.value) / (this.totalPremiumEMI) * 100) / 100;
 
-
-
       const sumAssured = this.policyRegistrationForm.get('sumAssured')!.value;
-      this.MaturityAmount = sumAssured + sumAssured * this.schemeDetail.profitPercent / 100;
+      this.MaturityAmount = sumAssured + sumAssured * this.schemeDetail.body['profitRatio'] / 100;
 
       //policy object
-      this.policy.insuranceSchemeId = this.schemeDetail.detailId
+      this.policy.insuranceSchemeId = this.schemeDetail.body['schemeId'];
       this.policy.issueDate = new Date();
 
       // Calculate MaturityDate
@@ -206,12 +228,10 @@ export class RegisterPolicyComponent {
       this.policy.sumAssured = this.MaturityAmount
       this.policy.totalPremiumNumber = this.totalPremiumEMI
       this.policy.investmentAmount = this.policyRegistrationForm.get('sumAssured')!.value
-      this.policy.customerId= this.policyRegistrationForm.get('customerId')!.value
+      this.policy.customerId= this.newCustomer.customer['customerId'],
+      this.policy.schemeName = this.schemeDetail.body['schemeName'];
 
-      // this.policy.NomineeDTO=new NomineeDTO();
-      // this.policy.NomineeDTO.NomineeName=this.policyRegistrationForm.get('nomineeName')?.value
-      // this.policy.NomineeDTO.Relation=this.policyRegistrationForm.get('nomineeRelation')?.value
-      this.policy.agentId = this.agentData.agentId
+      this.policy.agentId = this.agentData.body.customer['id'];
       console.log(this.policy)
       this.openModal();
 
@@ -248,11 +268,9 @@ export class RegisterPolicyComponent {
   }
 
   checkValidity(minValue: number, maxValue: number) {
-
-    const birthdate = new Date(this.customerData.birthDate);
+    const birthdate = new Date(this.newCustomer.customer['birthDate']);
     console.log(birthdate)
     const currentDate = new Date();
-
     // Calculate age in years
     const ageInMilliseconds = currentDate.getTime() - birthdate.getTime();
     const ageInYears = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25));
@@ -264,14 +282,14 @@ export class RegisterPolicyComponent {
     }
   }
   checkDocuments() {
-    if (this.customerData.documents.length < 3 ||this.customerData.documents ==null) {
+    if (this.newCustomer.documents.length < 3 ||this.customerData.documents ==null) {
       return false
     }
     return true
   }
   applyPolicy() {
-    if (this.checkValidity(this.schemeDetail.minAge, this.schemeDetail.maxAge)) {
-      if (this.checkDocuments()) {
+    if (this.checkValidity(this.schemeDetail.body['minAge'], this.schemeDetail.body['maxAge'])) {
+      if (true) {
         this.customer.setPolicy(this.policy)
         console.log(this.policy)
         this.RegisterPolicy()
@@ -299,8 +317,10 @@ export class RegisterPolicyComponent {
         next: (res) => {
           alert("Applied Successfully");
           this.closeModal();
+          this.router.navigateByUrl('/agent');
         },
         error: (err) => {
+          console.log(err);
           alert("Something went wrong!");
           this.closeModal();
         }

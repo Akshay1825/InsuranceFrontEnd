@@ -10,7 +10,7 @@
     </button>
   </div>
   <div>
-    <button id="button" class="btn btn-secondary m-4" (click)="registerPlan()">
+    <button id="button" class="btn btn-success m-4" (click)="registerPlan()">
       Add New Plan
     </button>
   </div>
@@ -29,11 +29,11 @@
         </select>
         <div class="search-container">
           <input
-            type="number"
+            type="string"
             class="search"
             id="searchQuery"
             [(ngModel)]="searchQuery"
-            placeholder="Search by Scheme Id.."
+            placeholder="Search by Plan Name"
             
           />
           <button *ngIf="!isSearch" class="search-btn ms-1 mb-1" (click)="onSearch()">
@@ -56,8 +56,8 @@
           <!-- <th scope="col">Plan ID</th> -->
           <th scope="col">Plan Name</th>
           <th scope="col">Status</th>
-          <th scope="col">Action</th>
-          <th scope="col">More</th>
+          <th scope="col" class="text-center">Action</th>
+          <th scope="col" class="text-center">More</th>
         </tr>
       </thead>
       <tbody *ngIf="plans.length > 0">
@@ -81,25 +81,25 @@
             </div>
           </td>
 
-          <td>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="red"
-              class="bi bi-trash m-1"
-              viewBox="0 0 16 16"
-              (click)="onDelete(plan)"
+          <td scope="col" class="text-center">
+            <button
+              *ngIf="plan.status; else activateButton"
+              class="btn btn-danger m-1"
+              (click)="onDeactivate(plan)"
             >
-              <path
-                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"
-              />
-              <path
-                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"
-              />
-            </svg>
+              Deactivate
+            </button>
+            <ng-template #activateButton>
+              <button
+                class="btn btn-success m-1"
+                (click)="onActivate(plan)"
+              >
+                Activate
+              </button>
+            </ng-template>
           </td>
-          <td>
+          
+          <td scope="col" class="text-center">
             <button class="btn btn-primary" (click)="viewScheme(plan)">
               View Schemes
             </button>

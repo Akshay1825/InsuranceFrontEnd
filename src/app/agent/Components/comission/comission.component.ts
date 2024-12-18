@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { AgentService } from 'src/app/Services/agent.service';
 import { CustomerService } from 'src/app/Services/customer.service';
 import { Location } from '@angular/common';
+import { Observable } from 'rxjs';
+
 declare var window:any
 @Component({
   selector: 'app-comission',
@@ -17,18 +19,17 @@ export class ComissionComponent {
   commissions:any={};
   headers: any
   searchQuery?:number
+  policyId:any;
   detailModal:any
   customerData:any={}
   totalCommission:number=0
   agentProfile: any;
- constructor(private agent:AgentService,private customer:CustomerService,private location:Location){}
- ngOnInit(){
+  constructor(private agent:AgentService,private http:HttpClient,private customer:CustomerService,private location:Location){}
+  ngOnInit(){
   this.getProfile()
- 
-
+  
  }
   getProfile() {
-    debugger
     this.agent.getProfile().subscribe({
       next:(res)=>{
         this.agentProfile=res;
@@ -42,13 +43,12 @@ export class ComissionComponent {
   }
  policyNumber!:number
  policyData:any={}
- getCommission(){
-  debugger
-  
-   
-   this.agent.getAgentCommission(this.agentProfile.agentId,this.currentPage,this.pageSize).subscribe(
+ getCommission(){ 
+   this.agent.getAgentCommission(this.agentProfile.body.customer.id,this.currentPage,this.pageSize,this.searchQuery).subscribe(
     {
+      
       next:(response: { headers: { get: (arg0: string) => any; }; body: any; })=>{
+        console.log();
          const paginationHeader = response.headers.get('X-Pagination');
         console.log(paginationHeader);
         const paginationData = JSON.parse(paginationHeader!);
@@ -86,10 +86,15 @@ onPageSizeChange(event: Event) {
   this.pageSize = +(event.target as HTMLSelectElement).value;
   this.getCommission();
 }
+
+roundToTwoDecimals(value: number): number {
+  if (isNaN(value)) return 0;
+  return Math.round(value * 100) / 100;
+}
 onSearch() {
-  let agentID=parseInt(localStorage.getItem('agentId')!) ;
-  this.agent.getAgentCommission(agentID,this.currentPage,this.pageSize,this.searchQuery).subscribe(
-    {
+  // let agentID=parseInt(localStorage.getItem('agentId')!) ;
+  this.agent.getAgentCommission(this.agentProfile.body.customer.id,this.pageSize,this.searchQuery).subscribe(
+    { 
       next:(response: { headers: { get: (arg0: string) => any; }; body: any; })=>{
          const paginationHeader = response.headers.get('X-Pagination');
         console.log(paginationHeader);
@@ -108,27 +113,48 @@ onSearch() {
    )
 }
 ViewDetail(index:number){
-  this.policyNumber=this.commissions[index].policyId;
-  this.customer.getPolicyDetail(this.policyNumber).subscribe(
+  this.policyId=this.commissions[index].policyId;
+  console.log(this.policyId);
+  this.customer.getPolicyDetail(this.policyId).subscribe(
     {
       next:(res)=>{
         console.log(res);
-        this.policyData=res;
-        this.getCustomerData(this.policyData.customerID)
+        this.policyData=res.body;
+        this.getCustomerData(this.policyData['customerId']);
       },
       error:(err:HttpErrorResponse)=>{
         console.log(err)
       }
     }
   )
-  
-
 }
-getCustomerData(id:number){
+
+withdrawCommission(commission:any) {
+  commission.status = 1;
+  console.log('Withdrawn commission with ID:', commission);
+
+  this.updateCommissionStatus(commission).subscribe(
+    (response) => {
+      console.log('Commission status updated successfully', response);
+      alert('Commission withdrawn successfully!');
+    },
+    (error) => {
+      console.error('Error updating commission status:', error);
+      alert('Something went wrong while updating the commission status.');
+    }
+  );
+}
+
+// Directly calling the API to update the commission status
+updateCommissionStatus(commission: any): Observable<any> {
+  return this.http.put("https://localhost:7117/api/Commission", commission,{observe:'response'});
+}
+
+getCustomerData(id:any){
   this.customer.getCustomerById(id).subscribe(
   (res)=>{
     console.log(res)
-    this.customerData=res
+    this.customerData=res.body;
   },
   (err)=>{
     console.log(err)

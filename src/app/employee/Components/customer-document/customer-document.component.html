@@ -33,12 +33,11 @@
   <table id="employeeTable" class="table table-light table-responsive-md table-hover Data-table">
     <thead>
       <tr>
-        <th scope="col">Sr.</th>
-       
-        <th scope="col">Document Type</th>
-        <th scope="col">Action</th>
-        <th scope="col">More</th>
-      </tr>
+        <th scope="col" style="width: 50px;">Sr.</th>
+        <th scope="col" style="width: 200px;">Document Type</th>
+        <th scope="col" style="width: 250px;">View Document</th>
+        <th scope="col" style="width: 150px;">Action</th>
+    </tr>
     </thead>
     <tbody *ngIf="documents.length>0">
       <tr *ngFor="let doc of documents; let i = index">
@@ -48,17 +47,35 @@
        
         <td>{{doc.name}}</td>
         <td>
-            <div *ngIf="!doc.status">
-            <button class="btn btn-primary" (click)="updateDocumentStatus(doc)">Approve</button> 
-            </div> 
-            <div *ngIf="doc.status">
-            <p>Approved</p>
-            </div>
+          <button class="btn btn-primary" (click)="downloadedDocument(i)">View</button>
         </td>
-       
         <td>
-          <button class="btn btn-primary" (click)="downloadDocument(doc)">Download</button>
-        </td>
+          <!-- Show approve/reject buttons if status is 0 -->
+          <div *ngIf="doc.status === 0 && isEmployee === true">
+              <button class="btn btn-primary" (click)="updateDocumentedStatus(i, 'approve')">Approve</button>
+              <button class="btn btn-danger" (click)="toggleRejectBox(i)">Reject</button>
+          </div> 
+          <div *ngIf="doc.status === 0 && isAdmin === true">
+            <p>Pending</p>
+        </div> 
+      
+          <!-- Show approved message if status is 1 -->
+          <div *ngIf="doc.status === 1">
+              <p>Approved</p>
+          </div>
+      
+          <!-- Show rejected message and reason input if status is 2 -->
+          <div *ngIf="doc.status === 2">
+              <p>Rejected</p>
+              <p>Reason: {{ doc.note }}</p>
+          </div>
+      
+          <!-- Show text box for rejection reason if status is 2 -->
+          <div *ngIf="doc.showRejectBox">
+              <textarea [(ngModel)]="doc.note" placeholder="Enter rejection reason"></textarea>
+              <button class="btn btn-danger" (click)="submitRejection(i)">Submit</button>
+          </div>
+      </td>
         
        
       </tr>

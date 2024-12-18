@@ -25,6 +25,13 @@ export class CustomerIschemeComponent {
   policy: Policy = new Policy()
   policyModal: any
   customerProfile: any
+  minTerm :any;
+  maxTerm :any;
+  isDecimalError :any;
+  isRangeError :any;
+  minimumAmount: any;
+  maximumAmount: any;
+  isAmountDecimalError: any;
   constructor(private activatedroute: ActivatedRoute,private admin:AdminService, private customer: CustomerService, private router: Router) {
 
   }
@@ -65,16 +72,6 @@ export class CustomerIschemeComponent {
     })
   }
 
-  // // Prevent input value from going below 0
-  // preventNegativeValue(event: any) {
-  //   const inputValue = this.premiumCalculateForm.get('term');
-  //   const currentValue = inputValue?.value;
-
-  //   // If the entered value is less than 0, set it to 0
-  //   if (currentValue < 0) {
-  //     inputValue?.setValue(0);
-  //   }
-  // }
   getSchemes() {
     this.admin.getSchemesByPlanID(this.planId).subscribe((res) => {
       const schemes = res.body; // Adjust this according to the actual property
@@ -92,6 +89,7 @@ export class CustomerIschemeComponent {
           });
           this.planSchemes = planSchemes;
           console.log(this.planSchemes);
+          console.log(this.planSchemes[1].requireddocuments);
         },
         (error) => {
           console.error('Error fetching additional scheme details:', error);
@@ -112,12 +110,15 @@ export class CustomerIschemeComponent {
 
   calculatePremium() {
 
-    if (this.premiumCalculateForm.valid) {
+    if (this.premiumCalculateForm.valid && !this.isDecimalError && !this.isAmountDecimalError) {
       const scheme = this.planSchemes.find((object) => object.schemeId == this.premiumCalculateForm.get('schemeName')!.value)
-      alert(scheme);
-      if (this.checkRange(scheme.minInvestTime, scheme.maxInvestTime, this.premiumCalculateForm.get('term')!.value) &&
-        this.checkRange(scheme.minAmount, scheme.maxAmount, this.premiumCalculateForm.get('sumAssured')!.value)) {
-
+      this.minTerm = scheme.minInvestTime;
+      this.maxTerm = scheme.maxInvestTime;
+      this.minimumAmount = scheme.minAmount;
+      this.maximumAmount = scheme.maxAmount;
+      console.log(this.minTerm, this.maxTerm);
+      if (this.checkRange(scheme.minInvestTime, scheme.maxInvestTime, this.premiumCalculateForm.get('term')!.value)){
+        if(this.checkRange(scheme.minAmount, scheme.maxAmount, this.premiumCalculateForm.get('sumAssured')!.value)){
         let modeMultiplier = 1;
         switch (this.premiumCalculateForm.get('premiumType')!.value) {
           case 'Monthly':
@@ -133,6 +134,7 @@ export class CustomerIschemeComponent {
             this.policy.premiumType = 1;
             break;
         }
+
         this.totalPremiumEMI = (modeMultiplier * this.premiumCalculateForm.get('term')!.value)
         this.premium = Math.round((this.premiumCalculateForm.get('sumAssured')!.value) / (this.totalPremiumEMI) * 100) / 100;
 
@@ -161,16 +163,55 @@ export class CustomerIschemeComponent {
 
       }
       else {
-        alert("Invalid Term/SumAssured")
+        alert(`Please Enter Investment Amount Between ${this.minimumAmount} and ${this.maximumAmount} .`);
+        
+      }}
+      else {
+        
+        alert(`Please Enter Investment Time Between ${this.minTerm} and ${this.maxTerm} years.`);
       }
 
     }
     else {
       ValidateForm.validateAllFormFileds(this.premiumCalculateForm)
-      alert("one or more field required")
+      alert("Please Enter Details correctly")
     }
   }
 
+  validateTerm(): void {
+    const termControl = this.premiumCalculateForm.get('term');
+    const amountControl = this.premiumCalculateForm.get('sumAssured');
+    if (termControl) {
+      const value = termControl.value;
+
+      // Reset errors
+      this.isDecimalError = false;
+      this.isRangeError = false;
+
+      // Check for decimal values
+      if (value && value % 1 !== 0) {
+        this.isDecimalError = true;
+        return;
+      }
+
+      // Check for min/max range
+      if (value < this.minTerm || value > this.maxTerm) {
+        this.isRangeError = true;
+        return;
+      }
+    }
+
+    if(amountControl)
+    {
+      const value = amountControl.value;
+      this.isAmountDecimalError = false;
+      if (value && value % 1 !== 0) 
+      {
+        this.isAmountDecimalError = true;
+        return;
+      }
+    }
+  }
   checkValidity(minValue: number, maxValue: number) {
     const birthdate = new Date(this.customerProfile.customer['birthDate']);
     console.log(birthdate)

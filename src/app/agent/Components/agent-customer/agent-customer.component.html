@@ -20,18 +20,20 @@
         >
           <option value="5">5</option>
           <option value="10">10</option>
+          <option value="15">15</option>
           <option value="20">20</option>
+          <option value="25">25</option>
           <option value="30">30</option>
           <!-- Add more options as needed -->
         </select>
         <div class="search-container">
           <input
-            type="text"
+            type="string"
             class="form-control search"
             id="searchQuery"
             [(ngModel)]="searchQuery"
             (keyup)="onSearch()"
-            placeholder="Start filtering by id or first name.."
+            placeholder="Start filtering first name"
           />
         </div>
       </div>
@@ -49,7 +51,7 @@
           <th scope="col">DOB</th>
           <th scope="col">Phone</th>
           <th scope="col">Email</th>
-          <th scope="col">View More</th>
+          <!-- <th scope="col">View More</th> -->
         </tr>
       </thead>
       <tbody>
@@ -75,11 +77,11 @@
           </td>
           <td>{{ customer.email }}</td>
 
-          <td>
+          <!-- <td>
             <button class="btn btn-primary" (click)="viewDocument(customer)">
               Documents
             </button>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>

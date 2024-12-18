@@ -26,11 +26,11 @@
             </select>
             <div class="search-container">
               <input
-                type="number"
+                type="string"
                 class="search"
                 id="searchQuery"
                 [(ngModel)]="searchQuery"
-                placeholder="Search by Policy Number.."
+                placeholder="Search by Policy Name"
                 [min]="1"
               />
               <button *ngIf="!isSearch" class="search-btn ms-1 mb-1" (click)="onSearch()">
@@ -54,12 +54,14 @@
   <thead>
     <tr>
       <th scope="col">Sr.</th>
+      <th scope="col">Scheme Name</th>
       <th scope="col">Policy Number</th>
       <th scope="col">Premium</th>
       <th scope="col">Mode</th>
       <th scope="col">Sum Assured</th>
       <th scope="col">Issue Date</th>
       <th scope="col">Maturity Date</th>
+      <th scope="col">E-KYC</th>
       
     </tr>
   </thead>
@@ -68,13 +70,16 @@
       <td>
         {{ calculateSRNumber(i) }}
       </td>
+      <td>
+        {{ policy.schemeName}}
+      </td>
 
       <td>
         {{ policy.policyNumber}}
       </td>
       <td>
         <span style="font-family: 'RupeeFont';">₹</span>
-{{policy.premiumAmount }}
+{{roundToTwoDecimals(policy.premiumAmount) }}
       </td>
       <td>
       
@@ -95,6 +100,34 @@
       <td>
         {{ policy.maturityDate | date : "dd-MM-YYYY" }}
       </td>
+      <td>
+      <div *ngIf="policy.status === 0 && isEmployee === true" class="btn-group">
+        <button 
+          class="btn btn-success"
+          (click)="Verify(i)">
+          Verify
+        </button>
+        <button 
+          class="btn btn-danger"
+          (click)="Reject(i)">
+          Reject
+        </button>
+      </div>
+
+      <div *ngIf="policy.status === 0 && isAdmin === true" class="btn-group">
+        <p class="text-warning">Pending</p>
+      </div>
+
+      <!-- 'Verified' text for status 1 -->
+      <span *ngIf="policy.status === 1" class="text-success">
+        Verified
+      </span>
+
+      <!-- 'Rejected' text for status 2 -->
+      <span *ngIf="policy.status === 2" class="text-danger">
+        Rejected
+      </span>
+    </td>
      
     </tr>
   </tbody>

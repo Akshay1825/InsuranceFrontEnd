@@ -6,12 +6,13 @@
 <div class="top_link">
   <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
       alt=""/>Back</button>
-</div>
+ </div>
+ <div *ngIf="this.customerProfile.customer['agentId']">
   <form [formGroup]="newDocument" (ngSubmit)="upload()" class="p-4 border rounded shadow-sm bg-light" style="max-width: 600px; margin: 0 auto;">
     <div class="mb-3">
       <label for="docType" class="form-label fw-bold">Document Type <span class="text-danger">*</span></label>
       <select formControlName="name" id="docType" class="form-select">
-        <option value="" disabled>Select a document type</option> <!-- Placeholder -->
+        <option value="" disabled>Select a document type</option> 
         <option *ngFor="let type of documentTypes" [value]="type.name" [id]="type.id">{{ type.name }}</option>
       </select>
       <div *ngIf="newDocument.get('name')?.invalid && newDocument.get('name')?.touched" class="text-danger mt-1 small">
@@ -22,31 +23,17 @@
     <div class="mb-3">
       <label for="fileInput" class="form-label fw-bold">Upload File</label>
       <input type="file" id="fileInput" class="form-control" (change)="onSelect($event)" accept="image/*" />
-      <!-- Display Selected File -->
+      
       <div *ngIf="file" class="mt-2">
         <p class="mb-1"><strong>Selected File:</strong> {{ file.name }}</p>
         <button type="button" class="btn btn-outline-danger btn-sm" (click)="onRemove()">Remove File</button>
       </div>
     </div>
   
-    <!-- Upload Button -->
+    
     <button type="submit" class="btn btn-primary w-100">Upload File</button>
   </form>
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
+</div>
 
   <div class="container">
   <table id="employeeTable" class="table table-light table-responsive-md table-hover Data-table">
@@ -54,7 +41,6 @@
       <tr class="text-center">
         <th scope="col">Sr.</th>
         <th scope="col">Type</th>
-       
         <th scope="col">Status</th>
         <th scope="col">Action</th>
       </tr>
@@ -71,9 +57,23 @@
         <div *ngIf = "doc.docType == 2">VoterIdCard</div> -->
         </td>
         <td>
-          <div *ngIf="!doc.status">Pending</div>
-          <div *ngIf="doc.status">Approved</div>
-        </td>
+        <div *ngIf="doc.status === 0" class="text-warning">
+          Pending
+        </div>
+    
+        <!-- Show Approved if doc.status is 1 -->
+        <div *ngIf="doc.status === 1" class="text-success">
+          Approved
+        </div>
+    
+        <!-- Show Rejected if doc.status is 2 and the rejection reason -->
+        <div *ngIf="doc.status === 2" class="text-danger">
+          Rejected
+          <p>Reason: {{ doc.note }}</p>
+          <!-- Show re-upload option ONLY for rejected documents -->
+          <button class="btn btn-primary" (click)="reuploadDocument(i)">Re-upload</button>
+        </div>
+      </td>
         <td>
           <button class="btn btn-primary" (click)="downloadDocument(doc)">View Document</button>
         </td>

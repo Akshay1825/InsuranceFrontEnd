@@ -9,214 +9,198 @@
     </button>
   </div>
   <div class="container">
-    <h5 class="modal-title" id="exampleModalLabel">Update Scheme Deatails</h5>
-    <form [formGroup]="updateSchemeForm">
+    <h3 class="modal-title text-center mb-4" id="exampleModalLabel">Update Scheme Details</h3>
+    <form [formGroup]="updateSchemeForm" class="p-4 border rounded shadow-sm bg-light custom-form">
+      
+      <!-- Scheme Name -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="text"
           formControlName="schemeName"
-          [(ngModel)]="schemeData.schemeName"
+          placeholder="Scheme Name*"
         />
-        <br />
         <small
-          *ngIf="
-            updateSchemeForm.get('schemeName')?.dirty &&
-            updateSchemeForm.get('schemeName')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('schemeName')?.dirty && updateSchemeForm.get('schemeName')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
+  
+      <!-- Description -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="text"
           formControlName="description"
           placeholder="TAG LINE*"
         />
-        <br />
         <small
-          *ngIf="
-            updateSchemeForm.get('description')?.dirty &&
-            updateSchemeForm.get('description')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('description')?.dirty && updateSchemeForm.get('description')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
-
+  
+      <!-- Minimum Amount -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="number"
           formControlName="minAmount"
           placeholder="MINIMUM INVESTMENT AMOUNT*"
         />
-        <br />
         <small
-          *ngIf="
-            updateSchemeForm.get('minAmount')?.dirty &&
-            updateSchemeForm.get('minAmount')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('minAmount')?.dirty && updateSchemeForm.get('minAmount')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
+  
+      <!-- Maximum Amount -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="number"
           formControlName="maxAmount"
           placeholder="MAX INVESTMENT AMOUNT*"
-        /><br />
+        />
         <small
-          *ngIf="
-            updateSchemeForm.get('maxAmount')?.dirty &&
-            updateSchemeForm.get('maxAmount')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('maxAmount')?.dirty && updateSchemeForm.get('maxAmount')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
+  
+      <!-- Minimum Age -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="number"
           formControlName="minAge"
-          aria-describedby="emailHelp"
           placeholder="MINIMUM AGE*"
-        /><br />
+        />
         <small
-          *ngIf="
-            updateSchemeForm.get('minAge')?.dirty &&
-            updateSchemeForm.get('minAge')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('minAge')?.dirty && updateSchemeForm.get('minAge')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
+  
+      <!-- Maximum Age -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="number"
           formControlName="maxAge"
           placeholder="MAX AGE*"
-        /><br />
+        />
         <small
-          *ngIf="
-            updateSchemeForm.get('maxAge')?.dirty &&
-            updateSchemeForm.get('maxAge')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('maxAge')?.dirty && updateSchemeForm.get('maxAge')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
+  
+      <!-- Minimum Investment Time -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="number"
           formControlName="minInvestTime"
           placeholder="MINIMUM TERM*"
         />
-        <br />
         <small
-          *ngIf="
-            updateSchemeForm.get('minInvestTime')?.dirty &&
-            updateSchemeForm.get('minInvestTime')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('minInvestTime')?.dirty && updateSchemeForm.get('minInvestTime')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
+  
+      <!-- Maximum Investment Time -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="number"
           formControlName="maxInvestTime"
           placeholder="MAXIMUM TERM*"
         />
-        <br />
         <small
-          *ngIf="
-            updateSchemeForm.get('maxInvestTime')?.dirty &&
-            updateSchemeForm.get('maxInvestTime')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('maxInvestTime')?.dirty && updateSchemeForm.get('maxInvestTime')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
-
+  
+      <!-- Profit Ratio -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="number"
           formControlName="profitRatio"
           placeholder="PROFIT PERCENT*"
-          [ngModel]="schemeId"
         />
-        <br />
         <small
-          *ngIf="
-            updateSchemeForm.get('profitRatio')?.dirty &&
-            updateSchemeForm.get('profitRatio')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('profitRatio')?.dirty && updateSchemeForm.get('profitRatio')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
+  
+      <!-- Registration Commission Ratio -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="number"
           formControlName="registrationCommRatio"
           placeholder="REGISTER COMMISSION PERCENT*"
         />
-        <br />
         <small
-          *ngIf="
-            updateSchemeForm.get('registrationCommRatio')?.dirty &&
-            updateSchemeForm
-              .get('registrationCommRatio')
-              ?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('registrationCommRatio')?.dirty && updateSchemeForm.get('registrationCommRatio')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
       </div>
+  
+      <!-- Installment Commission Ratio -->
       <div class="mb-3">
         <input
-          class="form-input"
+          class="form-control form-control-lg"
           type="number"
           formControlName="installmentCommRatio"
           placeholder="EMI COMMISSION PERCENT*"
         />
-        <br />
         <small
-          *ngIf="
-            updateSchemeForm.get('installmentCommRatio')?.dirty &&
-            updateSchemeForm.get('installmentCommRatio')?.hasError('required')
-          "
+          *ngIf="updateSchemeForm.get('installmentCommRatio')?.dirty && updateSchemeForm.get('installmentCommRatio')?.hasError('required')"
           class="text-danger"
-          >*Field is required.</small
-        >
+        >*Field is required.</small>
+      </div>
+  
+      <!-- Required Documents -->
+      <div class="mb-3">
+        <h4>Required Documents:</h4>
+        <ul class="checkbox-list">
+          <li *ngFor="let doc of documents">
+            <input
+              type="checkbox"
+              [id]="doc.id"
+              [value]="doc.value"
+              (change)="onCheckboxChange($event)"
+            />
+            <label [for]="doc.id" class="checkbox-label">{{ doc.label }}</label>
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Buttons -->
+      <div class="row justify-content-between mt-4">
+        <div class="col-md-3">
+          <button type="button" class="btn btn-secondary w-100">Cancel</button>
+        </div>
+        <div class="col-md-3">
+          <button
+            type="button"
+            class="btn btn-primary w-100"
+            (click)="updateScheme()"
+          >
+            Update Scheme
+          </button>
+        </div>
       </div>
     </form>
-    <div class="row">
-      <div class="col-md-3">
-        <button type="button" class="btn btn-secondary">Cancel</button>
-      </div>
-      <div class="col-md-3">
-        <button
-          id="save"
-          type="button"
-          class="btn btn-primary"
-          (click)="updateScheme()"
-        >
-          Update Scheme
-        </button>
-      </div>
-    </div>
   </div>
+  
+  
+  
   <app-footer-other></app-footer-other>
 </div>

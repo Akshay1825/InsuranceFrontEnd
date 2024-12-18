@@ -47,35 +47,25 @@ export class ChangePasswordComponent {
   updatePassword(){
   if(this.changePasswordForm.valid){
     var OldPassword=localStorage.getItem('password')
-    if(OldPassword==this.changePasswordForm.get('password')?.value)
-    {
-      
-      this.auth.changePassword(this.changePasswordForm.value,this.newRole).subscribe(
-        {
-           next:(res)=>{
-            console.log(res)
-            alert("Updated Sucessfully");
-          this.auth.logOut();
-          this.router.navigateByUrl('/');
-          
-           },
-           error:(err:HttpErrorResponse)=>{
-            console.log(err)
-            alert("Something went wrong!")
-           }
+    this.auth.changePassword(this.changePasswordForm.value, this.newRole).subscribe({
+      next: (res) => {
+        console.log(res);
+        alert("Password updated successfully.");
+        this.auth.logOut();
+        this.router.navigateByUrl('/');
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error("Error occurred:", err);
+        if (err.status === 401) {
+          alert("Unauthorized: Incorrect username or password.");
+        } else {
+          alert("Something went wrong. Please try again later.");
         }
-      )
-    }
-    else{
-      alert("UserName/Password does not match");
-    }
-    }
-    else{
-      ValidateForm.validateAllFormFileds(this.changePasswordForm)
-      alert("One or more fields are required")
-    }
+      },
+    });
 
   }
+}
   goBack(){
     this.location.back();
   }

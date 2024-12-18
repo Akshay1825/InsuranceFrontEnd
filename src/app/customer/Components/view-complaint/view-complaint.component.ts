@@ -21,9 +21,11 @@ export class ViewComplaintComponent {
   pageSizes: number[] = [5,10, 20, 30];
 
   pageSize = this.pageSizes[0];
+  window: any;
   constructor(private customer: CustomerService, private router:Router,private location:Location) { }
   ngOnInit(): void {
     this.getCustomerComplaints();
+    this.window.location.reload();
 
   }
   goBack(){
@@ -32,6 +34,7 @@ export class ViewComplaintComponent {
   getCustomerComplaints() {
     this.customer.getComplaints(localStorage.getItem("userName")!, this.currentPage, this.pageSize).subscribe({
       next: (response) => {
+        console.log(response);
 
         const paginationHeader = response.headers.get('X-Pagination');
         console.log(paginationHeader);
@@ -41,10 +44,19 @@ export class ViewComplaintComponent {
         this.totalComplaintCount = paginationData.TotalCount;
         this.complaints = response.body;
         console.log(this.complaints)
-        //this.updatePaginatedEmployees();
+        if (!Array.isArray(this.complaints) || this.complaints.length === 0) {
+          alert("No Complaints Found");
+          this.goBack();
+          return;
+        }
 
       },
       error: (err: HttpErrorResponse) => {
+        if (!Array.isArray(this.complaints) || this.complaints.length === 0) {
+          alert("No Complaints Found");
+          this.goBack();
+          return;
+        }
         console.log(err);
         this.complaints=[]
       }

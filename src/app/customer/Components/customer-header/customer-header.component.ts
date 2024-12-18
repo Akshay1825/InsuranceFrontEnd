@@ -30,7 +30,7 @@ export class CustomerHeaderComponent {
   }
 
   showSchemes(index:number){
-      this.router.navigateByUrl('/customer/plan/'+this.iPlans[index].planId)
+      this.router.navigateByUrl('/customer/plan/'+this.iPlans.body[index].planId)
     
   }
   showPolicies(){

@@ -28,6 +28,8 @@ pageSize = this.pageSizes[0];
 constructor(private employee: EmployeeService,private location:Location) { }
 replyModal:any
 isReply:boolean=false
+toDate:any;
+fromDate:any;
 ngOnInit(){
   const decodedToken = this.jwtHelper.decodeToken(localStorage.getItem('token')!);
   const role: string = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
@@ -50,7 +52,6 @@ goBack(){
   this.location.back()
 }
 getAllComplaints() {
-  debugger
   this.employee.getFilterQueries(this.currentPage, this.pageSize).subscribe({
     next: (response) => {
 
@@ -93,9 +94,8 @@ onPageSizeChange(event: Event) {
   this.getAllComplaints();
 }
 onSearch() {
-  debugger
   this.isSearch=true
-  this.employee.getFilterQueries(this.currentPage, this.pageSize ,this.searchQuery).subscribe({
+  this.employee.getFilterQueries(this.currentPage, this.pageSize ,this.toDate,this.fromDate).subscribe({
     next: (response) => {
 
       const paginationHeader = response.headers.get('X-Pagination');
@@ -106,7 +106,6 @@ onSearch() {
       this.totalComplaintCount = paginationData.TotalCount;
       this.complaints = response.body;
       console.log(this.complaints)
-      //this.updatePaginatedEmployees();
 
     },
     error: (err: HttpErrorResponse) => {
@@ -116,19 +115,22 @@ onSearch() {
   })
 }
 resetSearch() {
-  this.searchQuery=undefined
+  this.toDate=null;
+  this.fromDate=null;
   this.getAllComplaints()
   this.isSearch=false
  }
 onReply(data:any){
   this.complaintToUpdate=data;
+  
   this.replyModal.show();
+  
 }
 
 updateComplaint(){
  console.log(this.complaintToUpdate)
- debugger
  this.complaintToUpdate.response=this.complaintResponseForm.get('response')?.value!
+
  
  this.employee.updateQuery(this.complaintToUpdate).subscribe(
   (res)=>{
@@ -142,5 +144,4 @@ updateComplaint(){
  this.replyModal.hide()
 
 }
-
 }

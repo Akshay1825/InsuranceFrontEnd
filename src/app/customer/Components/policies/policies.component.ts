@@ -29,6 +29,7 @@ export class PoliciesComponent {
   paymentModal:any
   payPremiumForm!:FormGroup
   minDate: string;
+  id: any;
   constructor(private customer: CustomerService, private router: Router,private location:Location ) { 
     const today = new Date();
     this.minDate = today.toISOString().split('T')[0];
@@ -57,6 +58,14 @@ export class PoliciesComponent {
     this.getPolicies();
     
   }
+  // roundValue(value: number): number {
+  //   return Math.round(value);
+  // }
+
+  roundToTwoDecimals(value: number): number {
+    if (isNaN(value)) return 0;
+    return Math.round(value * 100) / 100;
+  }
  
  
   getPolicies() {
@@ -80,8 +89,8 @@ export class PoliciesComponent {
 
         // const customerId = res.customerId;
   
-        // Fetch policies using customerId
-        this.customer.getPolicies(res.customer['customerId'], status, this.currentPage, this.pageSize).subscribe({
+        this.id = res.customer['customerId'];
+        this.customer.getPolicies(res.customer['customerId'], status, this.currentPage, this.pageSize,this.searchQuery).subscribe({
           next: (response) => {
             
             const paginationHeader = response.headers?.get('X-Pagination');
@@ -106,8 +115,18 @@ export class PoliciesComponent {
             // Assign policies or fallback to an empty array
             this.policies = response.body || [];
             console.log("Policies:", this.policies);
+            if (!Array.isArray(this.policies) || this.policies.length === 0) {
+              alert("No Policies Found");
+              this.goBack();
+              return;
+            }
           },
           error: (err: HttpErrorResponse) => {
+            if (!Array.isArray(this.policies) || this.policies.length === 0) {
+              alert("No Policies Found");
+              this.goBack();
+              return;
+            }
             console.error("Error fetching policies:", err);
             this.policies = [];
             alert("Failed to fetch policies. Please try again.");
@@ -144,8 +163,7 @@ changePage(page: number) {
     this.getPolicies();
   }
   onSearch() {
-    let status = this.isSwitchOn ? 0 : 1
-    this.customer.getPolicies(localStorage.getItem("userName")!, status, this.currentPage, this.pageSize, this.searchQuery).subscribe({
+    this.customer.getPolicies(this.id, this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (response) => {
 
         const paginationHeader = response.headers.get('X-Pagination');
@@ -154,9 +172,8 @@ changePage(page: number) {
         console.log(paginationData.TotalCount);
 
         this.totalPolicyCount = paginationData.TotalCount;
-        this.policies = response.body;
-        console.log(this.policies)
-        //this.updatePaginatedEmployees();
+        this.policies = response.body || [];
+        
 
       }
     })

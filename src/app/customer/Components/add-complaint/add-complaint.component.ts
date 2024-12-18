@@ -44,15 +44,16 @@ if(this.addComplaintForm.valid){
  this.complaint.complaintName=this.addComplaintForm.get('complaintName')!.value;
  this.complaint.complaintMessage=this.addComplaintForm.get('complaintMessage')!.value;
  this.complaint.customerId=this.customerProfile.customer['customerId'];
-//  this.complaint.response = null;
  this.complaint.status = true;
+ this.complaint.dateOfComplaint = new Date();
 
 
   this.customer.addComplaint(this.complaint).subscribe({
     next:(res:any)=>{
       console.log(res);
-       alert("Added Successfully");
+       alert("Complaint Registered Successfully");
        this.addComplaintForm.reset();
+       this.goBack();
     },
     error:(err:HttpErrorResponse)=>{
       alert("Something went wrong!")
@@ -61,7 +62,7 @@ if(this.addComplaintForm.valid){
 }
 else{
   ValidateForm.validateAllFormFileds(this.addComplaintForm)
-  alert("One or more field required");
+  alert("Please Enter All Details Correctly");
   
 }
 }

@@ -1,9 +1,10 @@
 export class Claim {
-    claimId:number=0
-    claimAmount!: number
+    claimId:any
+    claimAmount!: any
     claimDate: Date = new Date()
     bankIFSCCode:string=''
     bankAccountNo:string=''
-    status: boolean = false
+    status: any
     policyNumber!: number
+    policyId:any
 }

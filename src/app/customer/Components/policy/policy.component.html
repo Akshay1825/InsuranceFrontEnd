@@ -63,7 +63,7 @@
             {{ policy.body['policyNumber'] }}
           </td>
           <td>
-            {{ schemeData.body['schemeName'] }}
+            {{ policy.body['schemeName'] }}
           </td>
           <td>
             {{ policy.body['issueDate'] | date : "dd-MM-YYYY" }}
@@ -163,24 +163,24 @@
   <div class="container mt-3 mb-3">
     <button
       class="btn btn-secondary"
-      *ngIf="installment.length > policy.payments.length"
+      *ngIf="policy.body.totalPremiumNumber > policy.body.payments"
     disabled >
       Claim Policy
     </button>
   </div>
-  <div class="container mt-3 mb-3">
+  <div *ngIf="policy.body.totalPremiumNumber === policy.body.payments" class="container mt-3 mb-3">
     <button
       class="btn submit"
-      *ngIf="installment.length == policy.payments.length &&policy.claims.length<=0"
       (click)="claim()"
     >
       Claim Policy
     </button>
   </div>
+  <!-- *ngIf="policy.body.totalPremiumNumber === policy.body.payments" -->
   <div class="container mt-3 mb-3">
     <button
       class="btn btn-secondary"
-      *ngIf="installment.length == policy.payments.length &&policy.claims.length>0"
+      *ngIf="policy.body.totalPremiumNumber < policy.body.payments"
       disabled
     >
       Claimed
@@ -214,14 +214,8 @@
           <div  class="row ms-2">
             <div class="col">Claim Amount:</div>
             <div class="col"><span style="font-family: 'RupeeFont';">₹</span>
-              {{policy.sumAssured}}</div>
+              {{policy.body.sumAssured}}</div>
           </div>
-         
-          
-         
-      
-            
-         
         </div> 
           <div class="container-box">
             <hr>
@@ -234,20 +228,20 @@
                       class="input"
                       type="text"
                    
-                      formControlName="accNo"
+                      formControlName="bankAccountNo"
                     />
                     <small
                     *ngIf="
-                    ClaimForm.get('accNo')?.dirty &&
-                    ClaimForm.get('accNo')?.hasError('required')
+                    ClaimForm.get('bankAccountNo')?.dirty &&
+                    ClaimForm.get('bankAccountNo')?.hasError('required')
                     "
                     class="text-danger"
                     >*required</small
                   >
                   <small
                   *ngIf="
-                  ClaimForm.get('accNo')?.dirty &&
-                  ClaimForm.get('accNo')?.hasError('pattern')
+                  ClaimForm.get('bankAccountNo')?.dirty &&
+                  ClaimForm.get('bankAccountNo')?.hasError('pattern')
                   "
                   class="text-danger"
                   >*Invalid</small>
@@ -261,17 +255,17 @@
                       class="input"
                       type="text"
                     
-                      formControlName="ifsc"
+                      formControlName="bankIFSCCode"
                     />
                     <small
                     *ngIf="
-                    ClaimForm.get('accNo')?.dirty &&
-                    ClaimForm.get('accNo')?.hasError('required')
+                    ClaimForm.get('bankAccountNo')?.dirty &&
+                    ClaimForm.get('bankAccountNo')?.hasError('required')
                     "
                     class="text-danger"
                     >*required</small
                   >
-                  <small class="text-danger" *ngIf="ClaimForm.get('ifsc')?.dirty && ClaimForm.get('ifsc')?.hasError('pattern')">
+                  <small class="text-danger" *ngIf="ClaimForm.get('bankIFSCCode')?.dirty && ClaimForm.get('bankIFSCCode')?.hasError('pattern')">
                     *Please enter a valid IFSC code.
                   </small>
                   </div>

@@ -13,7 +13,7 @@
     role="group"
     aria-label="Button switch"
   >
-    <div>
+    <!-- <div>
       <button
         type="button"
         class="btn"
@@ -31,8 +31,8 @@
       >
         Applied
       </button>
-    </div>
-  </div>
+    </div>-->
+  </div> 
 
   <div class="container">
     <div class="row">
@@ -46,17 +46,19 @@
         >
           <option value="5">5</option>
           <option value="10">10</option>
+          <option value="15">15</option>
           <option value="20">20</option>
+          <option value="25">25</option>
           <option value="30">30</option>
           <!-- Add more options as needed -->
         </select>
         <div class="search-container">
           <input
-            type="text"
+            type="string"
             class="search"
             id="searchQuery"
             [(ngModel)]="searchQuery"
-            placeholder="Search by policy Number.."
+            placeholder="Search by schemeName"
           />
           <button class="search-btn ms-1 mb-1" (click)="onSearch()">
             <svg
@@ -86,8 +88,8 @@
       <thead>
         <tr>
           <th scope="col">Sr.</th>
-          <th scope="col">Policy No</th>
-          <th scope="col">Scheme Id</th>
+          <th scope="col">Policy Number</th>
+          <th scope="col">Scheme Name</th>
           <th scope="col">Premium</th>
           <th scope="col">Mode</th>
           <th scope="col">Sum Assured</th>
@@ -102,24 +104,24 @@
           </td>
 
           <td>
-            {{ policy.policyNo }}
+            {{ policy.policyNumber }}
           </td>
           <td>
-            {{ policy.insuranceSchemeId }}
-          </td>
-          <td>
-            <span style="font-family: 'RupeeFont'">₹</span>
-            {{ policy.premium }}
-          </td>
-          <td>
-            <div *ngIf="policy.premiumMode == 0">Yearly</div>
-            <div *ngIf="policy.premiumMode == 1">Half Yearly</div>
-            <div *ngIf="policy.premiumMode == 2">Quaterly</div>
-            <div *ngIf="policy.premiumMode == 3">Monthly</div>
+            {{ policy.schemeName }}
           </td>
           <td>
             <span style="font-family: 'RupeeFont'">₹</span>
-            {{ policy.maturityAmount }}
+            {{ policy.premiumAmount }}
+          </td>
+          <td>
+            <div *ngIf="policy.premiumType == 0">Yearly</div>
+            <div *ngIf="policy.premiumType == 1">Half Yearly</div>
+            <div *ngIf="policy.premiumType == 2">Quaterly</div>
+            <div *ngIf="policy.premiumType == 3">Monthly</div>
+          </td>
+          <td>
+            <span style="font-family: 'RupeeFont'">₹</span>
+            {{ policy.sumAssured }}
           </td>
           <td>
             {{ policy.issueDate | date : "dd-MM-YYYY" }}

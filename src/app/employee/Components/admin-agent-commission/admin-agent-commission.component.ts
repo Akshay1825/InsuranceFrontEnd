@@ -5,6 +5,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { AgentService } from 'src/app/Services/agent.service';
 import { CustomerService } from 'src/app/Services/customer.service';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+
+
 @Component({
   selector: 'app-admin-agent-commission',
   templateUrl: './admin-agent-commission.component.html',
@@ -21,16 +24,16 @@ export class AdminAgentCommissionComponent {
   detailModal:any
   customerData:any={}
   totalCommission:number=0
-  AgentId!: number;
+  AgentId!: any;
   isEmployee!: boolean;
   isAdmin!: boolean;
   jwtHelper=new JwtHelperService()
- constructor(private agent:AgentService,private customer:CustomerService, private activateRoute:ActivatedRoute,private location:Location){}
+ constructor(private agent:AgentService,private router:Router,private customer:CustomerService, private activateRoute:ActivatedRoute,private location:Location){}
  ngOnInit(){
-  this.AgentId=Number(this.activateRoute.snapshot.paramMap.get('id'));
+  this.AgentId=this.activateRoute.snapshot.paramMap.get('id');
   const decodedToken= this.jwtHelper.decodeToken(localStorage.getItem('token')!);
   const role: string = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-  if(role==='Employee')
+  if(role==='EMPLOYEE')
   {
    this.isEmployee=true
   }
@@ -38,7 +41,7 @@ export class AdminAgentCommissionComponent {
    this.isAdmin=true
   }
   this.getCommission();
-
+  
  }
  goBack(){
   this.location.back()
@@ -46,7 +49,6 @@ export class AdminAgentCommissionComponent {
  policyNumber!:number
  policyData:any={}
  getCommission(){
-
    this.agent.getAgentCommission(this.AgentId,this.currentPage,this.pageSize).subscribe(
     {
       next:(response: { headers: { get: (arg0: string) => any; }; body: any; })=>{
@@ -58,8 +60,15 @@ export class AdminAgentCommissionComponent {
         this.totalCommissionCount = paginationData.TotalCount;
         this.commissions=response.body  
         console.log(this.commissions)
+        
+      
       },
       error:(err:HttpErrorResponse)=>{
+        if (!Array.isArray(this.commissions) || this.commissions.length === 0) {
+          alert("No commission found for this Agent");
+          this.goBack();
+          return;
+        }
         console.log(err)
         this.commissions=[]
       }
@@ -94,6 +103,11 @@ changePage(page: number) {
   this.currentPage = page;
   this.getCommission();
 }
+
+roundToTwoDecimals(value: number): number {
+  if (isNaN(value)) return 0;
+  return Math.round(value * 100) / 100;
+}
 calculateSRNumber(index: number): number {
   return (this.currentPage - 1) * this.pageSize + index + 1;
 }
@@ -124,22 +138,22 @@ ViewDetail(index:number){
     {
       next:(res)=>{
         console.log(res);
-        this.policyData=res;
-        this.getCustomerData(this.policyData.customerID)
+        this.policyData=res.body;
+        console.log(this.policyData);
+        this.getCustomerData(this.policyData.customerId)
       },
       error:(err:HttpErrorResponse)=>{
         console.log(err)
       }
     }
   )
-  
-
 }
-getCustomerData(id:number){
+getCustomerData(id:any){
   this.customer.getCustomerById(id).subscribe(
   (res)=>{
     console.log(res)
-    this.customerData=res
+    this.customerData=res.body;
+    
   },
   (err)=>{
     console.log(err)

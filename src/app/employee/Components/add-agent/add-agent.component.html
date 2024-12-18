@@ -8,52 +8,52 @@
   <div class="container" id="addAgent">
 
 
-    <h5 class="heading" id="Label">
+    <h3 class="heading" id="Label">
       Register Agent
-    </h5>
+    </h3>
 
 
 
     <form [formGroup]="addAgentForm">
       <div class="mb-3">
-        <input type="text" formControlName="agentFirstName" placeholder=" FIRST NAME*" />
+        <input type="text" formControlName="firstName" placeholder=" FIRST NAME*" />
         <br />
         <small *ngIf="
-              addAgentForm.get('agentFirstName')?.dirty &&
-              addAgentForm.get('agentFirstName')?.hasError('required')
+              addAgentForm.get('firstName')?.dirty &&
+              addAgentForm.get('firstName')?.hasError('required')
               " class="text-danger">*First Name is required.</small>
         <small *ngIf="
-            addAgentForm.get('agentFirstName')?.dirty &&
-            addAgentForm.get('agentFirstName')?.hasError('minlength')
+            addAgentForm.get('firstName')?.dirty &&
+            addAgentForm.get('firstName')?.hasError('minlength')
             " class="text-danger">*minimum 3 characters are required.</small>
         <small *ngIf="
-            addAgentForm.get('agentFirstName')?.dirty &&
+            addAgentForm.get('firstName')?.dirty &&
             addAgentForm
-                .get('agentFirstName')
+                .get('firstName')
                 ?.hasError('onlyCharacters')
             " class="text-danger">
           *{{
           addAgentForm
-          .get("agentFirstName")
+          .get("firstName")
           ?.getError("onlyCharacters").message
           }}</small>
       </div>
       <div class="mb-3">
-        <input type="text" formControlName="agentLastName" placeholder=" LAST NAME*" />
+        <input type="text" formControlName="lastName" placeholder=" LAST NAME*" />
         <br />
         <small *ngIf="
-              addAgentForm.get('agentLastName')?.dirty &&
-              addAgentForm.get('agentLastName')?.hasError('required')
+              addAgentForm.get('lastName')?.dirty &&
+              addAgentForm.get('lastName')?.hasError('required')
               " class="text-danger">*Last Name is required.</small>
         <small *ngIf="
-            addAgentForm.get('agentLastName')?.dirty &&
+            addAgentForm.get('lastName')?.dirty &&
             addAgentForm
-                .get('agentLastName')
+                .get('lastName')
                 ?.hasError('onlyCharacters')
             " class="text-danger">
           *{{
           addAgentForm
-          .get("agentLastName")
+          .get("lastName")
           ?.getError("onlyCharacters").message
           }}</small>
       </div>
@@ -102,14 +102,14 @@
             " class="text-danger">*Invalid format.</small>
       </div>
       <div class="mb-3">
-        <input type="text" formControlName="phone" placeholder="MOBILE NUMBER*" /><br />
+        <input type="text" formControlName="mobileNumber" placeholder="MOBILE NUMBER*" /><br />
         <small *ngIf="
-              addAgentForm.get('phone')?.dirty &&
-              addAgentForm.get('phone')?.hasError('required')
+              addAgentForm.get('mobileNumber')?.dirty &&
+              addAgentForm.get('mobileNumber')?.hasError('required')
               " class="text-danger">*Mobile No. is required.</small>
         <small *ngIf="
-              addAgentForm.get('phone')?.dirty &&
-              addAgentForm.get('phone')?.hasError('pattern')
+              addAgentForm.get('mobileNumber')?.dirty &&
+              addAgentForm.get('mobileNumber')?.hasError('pattern')
               " class="text-danger">*Invalid format</small>
       </div>
 

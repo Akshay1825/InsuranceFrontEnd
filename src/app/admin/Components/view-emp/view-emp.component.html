@@ -32,12 +32,12 @@
         <div class="search-container">
           <input
             class="search"
-            type="number"
+            type="string"
             class="search"
             id="searchQuery"
             [(ngModel)]="searchQuery"
             [min]="1"
-            placeholder="Search by Emp Name"
+            placeholder="Search by Emp FirstName"
           />
           <button
             *ngIf="!isSearch"

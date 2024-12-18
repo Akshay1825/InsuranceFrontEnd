@@ -59,6 +59,14 @@ constructor(private customer:CustomerService,private route:ActivatedRoute){}
     })
 }
 
+roundToTwoDecimals(value: number): number {
+  if (isNaN(value)) return 0;
+  return Math.round(value * 100) / 100;
+}
+
+roundValue(value: number): number {
+  return Math.round(value);
+}
 getPaymentDetails(){
 this.customer.getPaymentById(this.index,this.policyId).subscribe(
   {

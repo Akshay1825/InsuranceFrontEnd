@@ -1,40 +1,110 @@
-h5{
-    text-align: center;
-    padding-top: 20px;
+/* Custom Form Styling */
+.custom-form {
+  background-color: #f9f9f9; /* Light gray background */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.custom-form input {
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s;
+}
+
+.custom-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.25rem rgba(38, 143, 255, 0.5);
+}
+
+.custom-form .form-control-lg {
+  font-size: 16px;
+}
+
+.custom-form .form-control {
+  margin-bottom: 15px;
+}
+
+.custom-form .text-danger {
+  font-size: 12px;
+}
+
+button {
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+button.w-100 {
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+/* Cancel Button */
+button.btn-secondary {
+  background-color: #6c757d;
+  border: 1px solid #6c757d;
+}
+
+button.btn-secondary:hover {
+  background-color: #5a6268;
+  border: 1px solid #545b62;
+}
+
+/* Update Button */
+button.btn-primary {
+  background-color: #007bff;
+  border: 1px solid #007bff;
+}
+
+button.btn-primary:hover {
+  background-color: #0056b3;
+  border: 1px solid #0056b3;
+}
+
+/* Checkbox List Styling */
+.checkbox-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.checkbox-list li {
+  margin-bottom: 10px;
+}
+
+.checkbox-list input {
+  margin-right: 10px;
+  transition: all 0.2s ease;
+}
+
+.checkbox-list input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.checkbox-list .checkbox-label {
+  font-size: 16px;
+}
+
+.checkbox-list input[type="checkbox"]:checked + .checkbox-label {
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Small screen adjustments */
+@media (max-width: 768px) {
+  .custom-form {
+    padding: 15px;
   }
-  input{
-      border: none;
-        width: 80%;
-      
-        margin-top: 10px;
-        margin-left: 10px;
-        border-bottom: 1px solid;
-        padding: 10px 10px;
-       
-        overflow: hidden;
-        background: transparent;
-        font-weight: 600;
-        font-size: 14px;
-        border-bottom-left-radius: none;
-        border-bottom-right-radius: none;
-      }
-      input:focus{
-          border: none;
-      }
-      .error-div{
-        margin-left: 18%;
-      }
-      .container{
-        margin-top: 50px;
-        margin-bottom: 20px;
-        width: 40%;
-        padding: 20px;
-        top: 30%;
-        left: 50%;
-        border-radius: 10px;
-        box-shadow: 1px 4px 22px -8px #0004;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-      
+
+  button {
+    font-size: 14px;
+  }
+}

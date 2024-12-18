@@ -4,6 +4,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CustomerService } from 'src/app/Services/customer.service';
 import { EmployeeService } from 'src/app/Services/employee.service';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+
 declare var window:any
 @Component({
   selector: 'app-customer-claims',
@@ -19,17 +21,18 @@ export class CustomerClaimsComponent {
   claimData: any=[];
   headers: any;
   policyData: any={};
-
+  toDate:any;
+  fromDate:any;
   oldEmpObj: any
   pageSizes: number[] = [10, 20, 30];
   policyModal:any
   pageSize = this.pageSizes[0];
   searchQuery: string | number = '';
-  constructor(private employee: EmployeeService, private location: Location, private customer: CustomerService) { }
+  constructor(private employee: EmployeeService,private router:Router,private location: Location, private customer: CustomerService) { }
   ngOnInit() {
     const decodedToken = this.jwtHelper.decodeToken(localStorage.getItem('token')!);
     const role: string = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-    if (role === 'Employee') {
+    if (role === 'EMPLOYEE') {
       this.isEmployee = true
     }
     else {
@@ -43,8 +46,7 @@ goBack(){
   this.location.back()
 }
   getClaims() {
-debugger
-    this.employee.getClaims(this.currentPage, this.pageSize, this.searchQuery).subscribe(
+    this.employee.getClaims(this.currentPage, this.pageSize, this.fromDate,this.toDate).subscribe(
       (response) => {
         const paginationHeader = response.headers.get('X-Pagination');
         console.log(paginationHeader);
@@ -52,9 +54,20 @@ debugger
         console.log(paginationData.TotalCount);
         this.claimData = response.body
         console.log(this.claimData)
+        if (!Array.isArray(this.claimData) || this.claimData.length === 0) {
+          alert("No Claims Found");
+          this.goBack();
+          return;
+        }
+        
       },
       (err) => {
         console.log(err.message);
+        if (!Array.isArray(this.claimData) || this.claimData.length === 0) {
+          alert("No Claims Found");
+          this.goBack();
+          return;
+        }
         this.claimData = []
       }
     )
@@ -64,9 +77,11 @@ debugger
   this.policyModal.show()
   }
   getPolicyData(index: number) {
-    this.customer.getPolicyDetail(this.claimData[index].policyNumber).subscribe({
+    console.log(this.claimData[index].policyId);
+    this.customer.getPolicyDetail(this.claimData[index].policyId).subscribe({
       next: (response) => {
-        this.policyData = response;
+        this.policyData = response.body;
+        console.log(this.policyData);
       },
       error: (err) => {
         console.log(err);
@@ -96,7 +111,7 @@ debugger
     this.getClaims()
   }
   onSearch() {
-    this.employee.getClaims(this.currentPage, this.pageSize, this.searchQuery).subscribe(
+    this.employee.getClaims(this.currentPage, this.pageSize, this.fromDate,this.toDate).subscribe(
       (response) => {
         const paginationHeader = response.headers.get('X-Pagination');
         console.log(paginationHeader);

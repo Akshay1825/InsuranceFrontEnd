@@ -23,9 +23,8 @@ export class ViewSchemeComponent {
   planId!:any
   planSchemes: any
   schemeToUpdate:any
-pageSizes: any=[5,10,15,20,25,30,35,40,45,50];
+  pageSizes: any=[5,10,15,20,25,30,35,40,45,50];
   isSearch: boolean=false;
-
 
   constructor(private admin: AdminService, private route:Router,private activatedroute:ActivatedRoute,private location:Location) {}
   ngOnInit(){
@@ -34,9 +33,6 @@ pageSizes: any=[5,10,15,20,25,30,35,40,45,50];
     console.error('Plan ID not found in route parameters.');
     } 
     this.getSchemes();
-  
-   
-   
   }
   goBack(){
     this.location.back()
@@ -53,8 +49,18 @@ getSchemes(){
           this.totalSchemeCount=paginationData.TotalCount;
       this.planSchemes=res.body;
       console.log(this.planSchemes)
+      if (!Array.isArray(this.planSchemes) || this.planSchemes.length === 0) {
+        alert("No Schemes Found Under this Plan");
+        // this.goBack();
+        return;
+      }
     },
     error:(err:HttpErrorResponse)=>{
+      if (!Array.isArray(this.planSchemes) || this.planSchemes.length === 0) {
+        alert("No Schemes Found Under this Plan");
+        // this.goBack();
+        return;
+      }
       this.planSchemes=[]
       console.log("Could not fetch data");
     }
@@ -89,6 +95,7 @@ addScheme() {
 
 UpdateSchemeData(scheme:any)
 {
+  console.log(scheme.schemeId);
   this.route.navigateByUrl('/admin/update/scheme/'+scheme.schemeId)
 }
 resetSearch(){
@@ -97,4 +104,35 @@ resetSearch(){
   this.isSearch=false
 
 }
+
+
+Delete(data:any)
+{
+  this.admin.deleteScheme(data).subscribe({
+    next: (res) => {
+      alert('Scheme Updated successfully');
+      this.getSchemes(); 
+    },
+    error: (err) => {
+      console.error('Error while deleting scheme:', err);
+      alert('Failed to delete the scheme. Please try again.');
+    },
+  });
 }
+ActivateScheme(scheme: any): void {
+  console.log(scheme);
+  scheme.isActive = true; // Update locally for instant UI feedback
+  this.admin.updateScheme(scheme).subscribe({
+    next: (res) => {
+      alert('Scheme activated successfully.');
+      this.getSchemes(); // Refresh the list if necessary
+    },
+    error: (err) => {
+      console.error('Error activating scheme:', err);
+      alert('Failed to activate the scheme. Please try again.');
+    },
+  });
+}
+}
+
+

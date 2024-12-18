@@ -19,7 +19,7 @@ export class ViewAgentComponent {
   paginatedAgent: any[] = [];
   oldAgentObj: any
   pageSizes: number[] = [5,10,15, 20, 25,30,35,40,45,50];
-
+  agentObj: any
   pageSize = this.pageSizes[0];
   searchQuery:string|number='';
   isAdmin=false
@@ -54,7 +54,6 @@ export class ViewAgentComponent {
           this.totalAgentCount=paginationData.TotalCount;
         this.agents = response.body;
         console.log(this.agents)
-             //this.updatePaginatedEmployees();
 
       },
       error:(err:HttpErrorResponse)=>{
@@ -92,6 +91,9 @@ export class ViewAgentComponent {
   }
   onEdit(agentObj: any) {
     this.oldAgentObj = JSON.stringify(agentObj);
+    console.log(this.oldAgentObj);
+
+    console.log(JSON.stringify(agentObj));
     this.paginatedAgent.forEach(element => {
       element.isEdit = false;
     });
@@ -118,12 +120,14 @@ export class ViewAgentComponent {
    }
    validateForm(obj:any)
    {
-    if((!this.validateField(obj.phone)&&!this.validatePhone(obj.phone))&&(!this.validateField(obj.email)&&!this.validateEmail(obj.email))&&(!this.validateField(obj.status))){
+    console.log(obj);
+    if((!this.validateField(obj.mobileNumber)&&!this.validatePhone(obj.mobileNumber))&&(!this.validateField(obj.email)&&!this.validateEmail(obj.email))&&(!this.validateField(obj.status))){
   return true
     }
     return false
    }
   onUpdate(agentObj: any) {
+    console.log(agentObj)
     delete agentObj.isEditable;
     if(this.validateForm(agentObj)){
     console.log(agentObj)
@@ -171,8 +175,9 @@ export class ViewAgentComponent {
       }
     })
   }
+  
   viewCommission(agent:any){
-    this.router.navigateByUrl('employee/agents/commission/'+agent.agentId)
+    this.router.navigateByUrl('employee/agents/commission/'+agent.id)
   }
  
   onSearch() {

@@ -8,11 +8,11 @@
     />Back
   </button>
 </div>
-<button id="button" class="btn btn-secondary m-4" (click)="addScheme()">
+<button id="button" class="btn btn-success m-4" (click)="addScheme()">
   Add New Scheme
 </button>
 
-<div class="container">
+<div class="container" *ngIf="planSchemes.length != 0">
   <div class="row">
     <div class="pagination-controls ms-4 mb-3 pt-3">
       <!-- Other pagination elements -->
@@ -27,11 +27,11 @@
       </select>
       <div class="search-container">
         <input
-          type="number"
+          type="string"
           class="search"
           id="searchQuery"
           [(ngModel)]="searchQuery"
-          placeholder="Search by Scheme Id.."
+          placeholder="Search by Scheme Name"
           
         />
         <button *ngIf="!isSearch" class="search-btn ms-1 mb-1" (click)="onSearch()">
@@ -103,16 +103,22 @@
         </td>
 
         <td>
-          <button
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#updateSchemeModal"
-            dat
-            (click)="UpdateSchemeData(scheme)"
-          >
-            Edit
-          </button>
-          <button class="btn btn-danger mt-2">Delete</button>
+          <ng-container *ngIf="scheme.isActive; else deletedScheme">
+            <button
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#updateSchemeModal"
+              (click)="UpdateSchemeData(scheme)"
+            >
+              Edit
+            </button>
+            <button class="btn btn-danger mt-2" (click)="Delete(scheme)">Deactivate</button>
+          </ng-container>
+          <ng-template #deletedScheme>
+            <button class="btn btn-success" (click)="ActivateScheme(scheme)">
+              Activate
+            </button>
+          </ng-template>
         </td>
       </tr>
     </tbody>

@@ -22,6 +22,7 @@ import { PolicyComponent } from './Components/policy/policy.component';
 import { AgentModule } from '../agent/agent.module';
 import { PaymentComponent } from './Components/payment/payment.component';
 import { CustomerClaimsComponent } from './Components/customer-claims/customer-claims.component';
+import { DocumentuploadComponent } from './Components/documentupload/documentupload.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { CustomerClaimsComponent } from './Components/customer-claims/customer-c
     PolicyComponent,
     PaymentComponent,
     CustomerClaimsComponent,
+    DocumentuploadComponent,
 
 
   ],

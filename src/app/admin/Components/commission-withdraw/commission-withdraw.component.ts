@@ -4,6 +4,8 @@ import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 import { AgentService } from 'src/app/Services/agent.service';
 import { CustomerService } from 'src/app/Services/customer.service';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-commission-withdraw',
@@ -23,7 +25,9 @@ export class CommissionWithdrawComponent {
   customerData:any={}
   totalCommission:number=0
   AgentId!: number;
-  constructor(private agent:AgentService,private customer:CustomerService,private location:Location){}
+  fromDate: any// To store the 'From Date'
+  toDate: any;
+  constructor(private agent:AgentService,private http:HttpClient,private customer:CustomerService,private location:Location){}
  ngOnInit(){
  
   this.getCommission();
@@ -56,23 +60,48 @@ export class CommissionWithdrawComponent {
     }
    )
  }
- updateCommission(data:any)
+ rejectCommission(commission:any)
  {
-  data.status=0;
-  this.agent.updateAgentCommission(data).subscribe(
-    {
-      next:(res)=>{
-        alert("Approved Successfully");
-        this.getCommission()
-      },
-      error:(err:HttpErrorResponse)=>{
-        alert("Something went wrong!");
-        console.log(err);
-      }
+  commission.status = 3;
+  console.log('Withdrawn commission with ID:', commission);
+
+  this.updateCommissionStatus(commission).subscribe(
+    (response) => {
+      console.log('Commission status updated successfully', response);
+      alert('Commission Updated successfully');
+      this.getCommission()
+    },
+    (error) => {
+      console.error('Error updating commission status:', error);
+      alert('Something went wrong while updating the commission status.');
     }
-  )
-  
+  );
+    
  }
+
+ approveCommission(commission:any)
+ {
+  commission.status = 2;
+  console.log('Withdrawn commission with ID:', commission);
+
+  this.updateCommissionStatus(commission).subscribe(
+    (response) => {
+      console.log('Commission status updated successfully', response);
+      alert('Commission Updated successfully');
+      this.getCommission()
+    },
+    (error) => {
+      console.error('Error updating commission status:', error);
+      alert('Something went wrong while updating the commission status.');
+    }
+  );
+}
+
+// Directly calling the API to update the commission status
+updateCommissionStatus(commission: any): Observable<any> {
+  return this.http.put("https://localhost:7117/api/Commission", commission,{observe:'response'});
+}
+
  get pageNumbers(): number[] {
   return Array.from({ length: this.pageCount }, (_, i) => i + 1);
 }
@@ -92,7 +121,7 @@ onPageSizeChange(event: Event) {
   this.getCommission();
 }
 onSearch() {
-  this.agent.getCommission(this.currentPage,this.pageSize,this.searchQuery).subscribe(
+  this.agent.getCommission(this.currentPage,this.pageSize,this.fromDate,this.toDate).subscribe(
     {
       next:(response: { headers: { get: (arg0: string) => any; }; body: any; })=>{
          const paginationHeader = response.headers.get('X-Pagination');
@@ -112,14 +141,16 @@ onSearch() {
    )
    this.isSearch=!this.isSearch
 }
-ViewDetail(index:number){
+ViewDetail(index:any){
+  console.log(index);
   this.policyNumber=this.commissions[index].policyId;
   this.customer.getPolicyDetail(this.policyNumber).subscribe(
     {
       next:(res)=>{
         console.log(res);
-        this.policyData=res;
-        this.getCustomerData(this.policyData.customerID)
+        this.policyData=res.body;
+        console.log(this.policyData);
+        this.getCustomerData(this.policyData.customerId)
       },
       error:(err:HttpErrorResponse)=>{
         console.log(err)
@@ -129,11 +160,12 @@ ViewDetail(index:number){
   
 
 }
-getCustomerData(id:number){
+getCustomerData(id:any){
   this.customer.getCustomerById(id).subscribe(
   (res)=>{
     console.log(res)
-    this.customerData=res
+    this.customerData=res.body;
+    console.log(this.customerData);
   },
   (err)=>{
     console.log(err)
@@ -141,8 +173,14 @@ getCustomerData(id:number){
   )
 
 }
+
+roundToTwoDecimals(value: number): number {
+  if (isNaN(value)) return 0;
+  return Math.round(value * 100) / 100;
+}
 resetSearch(){
-  this.searchQuery=undefined
+  this.fromDate = null;
+    this.toDate = null;
   this.getCommission()
   this.isSearch=false
 

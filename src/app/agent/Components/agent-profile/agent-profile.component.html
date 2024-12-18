@@ -22,37 +22,37 @@
                 <td>First Name</td>
 
                 <td>
-                    {{ agentProfile.agentFirstName }}
+                    {{ agentProfile.body.customer.firstName }}
                 </td>
             </tr>
             <tr>
                 <td>Last Name</td>
-                <td>{{ agentProfile.agentLastName }}</td>
+                <td>{{ agentProfile.body.customer.lastName }}</td>
             </tr>
             <tr>
                 <td>Qualification</td>
-                <td>{{ agentProfile.qualification }}</td>
+                <td>{{ agentProfile.body.customer.qualification }}</td>
             </tr>
             
             <tr>
                 <td>Mobile No</td>
                 <td>
-                    <div *ngIf="!isEdited">{{ agentProfile.phone }}</div>
+                    <div *ngIf="!isEdited">{{ agentProfile.body.customer.mobileNumber }}</div>
                     <div *ngIf="isEdited">
-                        <input   class="table-input" type="=number" [(ngModel)]="agentProfile.phone" />
-                        <span class="text-danger" *ngIf="validateField(agentProfile.phone)">*required</span>
-                        <span class="text-danger" *ngIf="validatePhone(agentProfile.phone)">*Invalid</span>
+                        <input   class="table-input" type="=number" [(ngModel)]="agentProfile.body.customer.mobileNumber" />
+                        <span class="text-danger" *ngIf="validateField(agentProfile.body.customer.mobileNumber)">*required</span>
+                        <span class="text-danger" *ngIf="validatePhone(agentProfile.body.customer.mobileNumber)">*Invalid</span>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>Email</td>
                 <td>
-                    <div *ngIf="!isEdited">{{ agentProfile.email }}</div>
+                    <div *ngIf="!isEdited">{{ agentProfile.body.customer.email }}</div>
                     <div *ngIf="isEdited">
-                        <input class="table-input" type="email" [(ngModel)]="agentProfile.email" />
-                        <span class="text-danger" *ngIf="validateField(agentProfile.email)">*required</span>
-                        <span class="text-danger" *ngIf="validateEmail(agentProfile.email)">*Invalid</span>
+                        <input class="table-input" type="email" [(ngModel)]="agentProfile.body.customer.email" />
+                        <span class="text-danger" *ngIf="validateField(agentProfile.body.customer.email)">*required</span>
+                        <span class="text-danger" *ngIf="validateEmail(agentProfile.body.customer.email)">*Invalid</span>
                     </div>
                 </td>
             </tr>

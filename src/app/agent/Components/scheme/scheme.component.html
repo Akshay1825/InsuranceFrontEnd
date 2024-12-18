@@ -14,19 +14,22 @@
         class="form-control"
         (change)="onPageSizeChange($event)"
       >
+        <option value="5">5</option>
         <option value="10">10</option>
+        <option value="15">15</option>
         <option value="20">20</option>
+        <option value="25">25</option>
         <option value="30">30</option>
         <!-- Add more options as needed -->
       </select>
       <div class="search-container">
         <input
-          type="text"
+          type="string"
           class="form-control search"
           id="searchQuery"
           [(ngModel)]="searchQuery"
           (keyup)="onSearch()"
-          placeholder="Start filtering by id or scheme name.."
+          placeholder="Search By Scheme Name"
         />
       </div>
     </div>
@@ -54,8 +57,8 @@
           </div>
         </td>
         <td>
-          <div *ngIf="scheme.status">Active</div>
-          <div *ngIf="!scheme.status">InActive</div>
+          <div *ngIf="scheme.isActive">Active</div>
+          <div *ngIf="!scheme.isActive">InActive</div>
         </td>
 
         <td>
@@ -124,46 +127,46 @@
         <table>
           <tr>
             <td>Minimum Age:</td>
-            <td>{{ planSchemes.body }} years</td>
+            <td>{{ this.schemeDetail.minAge }} years</td>
           </tr>
           <tr>
             <td>Maximum Age:</td>
-            <td>{{ planSchemes.maxAge }} years</td>
+            <td>{{ this.schemeDetail.maxAge }} years</td>
           </tr>
           <tr>
             <td>Minimum Term:</td>
-            <td>{{ schemeDetail.minTerm }} years</td>
+            <td>{{ this.schemeDetail.minInvestTime }} years</td>
           </tr>
           <tr>
             <td>Maximum Term:</td>
-            <td>{{ schemeDetail.maxTerm }} years</td>
+            <td>{{ this.schemeDetail.maxInvestTime }} years</td>
           </tr>
 
           <tr>
             <td>Min Investment Amount:</td>
             <td>
               <span style="font-family: 'RupeeFont'">₹</span
-              >{{ schemeDetail.minInvestmentAmount }}
+              >{{ this.schemeDetail.minAmount }}
             </td>
           </tr>
           <tr>
             <td>Max Investment Amount:</td>
             <td>
               <span style="font-family: 'RupeeFont'">₹</span
-              >{{ schemeDetail.maxInvestmentAmount }}
+              >{{ this.schemeDetail.maxAmount }}
             </td>
           </tr>
           <tr>
             <td>Profit Percentage:</td>
-            <td>{{ schemeDetail.profitPercent }}&#37;</td>
+            <td>{{ this.schemeDetail.profitRatio }}&#37;</td>
           </tr>
           <tr>
             <td>Registration Commission&#37;:</td>
-            <td>{{ schemeDetail.firstPremiumCommissionPercent }}&#37;</td>
+            <td>{{ this.schemeDetail.registrationCommRatio }}&#37;</td>
           </tr>
           <tr>
             <td>Premium Commission&#37;:</td>
-            <td>{{ schemeDetail.emiCommissionPercent }}&#37;</td>
+            <td>{{ this.schemeDetail.installmentCommRatio }}&#37;</td>
           </tr>
           <!-- <tr>
               <td>Required Documents:</td>

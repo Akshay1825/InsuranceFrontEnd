@@ -6,11 +6,11 @@
         <app-admin-header></app-admin-header>
     </div>
   <!-- Button trigger modal -->
-  <div class="top_link">
+  <div class="top_link" *ngIf="this.commissions.length!=0">
     <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
         alt=""/>Back</button>
   </div>
-   <div class="container">
+   <div class="container" *ngIf="this.commissions.length!=0">
     <div class="row">
       <div class="pagination-controls ms-4 mb-3 pt-3">
         <!-- Other pagination elements -->
@@ -43,8 +43,9 @@
       <thead>
         <tr>
           <th scope="col">Sr.</th>
-          <th scope="col">Commission Id</th>
+          
           <th scope="col">Policy Number</th>
+          <th scope="col">Commission Type</th>
           <th>Date</th>
           <th scope="col">Commission Amount</th>
           
@@ -55,10 +56,11 @@
       <tbody *ngIf="totalCommissionCount>0">
          <tr *ngFor="let commission of commissions;let i=index">
           <td>{{calculateSRNumber(i)}}</td>
-          <td>{{commission.commissionId}}</td>
-          <td>{{commission.policyId}}</td>
+          
+          <td>{{commission.policyNumber}}</td>
+          <td>{{commission.commissionType}}</td>
           <td>{{commission.date |date:"dd-MM-YYYY"}}</td>
-          <td>&#x20B9;{{commission.commissionAmount}}</td>
+          <td>&#x20B9;{{roundToTwoDecimals(commission.amount)}}</td>
           
 
           
@@ -122,12 +124,12 @@ aria-hidden="true"
       <table>
           <tr>
               <td>Customer Name:</td>
-              <td>{{ customerData.customerFirstName }} {{customerData.customerLastName}} </td>
+              <td>{{ customerData.firstName }} {{customerData.lastName}} </td>
             </tr>
         
           <tr>
               <td>Mobile No:</td>
-              <td> +91 {{ customerData.phone }}  </td>
+              <td> +91 {{ customerData.mobileNumber }}  </td>
             </tr>
             <tr>
               <td>Email</td>
@@ -136,13 +138,13 @@ aria-hidden="true"
         <tr>
           
           <td>Policy No:</td>
-          <td>{{ policyData.policyNo }} </td>
+          <td>{{ policyData.policyNumber }} </td>
           
         </tr>
-         <tr>
+         <!-- <tr>
           <td>SchemeId</td>
           <td>{{ policyData.insuranceSchemeId }} </td>
-        </tr>
+        </tr> -->
         <tr>
           <td>Issue Date:</td>
           <td>{{ policyData.issueDate|date:"dd-MM-YYYY" }} </td>
@@ -163,7 +165,7 @@ aria-hidden="true"
           <td> Premium Amount:</td>
           <td>
             <span style="font-family: 'RupeeFont'">₹</span
-            >{{ policyData.premium }}
+            >{{ roundToTwoDecimals(policyData.premiumAmount) }}
           </td>
         </tr>
         

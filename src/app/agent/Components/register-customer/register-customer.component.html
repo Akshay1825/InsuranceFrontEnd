@@ -10,7 +10,7 @@
   </div>
   <div class="container">
     <div class="left">
-      <h5>Registration Form</h5>
+      <h3>Registration Form</h3>
       <form [formGroup]="customerSignUpForm" (ngSubmit)="customerSignUp()">
         <div class="row g-2">
           <div class="col-md-6">
@@ -103,6 +103,8 @@
               type="text"
               formControlName="userName"
               placeholder="USERNAME* "
+              (blur)="checkField('userName')"
+              (input)="fieldErrors.username = ''"
             /><br />
             <small
               *ngIf="
@@ -127,7 +129,7 @@
               "
               class="text-danger"
               >*maximum 20 characters are required.</small
-            >
+            > <small *ngIf="fieldErrors.username&&customerSignUpForm.get('userName')" class="error">{{ fieldErrors.username }}</small>
           </div>
 
           <div class="col-md-6">
@@ -166,6 +168,8 @@
             type="email"
             formControlName="email"
             placeholder="EMAIL*"
+            (blur)="checkField('email')"
+            (input)="fieldErrors.email = ''"
           /><br />
           <small
             *ngIf="
@@ -182,7 +186,7 @@
             "
             class="text-danger"
             >*Invalid format.</small
-          >
+          ><small *ngIf="fieldErrors.email" class="error">{{ fieldErrors.email }}</small>
         </div>
         <div class="col-md-12">
           <input
@@ -198,13 +202,20 @@
             "
             class="text-danger"
             >*DOB is required.</small
-          >
+          ><small
+          *ngIf="customerSignUpForm.get('birthDate')?.dirty && customerSignUpForm.get('birthDate')?.hasError('ageTooYoung')"
+          class="text-danger"
+        >
+          *Customer must be at least 18 years old.
+        </small>
         </div>
         <div class="col-md-12">
           <input
             type="number"
             formControlName="mobileNumber"
             placeholder="MOBILE NO*"
+            (blur)="checkField('mobileNumber')"
+            (input)="fieldErrors.mobileNumber = ''"
           /><br />
           <small
             *ngIf="
@@ -221,7 +232,7 @@
             "
             class="text-danger"
             >*Invalid Mobile no.</small
-          >
+          ><small *ngIf="fieldErrors.mobileNumber" class="error">{{ fieldErrors.mobileNumber }}</small>
         </div>
         <div class="col-md-12">
           <input

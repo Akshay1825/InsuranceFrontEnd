@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { AdminService } from 'src/app/Services/admin.service';
 import { ValidateForm } from 'src/app/helper/validateForm';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-agent',
@@ -12,12 +13,12 @@ import { ValidateForm } from 'src/app/helper/validateForm';
 })
 export class AddAgentComponent {
   addAgentForm=new FormGroup({
-agentFirstName:new FormControl('',[Validators.required,ValidateForm.onlyCharactersValidator,Validators.minLength(3)]),
-    agentLastName:new FormControl('',[Validators.required,ValidateForm.onlyCharactersValidator]),
+    firstName:new FormControl('',[Validators.required,ValidateForm.onlyCharactersValidator,Validators.minLength(3)]),
+    lastName:new FormControl('',[Validators.required,ValidateForm.onlyCharactersValidator]),
     userName:new FormControl('',[Validators.required,Validators.minLength(6),Validators.maxLength(20)]),
     qualification:new FormControl('',Validators['required']),
     email:new FormControl('',[Validators.required,Validators.email]),
-    phone:new FormControl('',[Validators.required,Validators.pattern(/^[0-9]{10}$/)]),
+    mobileNumber:new FormControl('',[Validators.required,Validators.pattern(/^[0-9]{10}$/)]),
     salary:new FormControl('',),
     password:new FormControl('',[Validators.required,ValidateForm.passwordPatternValidator]),
   })
@@ -26,7 +27,7 @@ agentFirstName:new FormControl('',[Validators.required,ValidateForm.onlyCharacte
   addModal:any;
   employeeData:any;
   
-constructor( private admin:AdminService,private location:Location){
+constructor( private admin:AdminService,private router:Router,private location:Location){
  
 }
   ngOnInit(): void {
@@ -36,18 +37,16 @@ constructor( private admin:AdminService,private location:Location){
   
   addAgent(): void{
     if(this.addAgentForm.valid){
-      
       console.log(this.addAgentForm.value)
       this.admin.addAgent(this.addAgentForm.value).subscribe({
         next:(data)=>{
           console.log(data)
-          alert("Added Successfully") 
-          location.reload();
-          this.addModal.hide();
+          alert("Added Successfully")
+          this.goBack();
           
         },
         error:(error:HttpErrorResponse)=>{
-          alert(error.error.Message)
+          alert("Agent Not Added")
           console.log(error.message)
         }
       })

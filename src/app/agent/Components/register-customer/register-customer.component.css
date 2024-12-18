@@ -6,8 +6,12 @@
   border-radius: 10px;
   box-shadow: 1px 4px 22px -8px #0004;
 }
-.left h5{
+.left h3{
   text-align: center;
+}
+.error {
+  color: red;
+  font-size: 0.9em;
 }
 .left input {
   border: none;

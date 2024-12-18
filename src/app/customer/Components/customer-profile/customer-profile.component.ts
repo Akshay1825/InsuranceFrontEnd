@@ -11,6 +11,7 @@ import { CustomerService } from 'src/app/Services/customer.service';
   styleUrls: ['./customer-profile.component.css']
 })
 export class CustomerProfileComponent {
+  customerProfile2: any;
 constructor(private customer:CustomerService,private location:Location){}
 customerProfile!:any
 isEdit:boolean=false
@@ -28,6 +29,8 @@ this.profileUpdateForm=new FormGroup(
   this.customer.getCustomerProfile().subscribe({
     next:(res)=>{
       this.customerProfile=res
+      this.customerProfile2 = res.customer
+      console.log(this.customerProfile2);
       console.log(res);
     },
     error:(err)=>{
@@ -44,7 +47,7 @@ this.isEdit=true
   {
    console.log(this.customerProfile.customer)
   
-   this.customer.updateCustomer(this.customerProfile).subscribe({
+   this.customer.updateCustomer(this.customerProfile.customer).subscribe({
     next:(res)=>{
       alert("Updated Successfully")
       location.reload();
@@ -79,7 +82,7 @@ return true
  }
  validateForm(obj:any)
  {
-  if((!this.ValidateField(obj.phone)&&!this.validatePhone(obj.phone))||(!this.ValidateField(obj.email)&&!this.validateEmail(obj.email))||(!this.ValidateField(obj.address))){
+  if((!this.ValidateField(obj.mobileNumber)&&!this.validatePhone(obj.mobileNumber))||(!this.ValidateField(obj.email)&&!this.validateEmail(obj.email))||(!this.ValidateField(obj.address))){
 return true
   }
   return false

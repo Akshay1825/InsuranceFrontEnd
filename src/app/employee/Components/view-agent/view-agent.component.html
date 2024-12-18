@@ -31,11 +31,11 @@
      
       <div class="search-container">
         <input
-          type="number"
+          type="string"
           class="search"
           id="searchQuery"
           [(ngModel)]="searchQuery"
-          placeholder="Search by Agent Name"
+          placeholder="Search by Agent First Name"
           
         />
         <button *ngIf="!isSearch" class="search-btn ms-1 mb-1" (click)="onSearch()">
@@ -61,7 +61,7 @@
         <th scope="col">Email</th>
         <th scope="col">Phone</th>
         <th scope="col">Status</th>
-        <th scope="col">Action</th>
+        <th *ngIf="isAdmin" scope="col">Action</th>
         <th scope="col">Commission</th>
       
       </tr>
@@ -100,7 +100,7 @@
             {{ agent.mobileNumber }}
           </div>
         </td>
-        <td>
+        <td >
           <div *ngIf="agent.isEdit">
             <select [(ngModel)]="agent.status" >
               <option [ngValue]="true">Active</option>
@@ -114,7 +114,7 @@
           </div>
         </td>
 
-        <td>
+        <td *ngIf="isAdmin">
           <div *ngIf="!agent.isEdit">
             <svg
               xmlns="http://www.w3.org/2000/svg"

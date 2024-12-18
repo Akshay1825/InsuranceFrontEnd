@@ -14,7 +14,7 @@
           </h2>
           <div [attr.id]="'collapse-' + i" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <h6>{{ scheme.description }}</h6>
+              <h4>{{ scheme.description }}</h4>
               <table>
                 <tr>
                   <td>Minimum Age:</td>
@@ -47,7 +47,9 @@
                 </tr>
                 <tr>
                   <td>Required Documents:</td>
-                  <td ><span>Aadhar Card,PAN Card, VoterId Card</span></td>
+                  <td>
+                    <span>{{ scheme.requireddocuments?.join(', ') }}</span>
+                  </td>
                 </tr>
               </table>
             </div>
@@ -61,7 +63,7 @@
 
         <form [formGroup]="premiumCalculateForm" name="premiumCalculateForm">
           <div class="form-group">
-            <label for="schemeSelect">Select a Scheme:</label>
+            <label for="schemeSelect">Select Scheme</label>
             <select id="schemeSelect" class="menu" formControlName="schemeName">
               <option *ngFor="let scheme of planSchemes" [value]="scheme.schemeId">
                 {{ scheme.schemeName }}
@@ -72,7 +74,8 @@
             </div>
           </div>
           <div class="col-md-12 mt-2">
-            <select class="menu" name="premium Type" id="" formControlName="premiumType">
+            <label for="abc">Select Premium Mode</label>
+            <select class="menu" name="premium Type" id="abc" formControlName="premiumType">
 
               <option value="Monthly">Monthly</option>
               <option value="Quaterly">Quaterly</option>
@@ -85,34 +88,68 @@
             premiumCalculateForm.get('premiumType')?.hasError('required')
             "
             class="text-danger"
-            >*required</small>
+            >Please Select Premium Mode</small>
           </div>
           <div class="col-md-12 mt-2">
-            <input type="number" formControlName="term" required placeholder="Enter Investment Time" min="0" />
+            <input 
+              type="number" 
+              formControlName="term" 
+              required 
+              placeholder="Enter Investment Time (in years)" 
+              min="0" 
+              (input)="validateTerm()" 
+            />
+          
+            <!-- Required Error -->
             <small
-            *ngIf="
-            premiumCalculateForm.get('term')?.dirty &&
-            premiumCalculateForm.get('term')?.hasError('required')
-            "
-            class="text-danger"
-            >*required</small>
+              *ngIf="
+                premiumCalculateForm.get('term')?.touched && 
+                premiumCalculateForm.get('term')?.hasError('required') && !isDecimalError
+              "
+              class="text-danger"
+            >
+              <br>Investment Time is Required
+            </small>
+          
+            <!-- Decimal Error -->
+            <small
+              *ngIf="isDecimalError"
+              class="text-danger"
+            >
+              <br>Decimal values are not allowed
+            </small>
+          
+            <!-- Min/Max Error -->
+            <!-- <small
+              *ngIf="isRangeError"
+              class="text-danger"
+            >
+              <br>Investment time must be between {{ minTerm }} and {{ maxTerm }} years.
+            </small> -->
           </div>
+          
           <div class="col-md-12 mt-2">
-            <input id="amountField" type="number" formControlName="sumAssured" required placeholder="Enter Investment Amount" min="0" />
+            <input id="amountField" type="number" formControlName="sumAssured" required placeholder="Enter Investment Amount" min="0" (input)="validateTerm()" />
             <small
             *ngIf="
             premiumCalculateForm.get('sumAssured')?.dirty &&
             premiumCalculateForm.get('sumAssured')?.hasError('required')
             "
             class="text-danger"
-            >*required</small>
+            ><br>Investment Amount is Required</small>
+            <small
+              *ngIf="isAmountDecimalError"
+              class="text-danger"
+            >
+              <br>Decimal values are not allowed
+            </small>
             <small
             *ngIf="
             premiumCalculateForm.get('sumAssured')?.dirty &&
             premiumCalculateForm.get('sumAssured')?.hasError('min')
             "
             class="text-danger"
-            >*Invalid</small>
+            ><br>Invalid</small>
           </div>
           <div class="col-12 mt-2">
             <button type="submit" class="submit" (click)="calculatePremium()">
@@ -121,13 +158,36 @@
           </div>
         </form>
         <div class="result" *ngIf="isDisabled">
-          <h6>Premium Amount: {{ this.premium }}</h6>
-          <h6>Total Premium:  {{ totalPremiumEMI }}</h6>
-          <h6>Maturity Amount: {{ MaturityAmount }}</h6>
-          <div class="col-12 mt-2 me-5">
+          <div style="
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 15px 20px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  margin: 15px auto;
+  margin-top: 0px;
+  text-align: left;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #444444;
+">
+  <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">
+    Premium Amount: 
+    <span style="color: #0056b3;">{{ this.premium }}</span>
+  </h3>
+  <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">
+    Total Installments: 
+    <span style="color: #198754;">{{ totalPremiumEMI }}</span>
+  </h3>
+  <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 0;">
+    Maturity Amount: 
+    <span style="color: #d35400;">{{ MaturityAmount }}</span>
+  </h3>
+</div>
+          <div class="col-12 mt-1 me-5">
 
             <button class="submitBtn" (click)="applyPolicy()">
-              Buy Policy
+              Proceed to Buy
             </button>
           </div>
         </div>

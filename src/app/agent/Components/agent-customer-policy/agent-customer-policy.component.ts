@@ -24,24 +24,22 @@ export class AgentCustomerPolicyComponent {
   user:any
   pageSize = this.pageSizes[0];
   searchQuery?:number;
-  customerID!: number;
+  customerID!: any;
   isSwitchOn: boolean = true;
   agentProfile: any={};
 
   constructor(private location: Location, private agent: AgentService,private customer:CustomerService, private activatedroute:ActivatedRoute) { }
   ngOnInit(){
-    this.customerID = Number(this.activatedroute.snapshot.paramMap.get('id'));
+    this.customerID = this.activatedroute.snapshot.paramMap.get('id');
+    console.log(this.customerID);
     this.getAgentProfile();
-   
-   
   }
   getAgentProfile() {
-
     this.agent.getProfile().subscribe({
       next: (res) => {
         this.agentProfile = res;
         console.log(this.agentProfile);
-        this.getCustomerPolicies()
+        this.getCustomerPolicies();
       },
       error: (err: HttpErrorResponse) => {
         console.log(err.message);
@@ -49,7 +47,7 @@ export class AgentCustomerPolicyComponent {
     })
   }
   getCustomer() {
-    debugger
+    console.log(this.customerID);
    this.customer.getCustomerById(this.customerID).subscribe(
     {
       next:(res)=>{
@@ -78,15 +76,13 @@ export class AgentCustomerPolicyComponent {
 
   toggleSwitch(state: boolean) {
     this.isSwitchOn = state;
-    this.getCustomerPolicies();
+    
     
   }
   getCustomerPolicies(){
-    debugger
-    let status = this.isSwitchOn ? 0 : 1
-    this.agent.getAgentPolicies(this.agentProfile.agentId, status, this.currentPage, this.pageSize).subscribe({
+    this.agent.getAgentPolicies(this.agentProfile.body.customer.id, this.currentPage, this.pageSize,this.searchQuery).subscribe({
       next: (response) => {
-
+        console.log(response);
         const paginationHeader = response.headers.get('X-Pagination');
         console.log(paginationHeader);
         const paginationData = JSON.parse(paginationHeader!);
@@ -126,8 +122,8 @@ export class AgentCustomerPolicyComponent {
      this.getCustomerPolicies();
   }
   onSearch() {
-    let status = this.isSwitchOn ? 0 : 1
-    this.agent.getAgentPolicies(this.agentProfile.agentId, status, this.currentPage, this.pageSize, this.searchQuery).subscribe({
+    // let status = this.isSwitchOn ? 0 : 1
+    this.agent.getAgentPolicies(this.agentProfile.body.customer.id, this.currentPage, this.pageSize,this.searchQuery).subscribe({
       next: (response) => {
 
         const paginationHeader = response.headers.get('X-Pagination');
@@ -138,8 +134,6 @@ export class AgentCustomerPolicyComponent {
         this.totalPolicyCount = paginationData.TotalCount;
         this.policies = response.body;
         console.log(this.policies)
-     
-
       },
       error:(err:HttpErrorResponse)=>{
         this.policies=[]

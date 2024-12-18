@@ -45,14 +45,13 @@ export class PolicyComponent implements OnInit {
   Razorpay: any;
  
   
-  constructor(private activatedroute: ActivatedRoute,private sharedService:SharedService, private location:Location,private cd:ChangeDetectorRef, private customer: CustomerService, private fb: FormBuilder, private router: Router) 
+  constructor(private activatedroute: ActivatedRoute,private admin:AdminService,private sharedService:SharedService, private location:Location,private cd:ChangeDetectorRef, private customer: CustomerService, private fb: FormBuilder, private router: Router) 
   {
     const today = new Date();
     this.minDate = today.toISOString().split('T')[0];
     this.getPolicyData();
    }
   ngOnInit() {
-
     this.policyId = (this.activatedroute.snapshot.paramMap.get('id'));
     this.getPolicyData();
     this.getTax();
@@ -66,8 +65,8 @@ export class PolicyComponent implements OnInit {
 
     });
     this.ClaimForm = this.fb.group({
-      accNo: ['', [Validators.required,Validators.pattern(/^\d{12}$/)]],
-      ifsc: ['', [Validators.required, Validators.pattern(/^[A-Za-z]{4}[0][0-9]{6}$/)]],
+      bankAccountNo: ['', [Validators.required,Validators.pattern(/^\d{12}$/)]],
+      bankIFSCCode: ['', [Validators.required]],
 
     });
 
@@ -267,33 +266,59 @@ export class PolicyComponent implements OnInit {
     this.claimModal = new window.bootstrap.Modal(document.getElementById("claimPolicyModal"));
     this.openModal(this.claimModal);
   }
-  claimPolicy(){
-    console.log(this.ClaimForm.value)
-    if(this.ClaimForm.valid){
-    let claim=new Claim();
-    claim.bankAccountNo=this.ClaimForm.get('accNo')?.value!
-    claim.bankIFSCCode=this.ClaimForm.get('ifsc')?.value!
-    claim.claimAmount=this.policy.sumAssured
-    claim.policyNumber=this.policy.policyNumber
-
-    this.customer.registerCliam(claim).subscribe({
-      next:(res)=>{
-        alert("Added successfully")
-        console.log(res);
-       PolicyComponent.isClaimed=true;
-        this.closeModal(this.claimModal)
-        location.reload()
-      },
-      error:(err:HttpErrorResponse)=>{
-        alert("Something went wrong");
-        this.closeModal(this.claimModal)
-      }
-    })
-  }
-  else{
-    alert("one or more field required");
-    ValidateForm.validateAllFormFileds(this.ClaimForm);
-  }
+  claimPolicy() {
+    console.log(this.ClaimForm.value);
+  
+    // Check form validity
+    if (this.ClaimForm.valid) {
+      // Prepare claim data
+      const claim = {
+        bankAccountNo: this.ClaimForm.get('bankAccountNo')?.value,
+        bankIFSCCode: this.ClaimForm.get('bankIFSCCode')?.value,
+        claimAmount: this.data.sumAssured,
+        policyNumber: this.data.policyNumber,
+        policyId: this.data.policyId,
+        claimDate: new Date()
+      };
+  
+      console.log(claim);
+  
+      // Register claim
+      this.customer.registerCliam(claim).subscribe({
+        next: (res) => {
+          alert("Claim registered successfully.");
+          console.log(res);
+  
+          // Mark policy as claimed
+          PolicyComponent.isClaimed = true;
+  
+          // Close the modal
+          this.closeModal(this.claimModal);
+  
+          // Update the policy
+          this.admin.UpdatePolicy(this.data).subscribe({
+            next: (updateRes) => {
+              console.log('Policy updated successfully', updateRes);
+              alert('Policy updated successfully!');
+              location.reload();
+            },
+            error: (error) => {
+              console.error('Error while updating the policy:', error);
+              alert('An error occurred while updating the policy. Please try again later.');
+            },
+          });
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error('Error while registering the claim:', err);
+          alert("Something went wrong while registering the claim.");
+          this.closeModal(this.claimModal);
+        },
+      });
+    } else {
+      // Handle invalid form
+      alert("One or more required fields are missing.");
+      ValidateForm.validateAllFormFileds(this.ClaimForm);
+    }
   }
   goBack(){
     this.location.back();

@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 
 import { CustomerService } from 'src/app/Services/customer.service';
 import { NomineeDTO } from 'src/app/models/NomineeDTO';
-
+import { Router } from '@angular/router';
 import { Policy } from 'src/app/models/Policy';
 import { Customer } from 'src/app/models/Customer';
 import { ValidateForm } from 'src/app/helper/validateForm';
@@ -24,7 +24,7 @@ export class BuyPolicyComponent implements OnInit{
   firstNewName:string='';
   lastNewName:string='';
   NomineeForm!:FormGroup
-  constructor(private customer: CustomerService,private location:Location,private fb:FormBuilder) {
+  constructor(private customer: CustomerService,private router:Router,private location:Location,private fb:FormBuilder) {
     this.policy=this.customer.getPolicy()
     this.getSchemeDetail()
    
@@ -39,8 +39,8 @@ export class BuyPolicyComponent implements OnInit{
    this.getCustomerProfile()
    console.log(this.policy)
    this.NomineeForm=new FormGroup({
-    nominee:new FormControl('',[Validators.required,ValidateForm.onlyCharactersValidator]),
-    nomineeRelation:new FormControl('',[Validators.required,ValidateForm.onlyCharactersValidator])
+    nominee:new FormControl('',[Validators.required]),
+    nomineeRelation:new FormControl('',[Validators.required])
    })
    this.documentForm = this.fb.group({});
 
@@ -53,13 +53,13 @@ export class BuyPolicyComponent implements OnInit{
     this.customer.getDetail(this.policy.insuranceSchemeId).subscribe(
       {
         next:(res)=>{
-            this.schemeData=res;
+            this.schemeData=res.body;
             this.reqDocs=this.schemeData.requiredDocuments
             console.log(this.schemeData);
-            console.log(this.reqDocs);
+            // console.log(this.reqDocs);
         },
         error:(err:HttpErrorResponse)=>{
-          alert(err.message);
+          console.log(err.message);
         }
       }
     )
@@ -81,36 +81,31 @@ export class BuyPolicyComponent implements OnInit{
 
   addNominee()
   {
-    alert('hi');
     if(this.NomineeForm.valid){
-      alert('bye');
       this.policy.nominee=this.NomineeForm.get('nominee')?.value!
       this.policy.nomineeRelation=this.NomineeForm.get('nomineeRelation')?.value!
-
-      alert("Added Successfully");
+      alert("Nominee Added Successfully");
     }
     else{
       ValidateForm.validateAllFormFileds(this.NomineeForm)
-      alert("One or more feilds are required");
+      alert("Nominee Details are Incomplete");
     }
   }
  
- 
 addPolicy(){
-  alert("Policy applied");
    this.applyPolicy()
-
-
 }
 applyPolicy()
 {
+  this.policy.schemeName=this.schemeData.schemeName;
   this.customer.purchasePolicy(this.policy).subscribe(
     {
       next:(res)=>{
-        alert("Applied Successfully");
+        alert("Policy Applied Successfully");
+        this.router.navigate(['/document-upload'], { queryParams: { schemeId:this.schemeData.schemeId } })
       },
       error:(err)=>{
-        alert("Something went wrong!");
+        alert("Invalid Details Entered");
       }
     }
    )

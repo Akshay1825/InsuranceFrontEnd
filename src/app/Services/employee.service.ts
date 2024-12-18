@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -8,38 +9,41 @@ import { Injectable } from '@angular/core';
 export class EmployeeService {
   baseURL='https://localhost:7117/api'
   constructor(private http:HttpClient) { }
-  getProfile(){
+  getProfile():Observable<any> {  
     let name=localStorage.getItem('userName');
-    return this.http.get(this.baseURL+"Employee/getProfile?name="+name);
+    return this.http.get(this.baseURL+"/Employee/getProfile?userName="+name,{observe:'response'});
   }
-  updateEmployee(data:any){
-    return this.http.put(this.baseURL+"Employee/update",data);
+  updateEmployee(data:any):Observable<any> {  
+    return this.http.put(this.baseURL+"/Employee",data,{observe:'response'});
   }
   containsOnlyDigits(s: string) {
     return /^\d+$/.test(s);
   }
-  getFilterQueries(pgNo?: number, pgSize?: number, searchQuery?: any) {
-    var serachUrl = this.baseURL+`/Complaint/get?PageNumber=${pgNo}&PageSize=${pgSize}`;
-    if (searchQuery !== undefined) {
-      if (this.containsOnlyDigits(searchQuery)) {
-        searchQuery = parseInt(searchQuery);
-      }
-
-      serachUrl += (typeof searchQuery === 'number') ? `&Id=${searchQuery}` : `&Name=${searchQuery}`;
+  getFilterQueries(pgNo?: number, pgSize?: number, toDate?: string,fromDate?:string): Observable<any> {
+    var searchUrl = this.baseURL+`/Complaint/get?PageNumber=${pgNo}&PageSize=${pgSize}`;
+    if (fromDate) {
+      searchUrl += `&FromDate=${fromDate}`;
     }
-    return this.http.get(serachUrl, { observe: 'response' });
+    if (toDate) {
+      searchUrl += `&ToDate=${toDate}`;
+    }
+  
+    return this.http.get(searchUrl, { observe: 'response' });
 
   }
-  updateQuery(data:any){
-    return this.http.put(this.baseURL+"Complaint/update",data);
+  updateQuery(data:any):Observable<any> {
+    return this.http.put(this.baseURL+"/Complaint",data,{ observe: 'response' });
 
   }
-  getClaims(pgNo?: number, pgSize?: number, searchQuery?: any){
-    var serachUrl = this.baseURL+`/Claimm/get?PageNumber=${pgNo}&PageSize=${pgSize}`;
-    if (searchQuery !== undefined) {
-      serachUrl += `&Id=${searchQuery}` ;
+  getClaims(pgNo?: number, pgSize?: number, toDate?: string,fromDate?:string){
+    var searchUrl = this.baseURL+`/Claimm/get?PageNumber=${pgNo}&PageSize=${pgSize}`;
+    if (fromDate) {
+      searchUrl += `&FromDate=${fromDate}`;
     }
-    return this.http.get(serachUrl, { observe: 'response' });
+    if (toDate) {
+      searchUrl += `&ToDate=${toDate}`;
+    }
+    return this.http.get(searchUrl, { observe: 'response' });
    
   }
   updateClaims(data:any)

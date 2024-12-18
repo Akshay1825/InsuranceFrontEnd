@@ -76,7 +76,10 @@ this.getSchemes()
 }
 showDetail(scheme:any){
     console.log(scheme)
-    this.schemeDetail=scheme.schemeDetails
+    // this.['minAge']
+    this.schemeDetail=scheme
+    console.log(this.schemeDetail);
+    console.log(this.schemeDetail.minAge);
 }
 
 

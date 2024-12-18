@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 export class ValidateForm {
 
@@ -15,19 +15,38 @@ export class ValidateForm {
     });
   }
 
-  static onlyCharactersValidator(control: FormControl<string>): { [key: string]: any } | null {
-    const regex = /^[a-zA-Z]+$/;
+  static integer(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (value === null || value === undefined || value === '') return null;
+    return Number.isInteger(Number(value)) ? null : { notInteger: true };
+  }
+  minMaxValidator(minField: string, maxField: string) {
+    return (formGroup: FormGroup): { [key: string]: boolean } | null => {
+      const minControl = formGroup.get(minField);
+      const maxControl = formGroup.get(maxField);
+  
+      if (minControl && maxControl && minControl.value >= maxControl.value) {
+        return { [`${minField}GreaterThanMax`]: true };
+      }
+      return null;
+    };
+  }
+  static onlyCharactersValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const value = control.value;
 
-    if (!regex.test(control.value)) {
-      return {
-        onlyCharacters: {
-          message: 'Only characters are allowed.',
-        },
-      };
+    // Regular Expression Explanation:
+    // ^[a-zA-Z\s]*$ - Ensures only letters (a-z, A-Z) and spaces (\s) are allowed.
+    const regex = /^[a-zA-Z\s]*$/;
+
+    if (value && !regex.test(value)) {
+      return { onlyCharacters: true }; // Validation fails
     }
 
-    return null;
+    return null; // Validation passes
   }
+
+
+  
 
   static passwordPatternValidator(control: FormControl): { [key: string]: any } | null {
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-])(?=.{8,})/;
@@ -35,9 +54,9 @@ export class ValidateForm {
     if (!regex.test(control.value)) {
       return {
         passwordValidator: {
-          message: ` *Password must contain at least 8 characters,<br>
-           *one uppercase letter, *one lowercase letter<br>
-           *one number, *one special character.`
+          message: ` *Password must contain at least 8 characters<br>
+           *one uppercase letter<br>*one lowercase letter<br>
+           *one number<br>*one special character.`
         },
       };
     }
@@ -61,7 +80,27 @@ export class ValidateForm {
       return null;
     };
   }
+  static minimumAge(minimumAge: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value) {
+        const birthDate = new Date(control.value);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const month = today.getMonth() - birthDate.getMonth();
 
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+
+        // If age is less than the required minimum, return an error
+        if (age < minimumAge) {
+          return { ageTooYoung: true };
+        }
+      }
+      return null; // Return null if validation passes
+    };
+  }
 
  static  rangeValidator(min: number, max: number): any {
   return (control: AbstractControl): { [key: string]: any } | null => {

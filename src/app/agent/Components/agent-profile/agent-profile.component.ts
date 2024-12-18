@@ -43,10 +43,10 @@ constructor(private agent:AgentService,private location:Location){}
      return false
     }
     getAgentProfile(){
-      
      this.agent.getProfile().subscribe({
        next:(res)=>{
          this.agentProfile=res;
+         console.log(this.agentProfile);
        },
        error:(err:HttpErrorResponse)=>{
          console.log(err.message);
@@ -59,10 +59,9 @@ constructor(private agent:AgentService,private location:Location){}
     }
     updateAgentProfile()
     {
-      debugger
      console.log(this.agentProfile)
      if(this.validateForm(this.agentProfile)){
-      this.agent.updateAgent(this.agentProfile).subscribe({
+      this.agent.updateAgent(this.agentProfile.body.customer).subscribe({
        next:(res)=>{
       
          alert("Updated Successfully");

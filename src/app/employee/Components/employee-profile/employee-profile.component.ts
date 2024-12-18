@@ -38,7 +38,8 @@ return true
  }
  validateForm(obj:any)
  {
-  if((!this.validateField(obj.phone)&&!this.validatePhone(obj.phone))||(!this.validateField(obj.email)&&!this.validateEmail(obj.email))){
+  console.log(obj);
+  if((!this.validateField(obj.mobileNumber)&&!this.validatePhone(obj.mobileNumber))||(!this.validateField(obj.email)&&!this.validateEmail(obj.email))){
 return true
   }
   return false
@@ -48,7 +49,7 @@ return true
   this.employee.getProfile().subscribe({
     next:(res)=>{
       this.employeeProfile=res;
-      this.employeeData=res;
+      console.log(this.employeeProfile);
     },
     error:(err:HttpErrorResponse)=>{
       console.log(err.message);
@@ -61,8 +62,8 @@ return true
  updateProfile()
  {
   console.log(this.employeeProfile)
-  if(this.validateForm(this.employeeProfile)){
-   this.employee.updateEmployee(this.employeeData).subscribe({
+  if(this.validateForm(this.employeeProfile.body.customer)){
+   this.employee.updateEmployee(this.employeeProfile.body.customer).subscribe({
     next:(res)=>{
    
       alert("Updated Successfully");
@@ -70,7 +71,7 @@ return true
      
     },
     error:(err:HttpErrorResponse)=>{
-      alert(err.message);
+      alert("Invalid Details");
     }
    })
   }

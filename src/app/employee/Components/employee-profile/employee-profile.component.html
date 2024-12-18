@@ -17,42 +17,42 @@
                 <td>First Name</td>
 
                 <td>
-                    {{ employeeProfile.employeeFirstName }}
+                    {{ employeeProfile.body.customer.firstName }}
                 </td>
             </tr>
             <tr>
                 <td>Last Name</td>
-                <td>{{ employeeProfile.employeeLastName }}</td>
+                <td>{{ employeeProfile.body.customer.lastName }}</td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <td>Date of Joining</td>
                 <td>{{ employeeProfile.doj | date : "dd-MM-yyyy" }}</td>
-            </tr>
+            </tr> -->
             <tr>
                 <td>Salary</td>
                 <td>
-                    &#8377;{{employeeProfile.salary }}
+                    &#8377;{{employeeProfile.body.customer.salary }}
                 </td>
             </tr>
             <tr>
                 <td>Mobile No</td>
                 <td>
-                    <div *ngIf="!isEdit">{{ employeeProfile.phone }}</div>
+                    <div *ngIf="!isEdit">{{ employeeProfile.body.customer.mobileNumber }}</div>
                     <div *ngIf="isEdit">
-                        <input  id="MobileField" class="table-input" type="text" [(ngModel)]="employeeData.phone" />
-                        <span class="text-danger" *ngIf="validateField(employeeData.phone)">*required</span>
-                        <span class="text-danger" *ngIf="validatePhone(employeeData.phone)">*Invalid</span>
+                        <input  id="MobileField" class="table-input" type="text" [(ngModel)]="employeeProfile.body.customer.mobileNumber" />
+                        <span class="text-danger" *ngIf="validateField(employeeProfile.body.customer.mobileNumber)">*required</span>
+                        <span class="text-danger" *ngIf="validatePhone(employeeProfile.body.customer.mobileNumber)">*Invalid</span>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>Email</td>
                 <td>
-                    <div *ngIf="!isEdit">{{ employeeProfile.email }}</div>
+                    <div *ngIf="!isEdit">{{ employeeProfile.body.customer.email }}</div>
                     <div *ngIf="isEdit">
-                        <input class="table-input" type="email" [(ngModel)]="employeeProfile.email" />
-                        <span class="text-danger" *ngIf="validateField(employeeData.email)">*required</span>
-                        <span class="text-danger" *ngIf="validateEmail(employeeData.email)">*Invalid</span>
+                        <input class="table-input" type="email" [(ngModel)]="employeeProfile.body.customer.email" />
+                        <span class="text-danger" *ngIf="validateField(employeeProfile.body.customer.email)">*required</span>
+                        <span class="text-danger" *ngIf="validateEmail(employeeProfile.body.customer.email)">*Invalid</span>
                     </div>
                 </td>
             </tr>

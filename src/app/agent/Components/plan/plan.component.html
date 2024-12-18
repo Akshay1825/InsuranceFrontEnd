@@ -18,18 +18,20 @@
       >
         <option value="5">5</option>
         <option value="10">10</option>
+        <option value="15">15</option>
         <option value="20">20</option>
+        <option value="25">25</option>
         <option value="30">30</option>
         <!-- Add more options as needed -->
       </select>
       <div class="search-container">
       <input
-        type="text"
+        type="string"
         class="form-control search"
         id="searchQuery"
         [(ngModel)]="searchQuery"
         (keyup)="onSearch()"
-        placeholder= "Start filtering by id or plan name.."
+        placeholder= "Start filtering plan Name"
       />
       
     </div>

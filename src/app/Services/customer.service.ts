@@ -74,14 +74,18 @@ export class CustomerService {
     
     return this.http.get('https://localhost:7117/api/Customer/GetByUserName?userName='+ payload.userName);
   }
+
+  getCustomerProfile2(data:any): Observable<any> {
+    return this.http.get('https://localhost:7117/api/Customer/GetByUserName?userName='+ data,{observe:'response'});
+  }
   purchasePolicy(policy: any): Observable<any>{
     return this.http.post(this.baseUrl+"/Policy", policy, { observe: 'response'});
   }
   getPolicies(customerId:any,status:number, pgNo?: number, pgSize?: number, searchQuery?: any) {
-    var serachUrl = this.baseUrl+"/Policy/Policy?"+"&PageNumber=" + pgNo + "&PageSize=" + pgSize +"&Status="+status + "&id="+customerId;
+    var serachUrl = this.baseUrl+"/Policy/Policy?"+"&PageNumber=" + pgNo + "&PageSize=" + pgSize + "&id="+customerId;
     
     if (searchQuery !== undefined) {
-      serachUrl += `&Id=${searchQuery}`;
+      serachUrl += `&Name=${searchQuery}`;
     }
     return this.http.get(serachUrl, { observe: 'response' });
     
@@ -101,7 +105,7 @@ export class CustomerService {
     return this.http.post(this.baseUrl+"/Complaint/", data);
   }
   getCustomerById(id: any): Observable<any>{
-    return this.http.get(this.baseUrl + "/Customer" + id,{ observe: 'response' });
+    return this.http.get(this.baseUrl + "/Customer/" + id,{ observe: 'response' });
   }
   getUserById(id:number):Observable<Object>{
     return this.http.get(this.baseUrl+"User/getId?id="+id)
@@ -137,8 +141,26 @@ export class CustomerService {
   getCustomerDocuments(customerId: any, pgNo?: number, pgSize?: number) {
     return this.http.get(this.baseUrl+"/Customer/documents?PageNumber=" + pgNo + "&PageSize=" + pgSize + "&customerId=" + customerId, { observe: 'response' });
   }
-  updateCustomerDocuments(documnetId:number){
-    return this.http.put(this.baseUrl+"Document/update?documentId=" + documnetId,{observe:'response'});
+  updateCustomerDocuments(data:any):Observable<any> {
+    console.log(data);
+    console.log(data.id);
+    
+    const documentData = 
+    { id: data.id,
+      name: data.name,
+      status: data.status,
+      note: data.note,
+      customerId:data.customerId,
+      filePath: data.filePath
+    };
+    console.log(documentData);
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.put(this.baseUrl+"/Document" + {id: data.id,
+      name: data.name,
+      status: data.status,
+      note: data.note,
+      customerId:data.customerId,
+      filePath: data.filePath},{observe:'response'});
   }
   getSchemeById(schemeId:any): Observable<any> 
   {
@@ -152,8 +174,12 @@ export class CustomerService {
     return this.http.get(this.baseUrl+"/Payment/GetID?index="+index+"&policyId="+policyId,{observe:'response'});
   }
 
+  updatePolicy(data:any):Observable<any> {
+    return this.http.put(this.baseUrl+"/Policy/UpdatePolicy",data,{ observe:'response'});
+  }
+
    registerCliam(claim:any):Observable<any>{
-    return this.http.post(this.baseUrl+"Claim/add",claim)
+    return this.http.post(this.baseUrl+"/Claimm",claim,{observe:'response'})
    }
 
    getPaymentFullDetail(policyId:number)

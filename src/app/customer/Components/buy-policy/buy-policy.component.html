@@ -4,90 +4,118 @@
   <button (click)="goBack()" class="ms-3 mt-2" ><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download"
       alt=""/>Back</button>
 </div>
-<div class="container">
-  <div class="row">
-  <div class="col-md-8">
-  <table class="table">
-    <tbody>
-      <tr>
-        <td>Name</td>
-        <td>
-          {{ this.firstNewName }} 
-          {{ this.lastNewName}}
-        </td>
-      </tr>
-      <tr>
-        <td>Premium Mode</td>
-        <td>
-          <div *ngIf="policy.premiumType==0">Yearly</div>
-          <div *ngIf="policy.premiumType==1">Half Yearly</div>
-          <div *ngIf="policy.premiumType==2">Quaterly</div>
-          <div *ngIf="policy.premiumType==3">Monthly</div>
-        </td>
-      </tr>
-
-      <tr>
-        <td>IssueDate</td>
-        <td>{{ policy.issueDate | date : "dd-MM-YYYY" }}</td>
-      </tr>
-      <tr>
-        <td>MaturityDate</td>
-        <td>{{ policy.maturityDate | date : "dd-MM-YYYY" }}</td>
-      </tr>
-      <tr>
-        <td>Investment Amount</td>
-        <td>{{ policy.investmentAmount }}</td>
-      </tr>
-      <tr>
-        <td>Premium</td>
-        <td>{{ policy.premiumAmount }}</td>
-      </tr>
-      <tr>
-        <td>SumAssured</td>
-        <td>{{ policy.sumAssured }}</td>
-      </tr>
-      <tr>
-        <td>Nominee</td>
-        <td>
-          <form [formGroup]="NomineeForm" (ngSubmit)="addNominee()">
-            <input
-              type="text"
-              class="table-input"
-              placeholder="Nominee Name"
-              formControlName="nominee"
-            />
-            <input
-              type="text"
-              class="table-input"
-              placeholder="Relation"
-              formControlName="nomineeRelation"
-            />
-            <button type="submit" class="btn btn-primary p-2">Add Nominee</button>
-          </form>
-        </td>
-      </tr>
-      
-      <tr>
-        <td>Agent Code</td>
-        <td>
-          <input
-            class="table-input"
-            type="any"
-            placeholder="Agent Code"
-            [(ngModel)]="policy.agentId"
-          />
-        </td>
-      </tr>
-     
-    </tbody>
-  </table>
-  <div class="col-12 mt-2">
-    <button id="button" class="submit" (click)="addPolicy()">Apply</button>
+<div class="container mt-2">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+          <h3>Policy Details</h3>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><strong>Name</strong></td>
+                <td>
+                  {{ this.firstNewName }} {{ this.lastNewName }}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Premium Mode</strong></td>
+                <td>
+                  <div *ngIf="policy.premiumType == 0">Yearly</div>
+                  <div *ngIf="policy.premiumType == 1">Half Yearly</div>
+                  <div *ngIf="policy.premiumType == 2">Quarterly</div>
+                  <div *ngIf="policy.premiumType == 3">Monthly</div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Issue Date</strong></td>
+                <td>{{ policy.issueDate | date: 'dd-MM-YYYY' }}</td>
+              </tr>
+              <tr>
+                <td><strong>Maturity Date</strong></td>
+                <td>{{ policy.maturityDate | date: 'dd-MM-YYYY' }}</td>
+              </tr>
+              <tr>
+                <td><strong>Investment Amount</strong></td>
+                <td>{{ policy.investmentAmount }}</td>
+              </tr>
+              <tr>
+                <td><strong>Premium</strong></td>
+                <td>{{ policy.premiumAmount }}</td>
+              </tr>
+              <tr>
+                <td><strong>Sum Assured</strong></td>
+                <td>{{ policy.sumAssured }}</td>
+              </tr>
+              <tr>
+                <td><strong>Nominee</strong></td>
+                <td>
+                  <form [formGroup]="NomineeForm" (ngSubmit)="addNominee()">
+                    <div class="mb-3">
+                      <label for="nominee" class="form-label">Nominee Name</label>
+                      <input
+                        type="text"
+                        id="nominee"
+                        class="form-control"
+                        placeholder="Nominee Name"
+                        formControlName="nominee"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="nomineeRelation" class="form-label">Relation</label>
+                      <select
+                        id="nomineeRelation"
+                        class="form-select"
+                        formControlName="nomineeRelation"
+                      >
+                        <option value="" disabled>Select</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Brother">Brother</option>
+                        <option value="Sister">Sister</option>
+                        <option value="Spouse">Spouse</option>
+                      </select>
+                      <small
+                        *ngIf="
+                          NomineeForm.get('nomineeRelation')?.dirty &&
+                          NomineeForm.get('nomineeRelation')?.hasError('required')
+                        "
+                        class="text-danger"
+                        ><br>Relation is required</small
+                      >
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Nominee</button>
+                  </form>
+                </td>
+              </tr>
+              <!-- <tr>
+                <td><strong>Agent Code</strong></td>
+                <td>
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Agent Code"
+                    [(ngModel)]="policy.agentId"
+                  />
+                </td>
+              </tr> -->
+            </tbody>
+          </table>
+          <div class="text-center mt-4">
+            <button
+              id="button"
+              class="btn btn-success btn-lg px-4"
+              (click)="addPolicy()"
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-
-
-</div>
 </div>
 
 </div>

@@ -65,8 +65,6 @@ import { SampleComponent } from './Samples/sample/sample.component';
       provide: HTTP_INTERCEPTORS, 
       useClass: JwtInterceptorInterceptor,
       multi: true
-      
-       
     }
   ],
   bootstrap: [AppComponent]

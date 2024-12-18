@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 import { AdminService } from 'src/app/Services/admin.service';
 import { __values } from 'tslib';
 import { ValidateForm } from 'src/app/helper/validateForm';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-emp',
@@ -27,7 +28,7 @@ export class AddEmpComponent {
   addModal:any;
   employeeData:any;
 
-constructor( private admin:AdminService,private location:Location){
+constructor( private admin:AdminService,private router:Router,private location:Location){
  
 }
 goBack(){
@@ -45,7 +46,8 @@ OnCancel() {
         next:(data)=>{
          this.addEmpForm.reset()
           console.log(data)
-          alert("Added Successfully") 
+          alert("Employee Added Successfully") 
+          this.goBack();
         },
         error:(error:HttpErrorResponse)=>{
           console.log(error)

@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { Scheme } from '../models/Scheme';
 
 @Injectable({
@@ -11,17 +11,16 @@ export class AdminService {
   baseUrl = "https://localhost:7117/api"
 
   constructor(private http: HttpClient) {
-
   }
   planScheme: any
   UpdatePayment(data: any): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json'); // Ensure JSON content type
+    const headers = new HttpHeaders().set('Content-Type', 'application/json'); 
     return this.http.post("https://localhost:7117/api/Payment", data, { headers });
   }
 
   UpdatePolicy(data: any): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json'); // JSON content type
-    return this.http.put("https://localhost:7117/api/Policy", data, { headers }); // Ensure correct endpoint
+    const headers = new HttpHeaders().set('Content-Type', 'application/json'); 
+    return this.http.put("https://localhost:7117/api/Policy", data, { headers }); 
   }
   
   getEmployees(pgNo?: number, pgSize?: number) 
@@ -34,9 +33,9 @@ export class AdminService {
   getFilterEmployees(pgNo?: number, pgSize?: number, searchQuery?: any) {
     var serachUrl = this.baseUrl+"/Employee/get?PageNumber=" + pgNo + "&PageSize=" + pgSize;
     if (searchQuery !== undefined) {
-      if (this.containsOnlyDigits(searchQuery)) {
-        searchQuery = parseInt(searchQuery);
-      }
+      // if (this.containsOnlyDigits(searchQuery)) {
+      //   searchQuery = parseInt(searchQuery);
+      // }
 
       serachUrl += (typeof searchQuery === 'number') ? `&Id=${searchQuery}` : `&Name=${searchQuery}`;
     }
@@ -48,14 +47,13 @@ export class AdminService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     var serachUrl = this.baseUrl+"/Customer/get?PageNumber=" + pgNo + "&PageSize=" + pgSize;
     if (searchQuery !== undefined) {
-      if (this.containsOnlyDigits(searchQuery)) {
-        searchQuery = parseInt(searchQuery);
-      }
+      // if (this.containsOnlyDigits(searchQuery)) {
+      //   searchQuery = parseInt(searchQuery);
+      // }
 
       serachUrl += (typeof searchQuery === 'number') ? `&Id=${searchQuery}` : `&Name=${searchQuery}`;
     }
     return this.http.get(serachUrl, { observe: 'response' });
-
   }
   addEmp(data: any) {
 
@@ -85,7 +83,23 @@ export class AdminService {
         searchQuery = parseInt(searchQuery);
       }
 
-      serachUrl += (typeof searchQuery === 'number') ? `&PlanId=${searchQuery}` : `&PlanName=${searchQuery}`;
+      serachUrl += (typeof searchQuery === 'number') ? `&PlanId=${searchQuery}` : `&Name=${searchQuery}`;
+    }
+    return this.http.get(serachUrl, { observe: 'response' });
+
+  }
+
+  getPlans2(pgNo?: number, pgSize?: number) {
+    return this.http.get(this.baseUrl+"/InsurancePlan/get2?PageNumber=" + pgNo + "&PageSize=" + pgSize, { observe: 'response' });
+  }
+  getFilterPlans2(pgNo?: number, pgSize?: number, searchQuery?: any) {
+    var serachUrl = this.baseUrl+"/InsurancePlan/get2?PageNumber=" + pgNo + "&PageSize=" + pgSize;
+    if (searchQuery !== undefined) {
+      if (this.containsOnlyDigits(searchQuery)) {
+        searchQuery = parseInt(searchQuery);
+      }
+
+      serachUrl += (typeof searchQuery === 'number') ? `&PlanId=${searchQuery}` : `&Name=${searchQuery}`;
     }
     return this.http.get(serachUrl, { observe: 'response' });
 
@@ -93,8 +107,8 @@ export class AdminService {
   UpdataPlan(data: any) {
     return this.http.put(this.baseUrl + "/InsurancePlan/", data);
   }
-  deletePlan(id: any) {
-    return this.http.delete(this.baseUrl + "/InsurancePlan/" + id);
+  deletePlan(data: any):Observable<any> {
+    return this.http.put(this.baseUrl + "/InsurancePlan" ,data, { observe:'response' });
   }
   getSchemeByPlanID(id:any,pgNo?: number, pgSize?: number,searchQuery?:any ): Observable<any> {
     var serachUrl = this.baseUrl+"/InsuranceScheme/getId?PageNumber=" + pgNo+"&PageSize="+pgSize+"&id=" + id;
@@ -142,40 +156,62 @@ export class AdminService {
     let name=localStorage.getItem('userName');
     return this.http.get(this.baseUrl+"/Admin/getProfile?userName="+name);
   }
-  updateTax(data:any){
-   const tax={
-      "id":"1",
-      "taxPercent":data.taxPercent
-    }
-    console.log(tax)
-    return this.http.put(this.baseUrl+"/Tax/",tax);
+  updateTax(data:any):Observable<any>{
+   
+    return this.http.put(this.baseUrl+"/Tax",data,{observe:'response'});
   }
-  addSchemeWithDetail(data:any){
-    return this.http.post(this.baseUrl+"/InsuranceScheme/",data);
+
+  checkSchemeNameDuplicate(schemeName: string): Observable<any> {
+    // Assuming your API accepts a GET request to check for duplicate scheme names
+    return this.http
+      .get<{ exists: boolean }>(`${this.baseUrl}/InsuranceScheme/check-scheme-name?name=${schemeName}`,{observe:'response'})
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error('Error checking scheme name:', error);
+          return of(false); // Return false in case of an error (e.g., server is down)
+        })
+      );
   }
-  getPayments(pgNo:number,pgSize:number,searchQuery?:number)
-  {
-    let url=this.baseUrl+`/Payment/get?PageNumber=${pgNo}&PageSize=${pgSize}`
-    if(searchQuery!=undefined)
-    {
-      url+=`&PolicyNumber=${searchQuery}`
-    }
+  addSchemeWithDetail(data:any):Observable<any> {
+    return this.http.post(this.baseUrl+"/InsuranceScheme",data,{observe:'response'});
+  }
+  getPayments(pgNo: number, pgSize: number, fromDate?: string, toDate?: string, searchQuery?: any): Observable<any> {
+    let url = `${this.baseUrl}/Payment/getAll?PageNumber=${pgNo}&PageSize=${pgSize}`;
     
-    return this.http.get(url,{observe:'response'});
+    if (searchQuery) {
+      url += `&PolicyNumber=${searchQuery}`;
+    }
+    if (fromDate && toDate) {
+      url += `&FromDate=${fromDate}&ToDate=${toDate}`;
+    }
+  
+    return this.http.get(url, { observe: 'response' });
   }
-  getFilterPolicies(customerId:number,pgNo?:number,pgSize?:number,searchQuery?:any){
-    var serachUrl = this.baseUrl+"/Policy/get?Status=0&PageNumber=" + pgNo + "&PageSize=" + pgSize+"&CustomerId="+customerId;
+  getFilterPolicies(customerId:any,pgNo?:number,pgSize?:number,searchQuery?:any): Observable<any>{
+    var serachUrl = this.baseUrl+"/Policy/Policy?PageNumber=" + pgNo + "&PageSize=" + pgSize+"&id="+customerId;
     if (searchQuery !== undefined) {
       if (this.containsOnlyDigits(searchQuery)) {
         searchQuery = parseInt(searchQuery);
       }
-
-      if( (typeof searchQuery === 'number') ) 
-      serachUrl+=`&Id=${searchQuery}` ;
+      serachUrl += (typeof searchQuery === 'number') ? `&Id=${searchQuery}` : `&Name=${searchQuery}`;
     }
     return this.http.get(serachUrl, { observe: 'response' });
   }
   updateScheme(data:any):Observable<any>{
-   return this.http.put(this.baseUrl+'/InsuranceScheme/',data ,{observe:'response'})
+    console.log(data);
+   return this.http.put("https://localhost:7117/api/InsuranceScheme/Update",data ,{observe:'response'})
+  }
+
+  updateScheme2(data:any):Observable<any>{
+    console.log(data);
+   return this.http.put("https://localhost:7117/api/InsuranceScheme",data ,{observe:'response'})
+  }
+
+  getDocumentTypes(): Observable<any> {
+    return this.http.get<any>("https://localhost:7117/api/Document/document-types",{observe:'response'});
+  }
+
+  deleteScheme(data:any):Observable<any>{
+    return this.http.delete("https://localhost:7117/api/InsuranceScheme/"+data.schemeId,{observe:'response'});
   }
 }
