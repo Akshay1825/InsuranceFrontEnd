@@ -136,7 +136,7 @@ export class SampleComponent implements OnInit {
   PayPremium(id: number)
   {
     const options = {
-      key: 'rzp_test_RB0WElnRLezVJ5', 
+      key: '', 
       amount: (this.roundValue(this.CalculateAmount()))*100,
       currency: 'INR',
       name: 'NewInsurance',
